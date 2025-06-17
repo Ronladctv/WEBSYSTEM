@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../environments/enviroment';
+import { settings } from '../Settings/appsettings';
 import { Observable } from 'rxjs';
 import { User, UserResponse } from '../Interfaces/user';
 
@@ -8,7 +8,7 @@ import { User, UserResponse } from '../Interfaces/user';
   providedIn: 'root'
 })
 export class UserService {
-  private endpoint:string = environment.endPoint;
+  private endpoint:string = settings.endPoint;
   private apiUrl:string = this.endpoint + "api/user/";
 
   constructor(private http :HttpClient) { }

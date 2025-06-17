@@ -1,6 +1,5 @@
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { importProvidersFrom } from '@angular/core';
 import {ReactiveFormsModule} from '@angular/forms';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
@@ -18,6 +17,9 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
 import { MatSidenavContainer } from '@angular/material/sidenav';
 import { LayoutModule } from '@angular/cdk/layout';
+import { MatCardModule } from '@angular/material/card';
+import { MatInputModule } from '@angular/material/input';
+import { FormsModule } from '@angular/forms';
 
 export const materialProviders =[
     MatButtonModule,
@@ -39,4 +41,7 @@ export const materialProviders =[
     MatListModule,
     MatSidenavContainer,
     LayoutModule,
+    MatCardModule,
+    MatInputModule,
+    FormsModule
 ];

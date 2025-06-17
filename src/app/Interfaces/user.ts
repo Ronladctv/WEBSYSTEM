@@ -10,3 +10,8 @@ export interface UserResponse {
     message: string;
     data: User[];
 }
+
+export interface UserLogin {
+    email:string;
+    password:string;
+}
