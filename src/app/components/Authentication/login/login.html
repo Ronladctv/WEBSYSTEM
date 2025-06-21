@@ -1,23 +1,24 @@
-<div class="card-container">
-    <mat-card appearance="outlined">
-        <mat-card-header>
-            <mat-card-title>Inicar Sesion</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-            <form class="form-custom" [formGroup]="formLogin">
-                <mat-form-field class="input-custom">
-                    <mat-label>Email</mat-label>
-                    <input matInput formControlName placeholder="Email">
-                </mat-form-field>
-                <mat-form-field class="input-custom">
-                    <mat-label>Contraseña</mat-label>
-                    <input matInput formControlName type="password" placeholder="Contraseña">
-                </mat-form-field>
-                <div class="flex">
-                    <button matButton="filled" color="" (click)="Login()">Iniciar Sesion</button>
-                    <button matButton="filled" (click)="Register()" style = "margin-left: 8px;">Registrase</button>
-                </div>
-            </form>
-        </mat-card-content>
-    </mat-card>
+<div class="login-background">
+    <div class="login-overlay">
+        <mat-card appearance="outlined">
+            <mat-card-header>
+                <mat-card-title>Iniciar Sesión</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <form class="form-custom" [formGroup]="formLogin">
+                    <mat-form-field appearance="outline" class="input-custom">
+                        <mat-label>Email</mat-label>
+                        <input matInput formControlName="email" placeholder="Email">
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="input-custom">
+                        <mat-label>Contraseña</mat-label>
+                        <input matInput formControlName="password" type="password" placeholder="Contraseña">
+                    </mat-form-field>
+                    <div class="buttons-container">
+                        <button mat-flat-button color="primary" (click)="Login()">Iniciar Sesión</button>
+                    </div>
+                </form>
+            </mat-card-content>
+        </mat-card>
+    </div>
 </div>

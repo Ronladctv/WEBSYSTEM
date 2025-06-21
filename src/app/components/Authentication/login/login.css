@@ -1,15 +1,53 @@
-.card-container {
+.login-background {
+    background-image: url('../../../../../public/Fondo2.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    width: auto;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.login-overlay {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 100px;
+    width: 100%;
+    max-width: 400px;
+    padding: 16px;
+    margin-right: 5%;
 }
 
 .form-custom {
-    min-width: none;
-    width: 100;
+    width: 100%;
 }
 
 .input-custom {
     width: 100%;
+}
+
+.buttons-container {
+    margin-top: 24px;
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+}
+
+mat-card {
+    background-color: rgba(255, 255, 255, 0.80);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+}
+
+mat-card-header {
+    display: flex;
+    justify-content: center;
+}
+
+mat-card-title {
+    text-align: center;
+    width: 100%;
+    font-size: 24px;
+    margin-bottom: 12px;
 }
