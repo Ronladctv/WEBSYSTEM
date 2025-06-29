@@ -1,5 +1,20 @@
+import { Empresa } from '../Interfaces/empresa';
+
 export interface ResponseAcces
 {
-    isSuccess:boolean;
-    token:string;
+    status:boolean;
+    msg:string,
+    value:any
+}
+export interface ResponseAccesLogin
+{
+    status:boolean;
+    msg:LoginResponse,
+    value:any
+}
+
+export interface LoginResponse
+{
+    Token?:string
+    Empresas?:Empresa[]
 }

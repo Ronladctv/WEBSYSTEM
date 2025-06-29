@@ -14,6 +14,17 @@
                         <mat-label>Contraseña</mat-label>
                         <input matInput formControlName="password" type="password" placeholder="Contraseña">
                     </mat-form-field>
+                    @if (mostrarSelect()) {
+                    <mat-form-field appearance="outline" class="input-custom">
+                        <mat-label>Empresa</mat-label>
+                        <mat-select formControlName="empresa">
+                            <mat-option value="" disabled>Seleccione una empresa</mat-option>
+                            @for (empresa of empresas(); track empresa.id ) {
+                            <mat-option [value]="empresa.id">{{ empresa.nameEmpresa }}</mat-option>
+                            }
+                        </mat-select>
+                    </mat-form-field>
+                    }
                     <div class="buttons-container">
                         <button mat-flat-button color="primary" (click)="Login()">Iniciar Sesión</button>
                     </div>

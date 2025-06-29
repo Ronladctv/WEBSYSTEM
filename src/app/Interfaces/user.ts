@@ -14,4 +14,5 @@ export interface UserResponse {
 export interface UserLogin {
     email:string;
     password:string;
+    empresaId?:string;
 }

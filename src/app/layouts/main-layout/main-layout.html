@@ -8,18 +8,12 @@
 <mat-sidenav-container class="sidenav-container">
     <mat-sidenav #sidenav mode="side" opened>
         <mat-nav-list>
-            <mat-list-item (click)="sidenav.mode === 'over' && sidenav.close()">
-                <mat-icon matListItemIcon>home</mat-icon>
-                <span>Home</span>
+            @for (menu of menus(); track menu.Id) {
+            <mat-list-item [routerLink]="menu.Url" (click)="sidenav.mode === 'over' && sidenav.close()">
+                <mat-icon matListItemIcon>{{ menu.Icono }}</mat-icon>
+                <span>{{ menu.Nombre }}</span>
             </mat-list-item>
-            <mat-list-item (click)="sidenav.mode === 'over' && sidenav.close()">
-                <mat-icon matListItemIcon>person</mat-icon>
-                <span>Profile</span>
-            </mat-list-item>
-            <mat-list-item (click)="sidenav.mode === 'over' && sidenav.close()">
-                <mat-icon matListItemIcon>info</mat-icon>
-                <span>About</span>
-            </mat-list-item>
+            }
         </mat-nav-list>
     </mat-sidenav>
 

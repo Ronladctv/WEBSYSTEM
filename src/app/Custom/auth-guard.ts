@@ -11,7 +11,7 @@ export const authGuard: CanActivateFn = (route, state) => {
   if (token != "") {
     return accessService.validateToken(token).pipe(
       map(data => {
-        if (data.isSuccess) {
+        if (data.value) {
           return true
         } else {
           router.navigate([""])

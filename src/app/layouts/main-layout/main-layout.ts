@@ -1,15 +1,17 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, inject, OnInit, signal, ViewChild } from '@angular/core';
+import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { MatSidenav } from '@angular/material/sidenav';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Header } from '../../components/header/header';
 import { Footer } from '../../components/footer/footer';
 import { materialProviders } from '../../shared-ui';
+import { MenuService } from '../../Services/menu.service';
+import { Menu } from '../../Interfaces/menu';
 
 
 @Component({
   selector: 'app-main-layout',
-  imports: [RouterOutlet, Header, Footer, materialProviders],
+  imports: [RouterOutlet, Header, Footer, materialProviders, RouterLink],
   templateUrl: './main-layout.html',
   styleUrl: './main-layout.css'
 })
@@ -17,6 +19,11 @@ export class MainLayout {
   protected title = 'WEBAPP';
   @ViewChild(MatSidenav, { static: true })
   sidenav!: MatSidenav;
+
+  private Menu = inject(MenuService)
+  private router = inject(Router)
+
+  public menus = signal<Menu[]>([]);
 
   constructor(private observer: BreakpointObserver) {
 
@@ -33,5 +40,22 @@ export class MainLayout {
           this.sidenav.open();
         }
       })
+    const usuarioId = localStorage.getItem('usuarioId') ?? '';
+    const empresaId = localStorage.getItem('empresaId') ?? '';
+    this.Menu.GetMneu(usuarioId, empresaId).subscribe({
+      next: (data) => {
+        if (data.value) {
+          this.menus.set(data.value);
+        } else {
+          alert("No se encontraron menus asignados")
+          this.menus.set([]);
+        }
+      },
+      error: (err) => {
+        console.error('Error al cargar menús', err);
+        this.menus.set([]);
+      }
+    });
+
   }
 }
