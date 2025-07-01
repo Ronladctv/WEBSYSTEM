@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { settings } from '../Settings/appsettings';
 import { Observable } from 'rxjs';
 import { User, UserResponse } from '../Interfaces/user';
+import { ResponseAcces } from '../Interfaces/ResponseAcces';
 
 @Injectable({
   providedIn: 'root'
@@ -13,9 +14,9 @@ export class UserService {
 
   constructor(private http :HttpClient) { }
 
-  getList():Observable<UserResponse>
+  getList():Observable<ResponseAcces>
   {
-    return this.http.get<UserResponse>(`${this.apiUrl}GetUser`)
+    return this.http.get<ResponseAcces>(`${this.apiUrl}Lista`)
   }
 
   add(modelo:User):Observable<User>

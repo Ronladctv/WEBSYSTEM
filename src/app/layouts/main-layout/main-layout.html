@@ -7,18 +7,28 @@
 
 <mat-sidenav-container class="sidenav-container">
     <mat-sidenav #sidenav mode="side" opened>
-        <mat-nav-list>
-            @for (menu of menus(); track menu.Id) {
-            <mat-list-item [routerLink]="menu.Url" (click)="sidenav.mode === 'over' && sidenav.close()">
-                <mat-icon matListItemIcon>{{ menu.Icono }}</mat-icon>
-                <span>{{ menu.Nombre }}</span>
-            </mat-list-item>
-            }
-        </mat-nav-list>
+        <div class="sidebar-card">
+            <mat-nav-list>
+                <mat-list-item routerLink="/inicio" (click)="sidenav.mode === 'over' && sidenav.close()">
+                    <mat-icon matListItemIcon>home</mat-icon>
+                    <span style="color: white;">Inicio</span>
+                </mat-list-item>
+                <mat-list-item routerLink="/perfil" (click)="sidenav.mode === 'over' && sidenav.close()">
+                    <mat-icon matListItemIcon>person</mat-icon>
+                    <span style="color: white;">Perfil</span>
+                </mat-list-item>
+                @for (menu of menus(); track menu.id) {
+                <mat-list-item [routerLink]="menu.url" (click)="sidenav.mode === 'over' && sidenav.close()">
+                    <mat-icon matListItemIcon>{{ menu.icono }}</mat-icon>
+                    <span style="color: white;">{{ menu.nombre }}</span>
+                </mat-list-item>
+                }
+            </mat-nav-list>
+        </div>
     </mat-sidenav>
 
     <mat-sidenav-content>
-        <div class="content">
+        <div class="content" style="scrollbar-width: none;">
             <router-outlet></router-outlet>
         </div>
     </mat-sidenav-content>

@@ -1,6 +1,6 @@
 export interface Menu {
-    Id:string,
-    Nombre:string,
-    Url:string,
-    Icono:string,
+    id:string,
+    nombre:string,
+    url:string,
+    icono:string,
 }

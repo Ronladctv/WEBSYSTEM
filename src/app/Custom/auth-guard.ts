@@ -1,12 +1,13 @@
 import { inject } from '@angular/core';
-import { CanActivateFn, Router} from '@angular/router';
+import { CanActivateFn, Router } from '@angular/router';
 import { AccessService } from '../Services/Access.service';
 import { catchError, map, of } from 'rxjs';
+import { LocalStorageService } from '../Services/local-storage';
 
 export const authGuard: CanActivateFn = (route, state) => {
-  const token = localStorage.getItem("token") || "";
+  const localStorageService = inject(LocalStorageService);
+  const token = localStorageService.getItem("token") || "";
   const router = inject(Router);
-
   const accessService = inject(AccessService)
   if (token != "") {
     return accessService.validateToken(token).pipe(
@@ -14,19 +15,15 @@ export const authGuard: CanActivateFn = (route, state) => {
         if (data.value) {
           return true
         } else {
-          router.navigate([""])
-          return false;
+          return router.createUrlTree(['login']);
         }
       }),
       catchError(error => {
-        router.navigate([""])
-        return of(false);
+        return of(router.createUrlTree(['login']));
       })
     )
   }
   else {
-    //const url = router.createUrlTree([""])
-    router.navigateByUrl("");
-    return false;
+    return router.createUrlTree(['login']);
   }
 };

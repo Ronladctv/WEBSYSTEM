@@ -43,5 +43,5 @@ export const materialProviders =[
     LayoutModule,
     MatCardModule,
     MatInputModule,
-    FormsModule
+    FormsModule,
 ];

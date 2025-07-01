@@ -12,7 +12,7 @@
                     </mat-form-field>
                     <mat-form-field appearance="outline" class="input-custom">
                         <mat-label>Contraseña</mat-label>
-                        <input matInput formControlName="password" type="password" placeholder="Contraseña">
+                        <input matInput formControlName="password" type="password" placeholder="Contraseña" (paste)="onPaste($event)">
                     </mat-form-field>
                     @if (mostrarSelect()) {
                     <mat-form-field appearance="outline" class="input-custom">

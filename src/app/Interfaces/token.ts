@@ -4,4 +4,6 @@ export interface Token {
     NameProfile:string;
     Email:string;
     Name:string;
+    ColorPrimary:string;
+    ColorSecundary:string
 }

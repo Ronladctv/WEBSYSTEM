@@ -2,8 +2,8 @@ import { Component, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { MatSidenav } from '@angular/material/sidenav';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { Header } from '../../components/header/header';
-import { Footer } from '../../components/footer/footer';
+import { Header } from '../../Shared/header/header';
+import { Footer } from '../../Shared/footer/footer';
 import { materialProviders } from '../../shared-ui';
 import { MenuService } from '../../Services/menu.service';
 import { Menu } from '../../Interfaces/menu';
@@ -40,8 +40,10 @@ export class MainLayout {
           this.sidenav.open();
         }
       })
-    const usuarioId = localStorage.getItem('usuarioId') ?? '';
-    const empresaId = localStorage.getItem('empresaId') ?? '';
+
+    const usuarioId = localStorage.getItem('UsuarioId') ?? '';
+    const empresaId = localStorage.getItem('EmpresaId') ?? '';
+
     this.Menu.GetMneu(usuarioId, empresaId).subscribe({
       next: (data) => {
         if (data.value) {

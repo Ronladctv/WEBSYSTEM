@@ -21,7 +21,7 @@ export class Login {
   private Access = inject(AccessService)
   private router = inject(Router)
   public formBuild = inject(FormBuilder)
-  
+
   public mostrarSelect = signal(false);
   public empresas = signal<Empresa[]>([]);
   private cd = inject(ChangeDetectorRef);
@@ -52,13 +52,15 @@ export class Login {
             localStorage.setItem("token", data.value.token)
             if (data.value.token) {
               const decoded = jwtDecode<Token>(data.value.token);
-              localStorage.setItem('EmpresaId:', decoded.EmpresaId);
-              localStorage.setItem('UsuarioId:', decoded.UsuarioId);
+              localStorage.setItem('EmpresaId', decoded.EmpresaId);
+              localStorage.setItem('UsuarioId', decoded.UsuarioId);
               localStorage.setItem('NameProfile', decoded.NameProfile);
               localStorage.setItem('Email', decoded.Email);
               localStorage.setItem('Name', decoded.Name);
+              localStorage.setItem('ColorPrimary', decoded.ColorPrimary);
+              localStorage.setItem('ColorSecundary', decoded.ColorSecundary);
             }
-            this.router.navigate(['/Home']);
+            this.router.navigate(['/home']);
           }
           else if (data.value.empresas && data.value.empresas.length > 0) {
             this.mostrarSelect.set(true);
@@ -75,7 +77,9 @@ export class Login {
       }
     })
   }
-
+  onPaste(event: ClipboardEvent) {
+    event.preventDefault();
+  }
   Register() {
     this.router.navigate(["registro"])
   }

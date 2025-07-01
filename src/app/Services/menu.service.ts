@@ -14,7 +14,7 @@ export class MenuService {
   constructor() { }
 
   GetMneu(usuarioId:string, empresaId:string): Observable<ResponseAcces> {
-    return this.http.post<ResponseAcces>(`${this.baseUrl}api/Authenticated/ListMenu/${usuarioId}/${empresaId}`, null);
+    return this.http.get<ResponseAcces>(`${this.baseUrl}api/Menu/ListMenu/${usuarioId}/${empresaId}`);
   }
 
 }
