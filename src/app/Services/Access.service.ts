@@ -26,4 +26,7 @@ export class AccessService {
     return this.http.get<ResponseAcces>(`${this.baseUrl}api/Authenticated/ValidateToken?token=${token}`)
   }
 
+  update(objeto: User): Observable<ResponseAcces> {
+    return this.http.post<ResponseAcces>(`${this.baseUrl}api/Authenticated`, objeto)
+  }
 }

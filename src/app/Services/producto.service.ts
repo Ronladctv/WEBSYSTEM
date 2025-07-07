@@ -1,9 +1,24 @@
 import { Injectable } from '@angular/core';
+import { settings } from '../Settings/appsettings';
+import { ResponseAcces } from '../Interfaces/ResponseAcces';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { Producto } from '../components/producto/producto';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductoService {
+  
+  private endpoint: string = settings.endPoint;
+  private apiUrl: string = this.endpoint + "api/empresa/";
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
+
+  getList(): Observable<ResponseAcces> {
+    return this.http.get<ResponseAcces>((`${this.apiUrl}Lista`))
+  }
+  add(modelo: ResponseAcces): Observable<Producto> {
+    return this.http.post<Producto>(`{${this.apiUrl}}`, modelo);
+  }
 }

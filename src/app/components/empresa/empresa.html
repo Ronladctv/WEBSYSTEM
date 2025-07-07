@@ -14,41 +14,45 @@
         </div>
     </div>
     <table mat-table [dataSource]="dataSource" class="custom-table">
-        <ng-container matColumnDef="Name">
-            <th mat-header-cell *matHeaderCellDef> Nombres</th>
-            <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-        </ng-container>
-        <ng-container matColumnDef="LastName">
-            <th mat-header-cell *matHeaderCellDef>Apellidos</th>
-            <td mat-cell *matCellDef="let element"> {{element.lastName}} </td>
+        <ng-container matColumnDef="NameEmpresa">
+            <th mat-header-cell *matHeaderCellDef> Nombre de la empresa </th>
+            <td mat-cell *matCellDef="let element"> {{element.nameEmpresa}} </td>
         </ng-container>
         <ng-container matColumnDef="Address">
-            <th mat-header-cell *matHeaderCellDef>Direccion</th>
-            <td mat-cell *matCellDef="let element"> {{element.dddress}} </td>
-        </ng-container>
-        <ng-container matColumnDef="Email">
-            <th mat-header-cell *matHeaderCellDef> Correo </th>
+            <th mat-header-cell *matHeaderCellDef>Correo Electronico</th>
             <td mat-cell *matCellDef="let element"> {{element.email}} </td>
-        </ng-container>
-        <ng-container matColumnDef="Phone">
-            <th mat-header-cell *matHeaderCellDef> Telefono</th>
-            <td mat-cell *matCellDef="let element"> {{element.phone}} </td>
-        </ng-container>
-        <ng-container matColumnDef="Document">
-            <th mat-header-cell *matHeaderCellDef> Documento </th>
-            <td mat-cell *matCellDef="let element"> {{element.document}} </td>
         </ng-container>
         <ng-container matColumnDef="Ruc">
             <th mat-header-cell *matHeaderCellDef> Ruc </th>
             <td mat-cell *matCellDef="let element"> {{element.ruc}} </td>
         </ng-container>
+        <ng-container matColumnDef="Email">
+            <th mat-header-cell *matHeaderCellDef> Email </th>
+            <td mat-cell *matCellDef="let element"> {{element.address}} </td>
+        </ng-container>
+        <ng-container matColumnDef="ColorPrimay">
+            <th mat-header-cell *matHeaderCellDef> Color</th>
+            <td mat-cell *matCellDef="let element"> {{element.colorPrimary}} </td>
+        </ng-container>
+        <ng-container matColumnDef="ColorSecundary">
+            <th mat-header-cell *matHeaderCellDef> Color 2 </th>
+            <td mat-cell *matCellDef="let element"> {{element.colorSecundary}} </td>
+        </ng-container>
+        <ng-container matColumnDef="LogHeader">
+            <th mat-header-cell *matHeaderCellDef> Logo del encabezado </th>
+            <td mat-cell *matCellDef="let element"> {{element.logHeader}} </td>
+        </ng-container>
+        <ng-container matColumnDef="LogoFooter">
+            <th mat-header-cell *matHeaderCellDef> Logo pie de pagina </th>
+            <td mat-cell *matCellDef="let element"> {{element.logoFooter}} </td>
+        </ng-container>
         <ng-container matColumnDef="Acciones">
             <th mat-header-cell *matHeaderCellDef style="width: 80px;"> Acciones </th>
             <td mat-cell *matCellDef="let element" style="display: flex; gap: 8px; justify-content: center;">
-                <button mat-icon-button aria-label="Editar" class="small-icon-button color-primary" matTooltip="Editar usuario" (click)="editarProvedor(element.id)">
+                <button mat-icon-button aria-label="Editar" class="small-icon-button color-primary" matTooltip="Editar usuario" (click)="editarEmpresa(element.id)">
                     <mat-icon class="small-icon">edit</mat-icon>
                 </button>
-                <button mat-icon-button aria-label="Eliminar" class="small-icon-button color-warn"  matTooltip="Eliminar usuario" (click)="eliminarProvedor(element.id)">
+                <button mat-icon-button aria-label="Eliminar" class="small-icon-button color-warn"  matTooltip="Eliminar usuario" (click)="eliminarEmpresa(element.id)">
                     <mat-icon class="small-icon">delete</mat-icon>
                 </button>
             </td>

@@ -1,9 +1,12 @@
 export interface User {
-    Name?: string;
-    LastName?: string;
-    Email?: string;
-    Cedula?: string;
-    Phone?: string;
+    id?:string;
+    nameProfile?:string;
+    name?: string;
+    lastName?: string;
+    email?: string;
+    cedula?: string;
+    phone?: string;
+    typeUserId?:string;
 }
 export interface UserResponse {
     isSuccess: boolean;

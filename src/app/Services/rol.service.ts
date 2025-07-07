@@ -1,9 +1,21 @@
 import { Injectable } from '@angular/core';
+import { settings } from '../Settings/appsettings';
+import { HttpClient } from '@angular/common/http';
+import { ResponseAcces } from '../Interfaces/ResponseAcces';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RolService {
 
-  constructor() { }
+  private endpoint: string = settings.endPoint;
+  private apiUrl: string = this.endpoint + "api/roles/";
+
+  constructor(private http: HttpClient) { }
+
+  getList(): Observable<ResponseAcces> {
+    return this.http.get<ResponseAcces>(`${this.apiUrl}Lista`)
+  }
+  
 }

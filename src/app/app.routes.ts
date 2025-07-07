@@ -4,6 +4,13 @@ import { Login } from './components/Authentication/login/login';
 import { MainLayout } from './Layouts/main-layout/main-layout';
 import { Home } from './components/home/home';
 import { Users } from './components/user/user';
+import { Dashoard } from './components/dashoard/dashoard';
+import { Cliente } from './components/cliente/cliente';
+import { Provedor } from './components/provedor/provedor';
+import { Inicio } from './components/inicio/inicio';
+import { Reporting } from './components/reporting/reporting';
+import { Configuration } from './components/configuration/configuration';
+import { Empresa } from './components/empresa/empresa';
 
 export const routes: Routes = [
     { path: 'login', component: Login },
@@ -11,8 +18,18 @@ export const routes: Routes = [
         path: '',
         component: MainLayout,
         children: [
+            
+            { path: 'inicio', component: Inicio, canActivate: [authGuard] },
+            { path: 'perfil', component: Home, canActivate: [authGuard] },  
             { path: 'home', component: Home, canActivate: [authGuard] }, 
+            { path: 'cliente', component: Cliente, canActivate: [authGuard] },
+            { path: 'historyVentas', component:Reporting, canActivate: [authGuard] },
             { path: 'usuario', component: Users, canActivate: [authGuard] },
+            { path: 'proveedor', component: Provedor, canActivate: [authGuard] },
+            { path: 'empresa', component: Empresa, canActivate: [authGuard] },
+            { path: 'dashboard', component: Dashoard, canActivate: [authGuard] },
+            { path: 'configuracion', component: Configuration, canActivate: [authGuard] },
+            { path: 'venta', component: Dashoard, canActivate: [authGuard] },
             { path: '**', redirectTo: '', pathMatch: 'full' }
         ]
     },

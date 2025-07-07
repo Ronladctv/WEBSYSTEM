@@ -21,7 +21,18 @@ export class UserService {
 
   add(modelo:User):Observable<User>
   {
-    return this.http.post<User>(`{${this.apiUrl}}`, modelo);
+    return this.http.post<User>(`${this.apiUrl}Register`, modelo);
   }
+  update(modelo:User):Observable<User>
+  {
+    return this.http.post<User>(`{${this.apiUrl}}Update`, modelo);
+  }
+
+  asignarRol(empresaId:string, usuarioId:string, rolId: string):Observable<ResponseAcces>
+  {
+    return this.http.post<ResponseAcces>(`${this.apiUrl}api/AsignarRole/${empresaId}/${usuarioId}/${rolId}`,null);
+  }
+  
 }
+
 

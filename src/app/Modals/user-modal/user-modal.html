@@ -1,0 +1,86 @@
+<h2 mat-dialog-title>{{tituloAccion}} Usuario</h2>
+<mat-dialog-content>
+    <form [formGroup]="formUser">
+        <mat-grid-list cols="2" rowHeight="85px" gutterSize="10px">
+            <mat-grid-tile colspan="2">
+                <mat-form-field appearance="outline" class="input-custom">
+                    <mat-label>Nombre de usuario</mat-label>
+                    <input matInput formControlName="nameProfile" placeholder="Nombre de perfil" autocomplete="off">
+                    <mat-icon matSuffix>person</mat-icon>
+                </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile colspan="2">
+                <mat-form-field appearance="outline" class="input-custom">
+                    <mat-label>Nombres Completos</mat-label>
+                    <input matInput formControlName="name" placeholder="Nombres" autocomplete="off">
+                    <mat-icon matSuffix>badge</mat-icon>
+                </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile colspan="2">
+                <mat-form-field appearance="outline" class="input-custom">
+                    <mat-label>Apellidos Completos</mat-label>
+                    <input matInput formControlName="lastName" placeholder="Nombres" autocomplete="off">
+                    <mat-icon matSuffix>badge</mat-icon>
+                </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile colspan="2">
+                <mat-form-field appearance="outline" class="input-custom">
+                    <mat-label>Tipo de identificación</mat-label>
+                    <mat-select formControlName="categoriType">
+                        <mat-option value="" disabled>Seleccione tipo de identificación</mat-option>
+                        @for (categoriType of categoriType(); track categoriType.id ) {
+                        <mat-option [value]="categoriType.id">{{ categoriType.name }}</mat-option>
+                        }
+                    </mat-select>
+                    <mat-icon matSuffix>assignment_ind</mat-icon>
+                </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile>
+                <mat-form-field appearance="outline" class="input-custom">
+                    <mat-label>Cedula</mat-label>
+                    <input matInput formControlName="cedula" placeholder="Nombres" autocomplete="off">
+                    <mat-icon matSuffix>credit_card</mat-icon>
+                </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile>
+                <mat-form-field appearance="outline" class="input-custom">
+                    <mat-label>Numero Telefonico</mat-label>
+                    <input matInput formControlName="phone" type="tel" placeholder="Nombres" autocomplete="off">
+                    <mat-icon matSuffix>phone</mat-icon>
+                </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile>
+                <mat-form-field appearance="outline" class="input-custom">
+                    <mat-label>Correo Electronico</mat-label>
+                    <input matInput formControlName="email" type="email" placeholder="Nombres" autocomplete="off">
+                    <mat-icon matSuffix>email</mat-icon>
+                </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile>
+                <mat-form-field appearance="outline" class="input-custom">
+                    <mat-label>Contraseña</mat-label>
+                    <input matInput formControlName="password" type="password" placeholder="Contraseña"
+                        autocomplete="off" (paste)="onPaste($event)">
+                    <mat-icon matSuffix>lock</mat-icon>
+                </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile colspan="2">
+                <mat-form-field appearance="outline" class="input-custom">
+                    <mat-label>Asigna un Rol para el Usuario</mat-label>
+                    <mat-select formControlName="roles">
+                        <mat-option value="" disabled>Seleccione un Rol para el Usuario</mat-option>
+                        @for (roles of roles(); track roles.id ) {
+                        <mat-option [value]="roles.id">{{ roles.nameRol }}</mat-option>
+                        }
+                    </mat-select>
+                    <mat-icon matSuffix>supervisor_account</mat-icon>
+                </mat-form-field>
+            </mat-grid-tile>
+        </mat-grid-list>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button matButton mat-dialog-close color="warn">Volver</button>
+    <button matButton mat-dialog-close color="warn" [disabled]="formUser.invalid"
+        (click)="saveUser()">{{botonAccion}}</button>
+</mat-dialog-actions>

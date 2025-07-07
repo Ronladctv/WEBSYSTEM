@@ -6,9 +6,9 @@
                 <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input>
             </mat-form-field>
             <div style="flex: 1 1 50%; display: flex; justify-content: flex-end;">
-                <button mat-raised-button color="primary"  matTooltip="Exportar Usuarios">
-                    <mat-icon>print</mat-icon>
-                    Imprimir
+                <button mat-raised-button color="primary" (click)="NewUser()" matTooltip="Agregar Usuario">
+                    <mat-icon>person_add</mat-icon>
+                    Agregar
                 </button>
             </div>
         </div>
@@ -37,7 +37,7 @@
         <ng-container matColumnDef="Acciones">
             <th mat-header-cell *matHeaderCellDef style="width: 80px;"> Acciones </th>
             <td mat-cell *matCellDef="let element" style="display: flex; gap: 8px; justify-content: center;">
-                <button mat-icon-button aria-label="Editar" class="small-icon-button color-primary" matTooltip="Editar usuario">
+                <button mat-icon-button aria-label="Editar" class="small-icon-button color-primary" (click)="EditUser(element)" matTooltip="Editar usuario">
                     <mat-icon class="small-icon">edit</mat-icon>
                 </button>
                 <button mat-icon-button aria-label="Eliminar" class="small-icon-button color-warn"  matTooltip="Eliminar usuario">

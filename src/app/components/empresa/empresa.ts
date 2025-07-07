@@ -1,29 +1,29 @@
-import { Component, ViewChild } from '@angular/core';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { materialProviders } from '../../shared-ui';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { ProductoService } from '../../Services/producto.service';
+import { EmpresaService } from '../../Services/empresa.service';
 
 @Component({
-  selector: 'app-producto',
+  selector: 'app-empresa',
   imports: [materialProviders, MatTableModule, MatPaginatorModule, MatInputModule, MatTooltipModule],
-  templateUrl: './producto.html',
-  styleUrl: './producto.css'
+  templateUrl: './empresa.html',
+  styleUrl: './empresa.css'
 })
-export class Producto {
-  displayedColumns: string[] = ['Name', 'Description', 'Brand', 'Price', 'Stock'];
-  dataSource = new MatTableDataSource<Producto>();
+export class Empresa implements AfterViewInit, OnInit {
+  displayedColumns: string[] = ['NameEmpresa', 'Address', 'Ruc', 'Email', 'LogHeader', 'LogoFooter', 'ColorPrimay', 'ColorSecundary', 'Acciones'];
+  dataSource = new MatTableDataSource<Empresa>();
 
-  constructor(private _productoService: ProductoService) {
+
+  constructor(private _empresaService: EmpresaService) {
 
   }
 
   ngOnInit(): void {
-    this.mostrarProducto();
+    this.mostrarEmpresas();
   }
-
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -35,8 +35,8 @@ export class Producto {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  mostrarProducto() {
-    this._productoService.getList().subscribe({
+  mostrarEmpresas() {
+    this._empresaService.getList().subscribe({
       next: (response) => {
         if (response.value) {
           this.dataSource.data = response.value;
@@ -49,12 +49,11 @@ export class Producto {
       }
     });
   }
-  editarProducto(id: string) {
+  editarEmpresa(id: string) {
     console.log('Editar empresa con ID GUID:', id);
   }
 
-  eliminarProducto(id: string) {
+  eliminarEmpresa(id: string) {
     console.log('Eliminar empresa con ID GUID:', id);
   }
-
 }
