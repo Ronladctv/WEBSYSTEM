@@ -64,8 +64,10 @@ export class UserModal implements OnInit {
     private dialogoReferencia: MatDialogRef<UserModal>,
     private fb: FormBuilder,
     private _snackBar: MatSnackBar,
-    private _userService: AccessService,
+    private _accessService: AccessService,
+    private _userService: UserService,
     private _rolesService: RolService,
+
     private _categoryType: CategoryTypeService,
     @Inject(MAT_DIALOG_DATA) public datauser: User
 
@@ -132,37 +134,67 @@ export class UserModal implements OnInit {
     console.log(this.formUser.value)
     const EMPTY_GUID = '00000000-0000-0000-0000-000000000000';
 
+    const empresaId = localStorage.getItem('EmpresaId') ?? '';
+
     const modelo: User =
     {
       id: this.datauser ? this.datauser.id : EMPTY_GUID,
-      nameProfile:this.formUser.value.nameProfile,
+      nameProfile: this.formUser.value.nameProfile,
       name: this.formUser.value.name,
       lastName: this.formUser.value.lastName,
-      email:this.formUser.value.email,
+      email: this.formUser.value.email,
       cedula: this.formUser.value.cedula,
       phone: this.formUser.value.phone,
-      typeUserId:this.formUser.value.categoriType
+      password: this.formUser.value.password,
+      typeUserId: this.formUser.value.categoriType
       //para fechas
       //fecha: moment(this.formuser.value.fechacontrato).format("DD/MM/YYYY")
     }
     if (this.datauser == null) {
       this._userService.register(modelo).subscribe({
         next: (data) => {
-          this.mostrarAlerta("Usuario Creado Exitosamente", "Listo")
-          this.dialogoReferencia.close("Creado")
+          if (data.status) {
+            const selectedRole = this.formUser.value.roles;
+
+            if (selectedRole) {
+              this._userService.asignarRol(empresaId,data.value.id,selectedRole).subscribe({
+                next: (data) => {
+                  if (data.status) {
+                    this.mostrarAlerta("El rol se agregó correctamente.", "Listo")
+                  }
+                }
+              });
+            }
+
+            this.mostrarAlerta("El usuario se creó correctamente.", "Listo")
+            this.dialogoReferencia.close("Creado")
+          }
         }, error: (e) => {
-          this.mostrarAlerta("No se pudo creaar el Usuario", "Error")
+          this.mostrarAlerta("No se pudo registrar el usuario.", "Error")
         }
       })
     }
     else {
       this._userService.update(modelo).subscribe({
         next: (data) => {
-          console.log(data)
-          this.mostrarAlerta("Usuario Creado Exitosamente", "Listo")
-          this.dialogoReferencia.close("Creado")
+          if (data.status) {
+            const selectedRole = this.formUser.value.roles;
+
+            if (selectedRole) {
+              this._userService.asignarRol(empresaId,data.value.id,selectedRole).subscribe({
+                next: (data) => {
+                  if (data.status) {
+                    this.mostrarAlerta("El rol se agregó correctamente.", "Listo")
+                  }
+                }
+              });
+            }
+
+          this.mostrarAlerta("El usuario se actualizó correctamente.", "Listo")
+          this.dialogoReferencia.close("Editado")
+          }
         }, error: (e) => {
-          this.mostrarAlerta("No se pudo creaar el Usuario", "Error")
+          this.mostrarAlerta("No se pudo registrar el usuario.", "Error")
         }
       })
     }

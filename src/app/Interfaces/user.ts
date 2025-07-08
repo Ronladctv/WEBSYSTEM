@@ -7,6 +7,7 @@ export interface User {
     cedula?: string;
     phone?: string;
     typeUserId?:string;
+    password?:string;
 }
 export interface UserResponse {
     isSuccess: boolean;

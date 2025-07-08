@@ -58,7 +58,7 @@ export class Users implements AfterViewInit, OnInit {
       width: "750px",
       maxWidth: "none"
     }).afterClosed().subscribe(resultado => {
-      if (resultado === "creado") {
+      if (resultado === "Creado") {
         this.mostrarUser();
       }
     });
@@ -71,7 +71,7 @@ export class Users implements AfterViewInit, OnInit {
       maxWidth: "none",
       data: dataUser
     }).afterClosed().subscribe(resultado => {
-      if (resultado === "editado") {
+      if (resultado === "Editado") {
         this.mostrarUser();
       }
     });

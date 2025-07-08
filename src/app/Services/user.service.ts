@@ -9,30 +9,32 @@ import { ResponseAcces } from '../Interfaces/ResponseAcces';
   providedIn: 'root'
 })
 export class UserService {
-  private endpoint:string = settings.endPoint;
-  private apiUrl:string = this.endpoint + "api/user/";
+  private endpoint: string = settings.endPoint;
+  private apiUrl: string = this.endpoint + "api/user/";
 
-  constructor(private http :HttpClient) { }
+  constructor(private http: HttpClient) { }
 
-  getList():Observable<ResponseAcces>
-  {
+  getList(): Observable<ResponseAcces> {
     return this.http.get<ResponseAcces>(`${this.apiUrl}Lista`)
   }
 
-  add(modelo:User):Observable<User>
-  {
-    return this.http.post<User>(`${this.apiUrl}Register`, modelo);
-  }
-  update(modelo:User):Observable<User>
-  {
-    return this.http.post<User>(`{${this.apiUrl}}Update`, modelo);
-  }
-
-  asignarRol(empresaId:string, usuarioId:string, rolId: string):Observable<ResponseAcces>
-  {
-    return this.http.post<ResponseAcces>(`${this.apiUrl}api/AsignarRole/${empresaId}/${usuarioId}/${rolId}`,null);
+  
+  register(objeto: User): Observable<ResponseAcces> {
+    return this.http.post<ResponseAcces>(`${this.apiUrl}/Register`, objeto)
   }
   
+  update(objeto: User): Observable<ResponseAcces> {
+    return this.http.post<ResponseAcces>(`${this.apiUrl}/Update`, objeto)
+  }
+
+  asignarRol(empresaId: string, usuarioId: string, rolId: string): Observable<ResponseAcces> {
+    return this.http.post<ResponseAcces>(`${this.apiUrl}AsignarRole/${empresaId}/${usuarioId}/${rolId}`, null);
+  }
+
+  updatepassword(password:string,userId:string ): Observable<ResponseAcces> {
+    return this.http.post<ResponseAcces>(`${this.apiUrl}/UpdatePassword/${userId}`,password)
+  }
+
 }
 
 

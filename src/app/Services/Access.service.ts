@@ -14,19 +14,11 @@ export class AccessService {
 
   constructor() { }
 
-  register(objeto: User): Observable<ResponseAcces> {
-    return this.http.post<ResponseAcces>(`${this.baseUrl}api/Authenticated/Register`, objeto)
-  }
-
   Login(objeto: UserLogin): Observable<ResponseAccesLogin> {
     debugger
     return this.http.post<ResponseAccesLogin>(`${this.baseUrl}api/Authenticated/Login`, objeto)
   }
   validateToken(token: string): Observable<ResponseAcces> {
     return this.http.get<ResponseAcces>(`${this.baseUrl}api/Authenticated/ValidateToken?token=${token}`)
-  }
-
-  update(objeto: User): Observable<ResponseAcces> {
-    return this.http.post<ResponseAcces>(`${this.baseUrl}api/Authenticated`, objeto)
   }
 }
