@@ -14,17 +14,21 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
+  getListAdmin(empresaId:string): Observable<ResponseAcces> {
+    return this.http.get<ResponseAcces>(`${this.apiUrl}ListaEmpresa/${empresaId}`)
+  }
+
   getList(): Observable<ResponseAcces> {
     return this.http.get<ResponseAcces>(`${this.apiUrl}Lista`)
   }
 
   
   register(objeto: User): Observable<ResponseAcces> {
-    return this.http.post<ResponseAcces>(`${this.apiUrl}/Register`, objeto)
+    return this.http.post<ResponseAcces>(`${this.apiUrl}Register`, objeto)
   }
   
   update(objeto: User): Observable<ResponseAcces> {
-    return this.http.post<ResponseAcces>(`${this.apiUrl}/Update`, objeto)
+    return this.http.post<ResponseAcces>(`${this.apiUrl}Update`, objeto)
   }
 
   asignarRol(empresaId: string, usuarioId: string, rolId: string): Observable<ResponseAcces> {
@@ -32,9 +36,12 @@ export class UserService {
   }
 
   updatepassword(password:string,userId:string ): Observable<ResponseAcces> {
-    return this.http.post<ResponseAcces>(`${this.apiUrl}/UpdatePassword/${userId}`,password)
+    return this.http.post<ResponseAcces>(`${this.apiUrl}UpdatePassword/${userId}`,password)
   }
 
+  obtainRole(userId:string, empresaId:string): Observable<ResponseAcces> {
+    return this.http.get<ResponseAcces>(`${this.apiUrl}ObtainRol/${userId}/${empresaId}`)
+  }
 }
 
 

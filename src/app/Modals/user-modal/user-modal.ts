@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, signal } from '@angular/core';
+import { Component, OnInit, Inject, signal, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogActions, MatDialogClose, MatDialogContent, MatDialogTitle } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -19,6 +19,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { CategoryType } from '../../Interfaces/category-type';
 import { CategoryTypeService } from '../../Services/category-type.service';
 import { AccessService } from '../../Services/Access.service';
+import { Router } from '@angular/router';
 
 
 export const MY_DATE_FORMATS = {
@@ -53,10 +54,11 @@ export const MY_DATE_FORMATS = {
   providers: [{ provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS }]
 })
 export class UserModal implements OnInit {
-
+  private router = inject(Router)
   formUser: FormGroup;
   tituloAccion: string = "Nuevo";
   botonAccion: string = "Guardar";
+  inputpassword: boolean = true;
   public roles = signal<Roles[]>([]);
   public categoriType = signal<CategoryType[]>([]);
 
@@ -81,7 +83,7 @@ export class UserModal implements OnInit {
       phone: ["", Validators.required],
       email: ["", Validators.required],
       password: ["", Validators.required],
-      roles: ["", Validators.required],
+      roles: [""],
       categoriType: ["", Validators.required]
     })
 
@@ -105,6 +107,7 @@ export class UserModal implements OnInit {
   }
 
   ngOnInit(): void {
+    const empresaId = localStorage.getItem('EmpresaId') ?? '';
     if (this.datauser) {
       this.formUser.patchValue({
         nameProfile: this.datauser.nameProfile,
@@ -113,10 +116,29 @@ export class UserModal implements OnInit {
         cedula: this.datauser.cedula,
         phone: this.datauser.phone,
         email: this.datauser.email,
-        categoriType: this.datauser.typeUserId
+        categoriType: this.datauser.typeUserId,
       })
+
+      this.formUser.get('password')?.clearValidators();
+      this.formUser.get('password')?.updateValueAndValidity();
+
+      this.formUser.get('roles')?.setValidators([Validators.required]);
+      this.formUser.get('roles')?.updateValueAndValidity();
+
+      this._userService.obtainRole(this.datauser.id!, empresaId).subscribe({
+        next: (data) => {
+          if (data.status && data.value) {
+            this.formUser.get('roles')?.setValue(data.value.rolId);
+          }
+        },
+        error: (e) => {
+          this.mostrarAlerta("No se pudo obtener el rol del usuario.", "Error");
+        }
+      });
+
       this.tituloAccion = "Editar";
-      this.botonAccion = "Actualizar"
+      this.botonAccion = "Actualizar";
+      this.inputpassword = false;
     }
   }
 
@@ -155,19 +177,21 @@ export class UserModal implements OnInit {
         next: (data) => {
           if (data.status) {
             const selectedRole = this.formUser.value.roles;
-
             if (selectedRole) {
-              this._userService.asignarRol(empresaId,data.value.id,selectedRole).subscribe({
+              this._userService.asignarRol(empresaId, data.value.id, selectedRole).subscribe({
                 next: (data) => {
                   if (data.status) {
                     this.mostrarAlerta("El rol se agregó correctamente.", "Listo")
+                  } else {
+                    this.mostrarAlerta(data.msg, "Error")
                   }
                 }
               });
             }
-
             this.mostrarAlerta("El usuario se creó correctamente.", "Listo")
-            this.dialogoReferencia.close("Creado")
+            window.location.reload();
+          } else {
+            this.mostrarAlerta(data.msg, "Error")
           }
         }, error: (e) => {
           this.mostrarAlerta("No se pudo registrar el usuario.", "Error")
@@ -179,19 +203,22 @@ export class UserModal implements OnInit {
         next: (data) => {
           if (data.status) {
             const selectedRole = this.formUser.value.roles;
-
             if (selectedRole) {
-              this._userService.asignarRol(empresaId,data.value.id,selectedRole).subscribe({
+              this._userService.asignarRol(empresaId, data.value.id, selectedRole).subscribe({
                 next: (data) => {
                   if (data.status) {
                     this.mostrarAlerta("El rol se agregó correctamente.", "Listo")
                   }
+                  else {
+                    this.mostrarAlerta(data.msg, "Error")
+                  }
                 }
               });
             }
-
-          this.mostrarAlerta("El usuario se actualizó correctamente.", "Listo")
-          this.dialogoReferencia.close("Editado")
+            this.mostrarAlerta("El usuario se actualizó correctamente.", "Listo")
+            window.location.reload();
+          } else {
+            this.mostrarAlerta(data.msg, "Error")
           }
         }, error: (e) => {
           this.mostrarAlerta("No se pudo registrar el usuario.", "Error")

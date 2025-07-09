@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ViewChild, OnInit, inject } from '@angular/core';
+import { AfterViewInit, Component, ViewChild, OnInit, inject, signal } from '@angular/core';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { materialProviders } from '../../shared-ui';
@@ -8,40 +8,76 @@ import { UserService } from '../../Services/user.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialog, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogTitle } from '@angular/material/dialog';
 import { UserModal } from '../../Modals/user-modal/user-modal';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-index',
-  imports: [materialProviders, MatTableModule, MatPaginatorModule, MatInputModule, MatTooltipModule],
+  imports: [materialProviders, MatTableModule, MatPaginatorModule, MatInputModule, MatTooltipModule, MatExpansionModule],
   templateUrl: './user.html',
   styleUrl: './user.css',
 })
 
 export class Users implements AfterViewInit, OnInit {
-  displayedColumns: string[] = ['Name', 'LastName', 'Email', 'Cedula', 'Phone', 'Acciones'];
-  dataSource = new MatTableDataSource<User>();
+  displayedColumns1: string[] = ['Name', 'LastName', 'Email', 'Cedula', 'Phone', 'Acciones'];
+  dataSource1 = new MatTableDataSource<User>();
+
+  displayedColumns2: string[] = ['Name', 'LastName', 'Email', 'Cedula', 'Phone', 'Acciones'];
+  dataSource2 = new MatTableDataSource<User>();
+
+  expandedUser = signal<string | null>(null);
+
+  public mostrarTable = signal(false);
+  public mostrarRegistro = signal(true);
+
+  public useradmin = signal<User[]>([]);
+
   readonly dialog = inject(MatDialog);
 
   constructor(private _userService: UserService) { }
 
   ngOnInit(): void {
     this.mostrarUser();
+    this.mostrarUserAdmin();
   }
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
+    this.dataSource1.paginator = this.paginator;
+    this.dataSource2.paginator = this.paginator;
   }
-  applyFilter(event: Event) {
+
+  applyFilter1(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+    this.dataSource1.filter = filterValue.trim().toLowerCase();
+  }
+  applyFilter2(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource2.filter = filterValue.trim().toLowerCase();
   }
 
   mostrarUser() {
     this._userService.getList().subscribe({
       next: (response) => {
         if (response.value) {
-          this.dataSource.data = response.value;
+          this.dataSource1.data = response.value;
+        } else {
+          console.error('Error en la petición:', response.msg);
+        }
+      },
+      error: (e) => {
+        console.error('Error en la petición HTTP:', e);
+      }
+    });
+  }
+
+  mostrarUserAdmin() {
+    const empresaId = localStorage.getItem('EmpresaId') ?? '';
+    this._userService.getListAdmin(empresaId).subscribe({
+      next: (response) => {
+        if (response.value) {
+          this.dataSource2.data = response.value;
+          this.useradmin.set(response.value)
         } else {
           console.error('Error en la petición:', response.msg);
         }
@@ -58,8 +94,11 @@ export class Users implements AfterViewInit, OnInit {
       width: "750px",
       maxWidth: "none"
     }).afterClosed().subscribe(resultado => {
-      if (resultado === "Creado") {
+      
+  console.log("Resultado recibido al cerrar:", resultado); 
+      if (resultado === "creado") {
         this.mostrarUser();
+        this.mostrarUserAdmin();
       }
     });
   }
@@ -71,9 +110,15 @@ export class Users implements AfterViewInit, OnInit {
       maxWidth: "none",
       data: dataUser
     }).afterClosed().subscribe(resultado => {
-      if (resultado === "Editado") {
+      console.log("Resultado recibido al cerrar:", resultado); 
+      if (resultado == "editado") {
         this.mostrarUser();
+        this.mostrarUserAdmin();
       }
     });
+  }
+
+  toggleUser(id: string) {
+    this.expandedUser.update(current => (current === id ? null : id));
   }
 }

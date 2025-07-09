@@ -1,14 +1,7 @@
 <h2 mat-dialog-title>{{tituloAccion}} Usuario</h2>
 <mat-dialog-content>
-    <form [formGroup]="formUser">
+    <form [formGroup]="formClient">
         <mat-grid-list cols="2" rowHeight="85px" gutterSize="10px">
-            <mat-grid-tile colspan="2">
-                <mat-form-field appearance="outline" class="input-custom">
-                    <mat-label>Nombre de usuario</mat-label>
-                    <input matInput formControlName="nameProfile" placeholder="Nombre de perfil" autocomplete="off">
-                    <mat-icon matSuffix>person</mat-icon>
-                </mat-form-field>
-            </mat-grid-tile>
             <mat-grid-tile colspan="2">
                 <mat-form-field appearance="outline" class="input-custom">
                     <mat-label>Nombres Completos</mat-label>
@@ -49,40 +42,53 @@
                     <mat-icon matSuffix>phone</mat-icon>
                 </mat-form-field>
             </mat-grid-tile>
-            <mat-grid-tile [colspan]="inputpassword ? 1 : 2">
+            <mat-grid-tile>
                 <mat-form-field appearance="outline" class="input-custom">
                     <mat-label>Correo Electronico</mat-label>
                     <input matInput formControlName="email" type="email" placeholder="Nombres" autocomplete="off">
                     <mat-icon matSuffix>email</mat-icon>
                 </mat-form-field>
             </mat-grid-tile>
-            @if (inputpassword) {
+
             <mat-grid-tile>
                 <mat-form-field appearance="outline" class="input-custom">
-                    <mat-label>Contraseña</mat-label>
-                    <input matInput formControlName="password" type="password" placeholder="Contraseña"
-                        autocomplete="off" (paste)="onPaste($event)">
-                    <mat-icon matSuffix>lock</mat-icon>
+                    <mat-label>Fecha de nacimiento</mat-label>
+                    <input matInput formControlName="birthdate" [matDatepicker]="picker" autocomplete="off">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                    <mat-icon matSuffix>calendar_today</mat-icon>
                 </mat-form-field>
             </mat-grid-tile>
-            }
-            <mat-grid-tile colspan="2">
+
+            <!-- ¿Es afiliado? -->
+            <mat-grid-tile>
                 <mat-form-field appearance="outline" class="input-custom">
-                    <mat-label>Asigna un Rol para el Usuario</mat-label>
-                    <mat-select formControlName="roles">
-                        <mat-option value="" disabled>Seleccione un Rol para el Usuario</mat-option>
-                        @for (roles of roles(); track roles.id ) {
-                        <mat-option [value]="roles.id">{{ roles.nameRol }}</mat-option>
-                        }
+                    <mat-label>¿Es Afiliado?</mat-label>
+                    <mat-select formControlName="isAfiliate">
+                        <mat-option [value]="true">Sí</mat-option>
+                        <mat-option [value]="false">No</mat-option>
                     </mat-select>
-                    <mat-icon matSuffix>supervisor_account</mat-icon>
+                    <mat-icon matSuffix>how_to_reg</mat-icon>
                 </mat-form-field>
             </mat-grid-tile>
+
+            <!-- ¿Es consumidor? -->
+            <mat-grid-tile>
+                <mat-form-field appearance="outline" class="input-custom">
+                    <mat-label>¿Consumidor Final?</mat-label>
+                    <mat-select formControlName="isConsumer">
+                        <mat-option [value]="true">Sí</mat-option>
+                        <mat-option [value]="false">No</mat-option>
+                    </mat-select>
+                    <mat-icon matSuffix>shopping_cart</mat-icon>
+                </mat-form-field>
+            </mat-grid-tile>
+
         </mat-grid-list>
     </form>
 </mat-dialog-content>
 <mat-dialog-actions>
     <button matButton mat-dialog-close color="warn">Volver</button>
-    <button matButton mat-dialog-close color="warn" [disabled]="formUser.invalid"
-        (click)="saveUser()">{{botonAccion}}</button>
+    <button matButton mat-dialog-close color="warn" [disabled]="formClient.invalid"
+        (click)="save()">{{botonAccion}}</button>
 </mat-dialog-actions>
