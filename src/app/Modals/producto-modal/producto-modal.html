@@ -1,0 +1,85 @@
+<h2 mat-dialog-title>{{tituloAccion}} Usuario</h2>
+<mat-dialog-content>
+    <form [formGroup]="formProducto">
+        <mat-grid-list cols="2" rowHeight="85px" gutterSize="10px">
+            <!-- Nombre del producto -->
+            <mat-grid-tile colspan="2">
+                <mat-form-field appearance="outline" class="input-custom">
+                    <mat-label>Nombre del Producto</mat-label>
+                    <input matInput formControlName="name" placeholder="Ingrese nombre del producto" autocomplete="off">
+                    <mat-icon matSuffix>shopping_bag</mat-icon>
+                </mat-form-field>
+            </mat-grid-tile>
+
+            <!-- Descripción del producto -->
+            <mat-grid-tile colspan="2">
+                <mat-form-field appearance="outline" class="input-custom">
+                    <mat-label>Descripción</mat-label>
+                    <input matInput formControlName="description" placeholder="Ingrese descripción" autocomplete="off">
+                    <mat-icon matSuffix>description</mat-icon>
+                </mat-form-field>
+            </mat-grid-tile>
+
+            <!-- Tipo de producto -->
+            <mat-grid-tile colspan="2">
+                <mat-form-field appearance="outline" class="input-custom">
+                    <mat-label>Tipo de Producto</mat-label>
+                    <mat-select formControlName="typeProductId">
+                        <mat-option value="" disabled>Seleccione tipo de producto</mat-option>
+                        @for (categoriType of typeProduct(); track categoriType.id) {
+                        <mat-option [value]="categoriType.id">{{ categoriType.name }}</mat-option>
+                        }
+                    </mat-select>
+                    <mat-icon matSuffix>category</mat-icon>
+                </mat-form-field>
+            </mat-grid-tile>
+
+            <!-- Marca -->
+            <mat-grid-tile>
+                <mat-form-field appearance="outline" class="input-custom">
+                    <mat-label>Marca</mat-label>
+                    <input matInput formControlName="brand" placeholder="Ingrese la marca" autocomplete="off">
+                    <mat-icon matSuffix>branding_watermark</mat-icon>
+                </mat-form-field>
+            </mat-grid-tile>
+
+            <!-- Precio -->
+            <mat-grid-tile>
+                <mat-form-field appearance="outline" class="input-custom">
+                    <mat-label>Precio</mat-label>
+                    <input matInput formControlName="price" type="number" placeholder="Ingrese el precio"
+                        autocomplete="off">
+                    <mat-icon matSuffix>attach_money</mat-icon>
+                </mat-form-field>
+            </mat-grid-tile>
+
+            <!-- Stock -->
+            <mat-grid-tile>
+                <mat-form-field appearance="outline" class="input-custom">
+                    <mat-label>Stock</mat-label>
+                    <input matInput formControlName="stock" type="number" placeholder="Ingrese cantidad en stock"
+                        autocomplete="off">
+                    <mat-icon matSuffix>inventory</mat-icon>
+                </mat-form-field>
+            </mat-grid-tile>
+
+            <!-- Estado -->
+            <mat-grid-tile>
+                <mat-form-field appearance="outline" class="input-custom">
+                    <mat-label>Estado</mat-label>
+                    <mat-select formControlName="state">
+                        <mat-option [value]="true">Activo</mat-option>
+                        <mat-option [value]="false">Inactivo</mat-option>
+                    </mat-select>
+                    <mat-icon matSuffix>toggle_on</mat-icon>
+                </mat-form-field>
+            </mat-grid-tile>
+
+        </mat-grid-list>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button matButton mat-dialog-close color="warn">Volver</button>
+    <button matButton mat-dialog-close color="warn" [disabled]="formProducto.invalid"
+        (click)="save()">{{botonAccion}}</button>
+</mat-dialog-actions>

@@ -19,4 +19,8 @@ export class CategoryTypeService {
     return this.http.get<ResponseAcces>((`${this.apiUrl}ListCategoryUser`))
   }
 
+  getListCategoryProduct(): Observable<ResponseAcces> {
+    return this.http.get<ResponseAcces>((`${this.apiUrl}ListCategoryProduct`))
+  }
+
 }

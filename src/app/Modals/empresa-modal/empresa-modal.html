@@ -1,0 +1,80 @@
+<h2 mat-dialog-title>{{tituloAccion}} Usuario</h2>
+<mat-dialog-content>
+    <form [formGroup]="formEmpresa">
+        <mat-grid-list cols="2" rowHeight="85px" gutterSize="10px">
+            <mat-grid-tile colspan="2">
+                <mat-form-field appearance="outline" class="input-custom">
+                    <mat-label>Nombre de la Empresa</mat-label>
+                    <input matInput formControlName="nameEmpresa" placeholder="Nombre de la Empresa" autocomplete="off">
+                    <mat-icon matSuffix>business</mat-icon>
+                </mat-form-field>
+            </mat-grid-tile>
+
+            <!-- RUC -->
+            <mat-grid-tile>
+                <mat-form-field appearance="outline" class="input-custom">
+                    <mat-label>RUC</mat-label>
+                    <input matInput formControlName="ruc" placeholder="RUC" autocomplete="off">
+                    <mat-icon matSuffix>badge</mat-icon>
+                </mat-form-field>
+            </mat-grid-tile>
+
+            <!-- Email -->
+            <mat-grid-tile>
+                <mat-form-field appearance="outline" class="input-custom">
+                    <mat-label>Email</mat-label>
+                    <input matInput type="email" formControlName="email" placeholder="Email" autocomplete="off">
+                    <mat-icon matSuffix>alternate_email</mat-icon>
+                </mat-form-field>
+            </mat-grid-tile>
+
+            <!-- Colores (Primario y Secundario) -->
+            <mat-grid-tile>
+                <mat-form-field appearance="outline" class="input-custom">
+                    <mat-label>Color Primario</mat-label>
+                    <input matInput type="color" formControlName="colorPrimary">
+                </mat-form-field>
+            </mat-grid-tile>
+
+            <mat-grid-tile>
+                <mat-form-field appearance="outline" class="input-custom">
+                    <mat-label>Color Secundario</mat-label>
+                    <input matInput type="color" formControlName="colorSecundary">
+                </mat-form-field>
+            </mat-grid-tile>
+
+            <!-- Dirección (colspan 2 porque puede ser más larga) -->
+            <mat-grid-tile colspan="2">
+                <mat-form-field appearance="outline" class="input-custom">
+                    <mat-label>Dirección</mat-label>
+                    <input matInput formControlName="address" placeholder="Dirección" autocomplete="off">
+                    <mat-icon matSuffix>location_on</mat-icon>
+                </mat-form-field>
+            </mat-grid-tile>
+
+            <!-- Logo Header -->
+            <mat-grid-tile>
+                <mat-form-field appearance="outline" class="input-custom">
+                    <mat-label>Logo Header</mat-label>
+                    <input matInput formControlName="logHeader" placeholder="URL del Logo Header" autocomplete="off">
+                    <mat-icon matSuffix>insert_photo</mat-icon>
+                </mat-form-field>
+            </mat-grid-tile>
+
+            <!-- Logo Footer -->
+            <mat-grid-tile>
+                <mat-form-field appearance="outline" class="input-custom">
+                    <mat-label>Logo Footer</mat-label>
+                    <input matInput formControlName="logoFooter" placeholder="URL del Logo Footer" autocomplete="off">
+                    <mat-icon matSuffix>insert_photo</mat-icon>
+                </mat-form-field>
+            </mat-grid-tile>
+
+        </mat-grid-list>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button matButton mat-dialog-close color="warn">Volver</button>
+    <button matButton mat-dialog-close color="warn" [disabled]="formEmpresa.invalid"
+        (click)="save()">{{botonAccion}}</button>
+</mat-dialog-actions>

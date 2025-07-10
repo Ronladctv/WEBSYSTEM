@@ -71,8 +71,6 @@ export class Cliente {
       width: "750px",
       maxWidth: "none"
     }).afterClosed().subscribe(resultado => {
-
-      console.log("Resultado recibido al cerrar:", resultado);
       if (resultado === "creado") {
         this.mostrarClient();
       }
@@ -86,7 +84,6 @@ export class Cliente {
       maxWidth: "none",
       data: data
     }).afterClosed().subscribe(resultado => {
-      console.log("Resultado recibido al cerrar:", resultado);
       if (resultado == "editado") {
         this.mostrarClient();
       }

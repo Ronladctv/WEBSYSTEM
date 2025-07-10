@@ -6,7 +6,7 @@ import { UserLogin } from '../../../Interfaces/user';
 import { ChangeDetectorRef } from '@angular/core';
 import { materialProviders } from '../../../shared-ui';
 import { ErrorStateMatcher } from '@angular/material/core';
-import { Empresa } from '../../../Interfaces/empresa';
+import { Empresas } from '../../../Interfaces/empresas';
 import { signal } from '@angular/core';
 import { jwtDecode } from 'jwt-decode';
 import { Token } from '../../../Interfaces/token';
@@ -23,7 +23,7 @@ export class Login {
   public formBuild = inject(FormBuilder)
 
   public mostrarSelect = signal(false);
-  public empresas = signal<Empresa[]>([]);
+  public empresas = signal<Empresas[]>([]);
   private cd = inject(ChangeDetectorRef);
 
 

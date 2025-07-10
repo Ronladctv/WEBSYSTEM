@@ -18,18 +18,21 @@ import { MatExpansionModule } from '@angular/material/expansion';
 })
 
 export class Users implements AfterViewInit, OnInit {
-  displayedColumns1: string[] = ['Name', 'LastName', 'Email', 'Cedula', 'Phone', 'Acciones'];
-  dataSource1 = new MatTableDataSource<User>();
+  displayedColumns: string[] = ['Name', 'LastName', 'Email', 'Cedula', 'Phone', 'Acciones'];
+  dataSource = new MatTableDataSource<User>();
 
-  displayedColumns2: string[] = ['Name', 'LastName', 'Email', 'Cedula', 'Phone', 'Acciones'];
-  dataSource2 = new MatTableDataSource<User>();
+  displayedColumnsAdmin: string[] = ['Name', 'LastName', 'Email', 'Cedula', 'Phone', 'Acciones'];
+  dataSourceAdmin = new MatTableDataSource<User>();
 
   expandedUser = signal<string | null>(null);
+  
+  expandedUserAdmin = signal<string | null>(null);
 
   public mostrarTable = signal(false);
   public mostrarRegistro = signal(true);
 
   public useradmin = signal<User[]>([]);
+  public user = signal<User[]>([]);
 
   readonly dialog = inject(MatDialog);
 
@@ -43,24 +46,25 @@ export class Users implements AfterViewInit, OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   ngAfterViewInit() {
-    this.dataSource1.paginator = this.paginator;
-    this.dataSource2.paginator = this.paginator;
+    this.dataSource.paginator = this.paginator;
+    this.dataSourceAdmin.paginator = this.paginator;
   }
 
   applyFilter1(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource1.filter = filterValue.trim().toLowerCase();
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
   applyFilter2(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource2.filter = filterValue.trim().toLowerCase();
+    this.dataSourceAdmin.filter = filterValue.trim().toLowerCase();
   }
 
   mostrarUser() {
     this._userService.getList().subscribe({
       next: (response) => {
         if (response.value) {
-          this.dataSource1.data = response.value;
+          this.dataSource.data = response.value;      
+          this.user.set(response.value)
         } else {
           console.error('Error en la petición:', response.msg);
         }
@@ -76,7 +80,7 @@ export class Users implements AfterViewInit, OnInit {
     this._userService.getListAdmin(empresaId).subscribe({
       next: (response) => {
         if (response.value) {
-          this.dataSource2.data = response.value;
+          this.dataSourceAdmin.data = response.value;
           this.useradmin.set(response.value)
         } else {
           console.error('Error en la petición:', response.msg);
@@ -120,5 +124,9 @@ export class Users implements AfterViewInit, OnInit {
 
   toggleUser(id: string) {
     this.expandedUser.update(current => (current === id ? null : id));
+  }
+
+  toggleUserAdmin(id: string) {
+    this.expandedUserAdmin.update(current => (current === id ? null : id));
   }
 }

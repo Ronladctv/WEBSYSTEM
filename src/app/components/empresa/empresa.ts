@@ -1,10 +1,13 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { materialProviders } from '../../shared-ui';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { EmpresaService } from '../../Services/empresa.service';
+import { MatDialog } from '@angular/material/dialog';
+import { EmpresaModal } from '../../Modals/empresa-modal/empresa-modal';
+import { Empresas } from '../../Interfaces/empresas';
 
 @Component({
   selector: 'app-empresa',
@@ -14,7 +17,16 @@ import { EmpresaService } from '../../Services/empresa.service';
 })
 export class Empresa implements AfterViewInit, OnInit {
   displayedColumns: string[] = ['NameEmpresa', 'Address', 'Ruc', 'Email', 'LogHeader', 'LogoFooter', 'ColorPrimay', 'ColorSecundary', 'Acciones'];
-  dataSource = new MatTableDataSource<Empresa>();
+  dataSource = new MatTableDataSource<Empresas>();
+
+  expandedEmpresa = signal<string | null>(null);
+
+  public mostrarTable = signal(false);
+  public mostrarRegistro = signal(true);
+
+  public empresaAdmin = signal<Empresas[]>([]);
+
+  readonly dialog = inject(MatDialog);
 
 
   constructor(private _empresaService: EmpresaService) {
@@ -40,6 +52,7 @@ export class Empresa implements AfterViewInit, OnInit {
       next: (response) => {
         if (response.value) {
           this.dataSource.data = response.value;
+          this.empresaAdmin.set(response.value)
         } else {
           console.error('Error en la petición:', response.msg);
         }
@@ -49,11 +62,34 @@ export class Empresa implements AfterViewInit, OnInit {
       }
     });
   }
-  editarEmpresa(id: string) {
-    console.log('Editar empresa con ID GUID:', id);
+
+  NewEmpresa() {
+    this.dialog.open(EmpresaModal, {
+      disableClose: true,
+      width: "750px",
+      maxWidth: "none"
+    }).afterClosed().subscribe(resultado => {
+      if (resultado === "creado") {
+        this.mostrarEmpresas();
+      }
+    });
   }
 
-  eliminarEmpresa(id: string) {
-    console.log('Eliminar empresa con ID GUID:', id);
+  EditEmpresa(data: Empresas) {
+    this.dialog.open(EmpresaModal, {
+      disableClose: true,
+      width: "750px",
+      maxWidth: "none",
+      data: data
+    }).afterClosed().subscribe(resultado => {
+      if (resultado == "editado") {
+        this.mostrarEmpresas();
+      }
+    });
   }
+
+  toggleUser(id: string) {
+    this.expandedEmpresa.update(current => (current === id ? null : id));
+  }
+
 }

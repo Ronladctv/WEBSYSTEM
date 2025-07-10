@@ -1,4 +1,4 @@
-import { Empresa } from '../Interfaces/empresa';
+import { Empresas } from './empresas';
 
 export interface ResponseAcces
 {
@@ -16,5 +16,5 @@ export interface ResponseAccesLogin
 export interface LoginResponse
 {
     Token?:string
-    Empresas?:Empresa[]
+    Empresas?:Empresas[]
 }

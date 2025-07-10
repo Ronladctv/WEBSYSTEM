@@ -1,3 +1,17 @@
+<mat-card class="mat-elevation-z4" style="display: flex; flex-direction: row; padding: 0; height: 35px;">
+    <button mat-button
+        style="flex: 1; border-right: 1px solid #ccc; font-weight: 600; font-size: 0.9rem; height: 100%; border-radius: 4px !important;"
+        (click)="mostrarRegistro.set(true); mostrarTable.set(false)" [class.active]="mostrarRegistro()">
+        Registro
+    </button>
+    <button mat-button
+        style="flex: 1; font-weight: 600; font-size: 0.9rem; height: 100%; border-radius: 4px !important;"
+        (click)="mostrarTable.set(true); mostrarRegistro.set(false)" [class.active]="mostrarTable()">
+        Tabla
+    </button>
+</mat-card>
+
+@if (mostrarTable()) {
 <mat-card class="mat-elevation-z8">
     <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 1px;">
         <div style="display: flex; width: 100%; gap: 12px; align-items: center;">
@@ -6,9 +20,9 @@
                 <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input>
             </mat-form-field>
             <div style="flex: 1 1 50%; display: flex; justify-content: flex-end;">
-                <button mat-raised-button color="primary"  matTooltip="Exportar Usuarios">
-                    <mat-icon>print</mat-icon>
-                    Imprimir
+                <button mat-raised-button color="primary" (click)="NewProducto()" matTooltip="Agregar Producto">
+                    <mat-icon>person_add</mat-icon>
+                    Agregar
                 </button>
             </div>
         </div>
@@ -37,10 +51,12 @@
         <ng-container matColumnDef="Acciones">
             <th mat-header-cell *matHeaderCellDef style="width: 80px;"> Acciones </th>
             <td mat-cell *matCellDef="let element" style="display: flex; gap: 8px; justify-content: center;">
-                <button mat-icon-button aria-label="Editar" class="small-icon-button color-primary" matTooltip="Editar usuario" (click)="editarProducto(element.id)">
+                <button mat-icon-button aria-label="Editar" class="small-icon-button color-primary"
+                    matTooltip="Editar usuario" (click)="EditProducto(element)">
                     <mat-icon class="small-icon">edit</mat-icon>
                 </button>
-                <button mat-icon-button aria-label="Eliminar" class="small-icon-button color-warn"  matTooltip="Eliminar usuario" (click)="eliminarProducto(element.id)">
+                <button mat-icon-button aria-label="Eliminar" class="small-icon-button color-warn"
+                    matTooltip="Eliminar usuario">
                     <mat-icon class="small-icon">delete</mat-icon>
                 </button>
             </td>
@@ -51,4 +67,102 @@
     <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of periodic elements">
     </mat-paginator>
 </mat-card>
+}
 
+
+@if (mostrarRegistro()) {
+<mat-card class="mat-elevation-z4" style="padding: 16px;">
+    <mat-card-title style="font-size: 1.5rem; font-weight: 600; margin-bottom: 12px;">
+        Clientes Totales
+    </mat-card-title>
+    <div style="display: flex; justify-content: flex-end; align-items: center; margin-bottom: 12px;">
+        <button mat-raised-button color="primary" (click)="NewProducto()" matTooltip="Agregar Usuario">
+            <mat-icon>person_add</mat-icon>
+            Agregar
+        </button>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 12px;">
+        @for (producto of empresaProducto(); track producto.id) {
+        <div style="width: 100%; border: 1px solid #ccc; border-radius: 6px; overflow: hidden;">
+
+            <!-- Header -->
+            <div style="width: 100%; padding:  8px 16px 8px 16px; background-color: #f3f3f3; display: flex; justify-content: space-between; align-items: center; cursor: pointer;"
+                (click)="toggleUser(producto.id)">
+                <div style="flex: 1;">
+                    <strong>{{ producto.name }} {{ producto.description }}</strong>
+                </div>
+                <button mat-icon-button style="flex-shrink: 0; margin-right: 35px;"
+                    (click)="EditProducto(producto); $event.stopPropagation()" matTooltip="Editar usuario"
+                    class="small-icon-button color-primary">
+                    <mat-icon>edit</mat-icon>
+                </button>
+            </div>
+
+            <!-- Expandable Content -->
+            <div class="expandable-content" [class.expanded]="expandedProducto() === producto.id">
+                <div style="padding: 12px; background-color: white;">
+                    <div style="display: flex; flex-wrap: wrap; row-gap: 25px; column-gap: 4%; padding-bottom: 16px;">
+
+                        <!-- Reutiliza esta clase o estilo para todos los campos -->
+                        <div style="flex: 1 1 48%; display: flex; align-items: center; height: 40px;">
+                            <span style="width: 100px; font-weight: 500;">Nombre Producto:</span>
+                            <mat-form-field appearance="outline" style="flex: 1; margin: 0; height: 100%;">
+                                <input matInput [value]="producto.name" disabled
+                                    style="padding: 2px 6px; height: 10px; font-size: 13px;" />
+                                <mat-icon matSuffix style="color: green; font-size: 18px;">shopping_bag</mat-icon>
+                            </mat-form-field>
+                        </div>
+
+                        <div style="flex: 1 1 48%; display: flex; align-items: center; height: 40px;">
+                            <span style="width: 100px; font-weight: 500;">Descripción:</span>
+                            <mat-form-field appearance="outline" style="flex: 1; margin: 0; height: 100%;">
+                                <input matInput [value]="producto.description" disabled
+                                    style="padding: 2px 6px; height: 10px; font-size: 13px;" />
+                                <mat-icon matSuffix style="color: aqua; font-size: 18px;">description</mat-icon>
+                            </mat-form-field>
+                        </div>
+
+                        <div style="flex: 1 1 48%; display: flex; align-items: center; height: 40px;">
+                            <span style="width: 100px; font-weight: 500;">Marca:</span>
+                            <mat-form-field appearance="outline" style="flex: 1; margin: 0; height: 100%;">
+                                <input matInput [value]="producto.brand" disabled
+                                    style="padding: 2px 6px; height: 10px; font-size: 13px;" />
+                                <mat-icon matSuffix style="font-size: 18px;">branding_watermark</mat-icon>
+                            </mat-form-field>
+                        </div>
+
+                        <div style="flex: 1 1 48%; display: flex; align-items: center; height: 40px;">
+                            <span style="width: 100px; font-weight: 500;">Precio de venta:</span>
+                            <mat-form-field appearance="outline" style="flex: 1; margin: 0; height: 100%;">
+                                <input matInput [value]="producto.price" disabled
+                                    style="padding: 2px 6px; height: 10px; font-size: 13px;" />
+                                <mat-icon matSuffix style="font-size: 18px;">attach_money</mat-icon>
+                            </mat-form-field>
+                        </div>
+
+                        <div style="flex: 1 1 48%; display: flex; align-items: center; height: 40px;">
+                            <span style="width: 100px; font-weight: 500;">Stock:</span>
+                            <mat-form-field appearance="outline" style="flex: 1; margin: 0; height: 100%;">
+                                <input matInput [value]="producto.stock" disabled
+                                    style="padding: 2px 6px; height: 10px; font-size: 13px;" />
+                                <mat-icon matSuffix style="color: teal; font-size: 18px;">inventory_2</mat-icon>
+                            </mat-form-field>
+                        </div>
+
+                        <div style="flex: 1 1 48%; display: flex; align-items: center; height: 40px;">
+                            <span style="width: 100px; font-weight: 500;">Estado:</span>
+                            <mat-form-field appearance="outline" style="flex: 1; margin: 0; height: 100%;">
+                                <input matInput [value]="producto.state" disabled
+                                    style="padding: 2px 6px; height: 10px; font-size: 13px;" />
+                                <mat-icon matSuffix style="color: teal; font-size: 18px;">toggle_on</mat-icon>
+                            </mat-form-field>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        }
+    </div>
+</mat-card>
+}

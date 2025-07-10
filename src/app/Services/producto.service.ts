@@ -3,7 +3,7 @@ import { settings } from '../Settings/appsettings';
 import { ResponseAcces } from '../Interfaces/ResponseAcces';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Producto } from '../components/producto/producto';
+import { Productos } from '../Interfaces/productos';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +18,7 @@ export class ProductoService {
   getList(): Observable<ResponseAcces> {
     return this.http.get<ResponseAcces>((`${this.apiUrl}Lista`))
   }
-  add(modelo: ResponseAcces): Observable<Producto> {
-    return this.http.post<Producto>(`{${this.apiUrl}}`, modelo);
+  register(modelo: Productos): Observable<ResponseAcces> {
+    return this.http.post<ResponseAcces>(`{${this.apiUrl}}Register`, modelo);
   }
 }

@@ -17,17 +17,16 @@ import { Clientes } from '../../Interfaces/clientes';
 import { MatDatepicker, MatDatepickerModule } from "@angular/material/datepicker";
 
 export const MY_DATE_FORMATS = {
-  parse:
-  {
-    dateinput: 'DD/MM/YYYY',
+  parse: {
+    dateInput: 'YYYY/MM/DD',
   },
   display: {
-    dateinput: 'DD/MM/YYY',
-    monthYearLabel: 'MMMM YYYY',
+    dateInput: 'YYYY/MM/DD',
+    monthYearLabel: 'YYYY MMM',
     dateA11yLabel: 'LL',
-    monthYearA11yLabel: 'MMMM YYYY'
+    monthYearA11yLabel: 'YYYY MMM'
   }
-}
+};
 
 
 @Component({
@@ -39,12 +38,8 @@ export const MY_DATE_FORMATS = {
     MatDialogClose,
     MatButtonModule,
     ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
     MatGridListModule,
-    MatIconModule,
     MatSelectModule,
-    MatNativeDateModule,
     MatDatepicker,
     MatFormFieldModule,
     MatInputModule,
@@ -83,9 +78,12 @@ export class ClientModal implements OnInit {
       phone: ["", Validators.required],
       email: ["", Validators.required],
       categoriType: ["", Validators.required],
-      birthdate: [new Date(), Validators.required],
+      birthdate: [this.getTodayDateOnly(), Validators.required],
+      city: ["", Validators.required],
+      address: ["", Validators.required],
       isAfiliate: [false, Validators.required],
       isConsumer: [false, Validators.required],
+
     })
 
     this._categoryType.getListCategoryUser().subscribe({
@@ -101,13 +99,17 @@ export class ClientModal implements OnInit {
 
   ngOnInit(): void {
     if (this.dataclient) {
+      console.log(this.dataclient)
       this.formClient.patchValue({
         name: this.dataclient.name,
         lastName: this.dataclient.lastName,
         cedula: this.dataclient.cedula,
         phone: this.dataclient.phone,
         email: this.dataclient.email,
+        city: this.dataclient.city,
+        address: this.dataclient.address,
         categoriType: this.dataclient.typeClientId,
+        birthdate: new Date(this.dataclient.birthdate),
       })
       this.tituloAccion = "Editar";
       this.botonAccion = "Actualizar";
@@ -139,43 +141,38 @@ export class ClientModal implements OnInit {
       phone: this.formClient.value.phone,
       typeClientId: this.formClient.value.categoriType,
       birthdate: this.formClient.value.birthdate,
+      city: this.formClient.value.city,
+      address: this.formClient.value.address,
       isAfiliate: this.formClient.value.isAfiliate,
       isConsumer: this.formClient.value.isConsumer
       //para fechas
       //fecha: moment(this.formuser.value.fechacontrato).format("DD/MM/YYYY")
     }
-    if (this.dataclient == null) {
-      this._clientService.register(modelo).subscribe({
-        next: (data) => {
-          if (data.status) {
-            this.mostrarAlerta("El usuario se creó correctamente.", "Listo")
-            window.location.reload();
-          } else {
-            this.mostrarAlerta(data.msg, "Error")
-          }
-        }, error: (e) => {
-          this.mostrarAlerta("No se pudo registrar el usuario.", "Error")
+
+    const isNew = this.dataclient == null;
+
+    this._clientService.register(modelo).subscribe({
+      next: (data) => {
+        if (data.status) {
+          const mensaje = isNew ? "El cliente se creó correctamente." : "El cliente se actualizó correctamente.";
+          this.mostrarAlerta(mensaje, "Listo");
+          window.location.reload();
+        } else {
+          this.mostrarAlerta(data.msg, "Error")
         }
-      })
-    }
-    else {
-      this._clientService.register(modelo).subscribe({
-        next: (data) => {
-          if (data.status) {
-            this.mostrarAlerta("El usuario se actualizó correctamente.", "Listo")
-            window.location.reload();
-          }
-          else {
-            this.mostrarAlerta(data.msg, "Error")
-          }
-        }, error: (e) => {
-          this.mostrarAlerta("No se pudo registrar el usuario.", "Error")
-        }
-      })
-    }
+      }, error: (e) => {
+        const mensaje = isNew ? "No se pudo registrar el cliente." : "No se pudo actualizar el cliente.";
+        this.mostrarAlerta(mensaje, "Error")
+      }
+    })
   }
 
   onPaste(event: ClipboardEvent) {
     event.preventDefault();
+  }
+
+  getTodayDateOnly(): Date {
+    const today = new Date();
+    return new Date(today.getFullYear(), today.getMonth(), today.getDate());
   }
 }

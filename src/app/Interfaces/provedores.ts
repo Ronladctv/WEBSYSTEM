@@ -1,7 +1,7 @@
-export interface Provedor {
+export interface Provedores {
     id:string,
     name:string,
-    lastname:string,
+    lastName:string,
     address:string,
     email:number,
     phone:number,

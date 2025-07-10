@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { ResponseAcces } from '../Interfaces/ResponseAcces';
 import { Observable } from 'rxjs';
 import { Provedor } from '../components/provedor/provedor';
+import { Provedores } from '../Interfaces/provedores';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,7 @@ export class ProvedorService {
     getList(): Observable<ResponseAcces> {
       return this.http.get<ResponseAcces>((`${this.apiUrl}Lista`))
     }
-    add(modelo: ResponseAcces): Observable<Provedor> {
-      return this.http.post<Provedor>(`{${this.apiUrl}}`, modelo);
+    register(modelo: Provedores): Observable<ResponseAcces> {
+      return this.http.post<ResponseAcces>(`{${this.apiUrl}}Register`, modelo);
     }
 }

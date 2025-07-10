@@ -1,10 +1,13 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, inject, signal, ViewChild } from '@angular/core';
 import { materialProviders } from '../../shared-ui';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ProvedorService } from '../../Services/provedor.service';
+import { Provedores } from '../../Interfaces/provedores';
+import { MatDialog } from '@angular/material/dialog';
+import { ProvedorModal } from '../../Modals/provedor-modal/provedor-modal';
 
 @Component({
   selector: 'app-provedor',
@@ -13,8 +16,17 @@ import { ProvedorService } from '../../Services/provedor.service';
   styleUrl: './provedor.css'
 })
 export class Provedor {
-  displayedColumns: string[] = ['Name', 'LasName', 'Address', 'Email', 'Phone', 'Document', 'Ruc', 'Acciones'];
-  dataSource = new MatTableDataSource<Provedor>();
+  displayedColumns: string[] = ['Name', 'LastName', 'Address', 'Email', 'Phone', 'Document', 'Ruc', 'Acciones'];
+  dataSource = new MatTableDataSource<Provedores>();
+
+  expandedProvedor = signal<string | null>(null);
+
+  public mostrarTable = signal(false);
+  public mostrarRegistro = signal(true);
+
+  public provedorAdmin = signal<Provedores[]>([]);
+
+  readonly dialog = inject(MatDialog);
 
   constructor(private _providerService: ProvedorService) {
 
@@ -37,7 +49,9 @@ export class Provedor {
     this._providerService.getList().subscribe({
       next: (response) => {
         if (response.value) {
+          console.log(response.value)
           this.dataSource.data = response.value;
+          this.provedorAdmin.set(response.value)
         } else {
           console.error('Error en la petición:', response.msg);
         }
@@ -47,11 +61,32 @@ export class Provedor {
       }
     });
   }
-  editarProvedor(id: string) {
-    console.log('Editar empresa con ID GUID:', id);
+  NewProvedor() {
+    this.dialog.open(ProvedorModal, {
+      disableClose: true,
+      width: "750px",
+      maxWidth: "none"
+    }).afterClosed().subscribe(resultado => {
+      if (resultado === "creado") {
+        this.mostrarProvedores();
+      }
+    });
   }
 
-  eliminarProvedor(id: string) {
-    console.log('Eliminar empresa con ID GUID:', id);
+  EditProvedor(data: Provedores) {
+    this.dialog.open(ProvedorModal, {
+      disableClose: true,
+      width: "750px",
+      maxWidth: "none",
+      data: data
+    }).afterClosed().subscribe(resultado => {
+      if (resultado == "editado") {
+        this.mostrarProvedores();
+      }
+    });
+  }
+
+  toggleUser(id: string) {
+    this.expandedProvedor.update(current => (current === id ? null : id));
   }
 }

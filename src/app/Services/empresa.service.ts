@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ResponseAcces } from '../Interfaces/ResponseAcces';
 import { Empresa } from '../components/empresa/empresa';
+import { Empresas } from '../Interfaces/empresas';
 
 @Injectable({
   providedIn: 'root'
@@ -22,4 +23,7 @@ export class EmpresaService {
     return this.http.post<Empresa>(`{${this.apiUrl}}`, modelo);
   }
 
+  register(objeto: Empresas): Observable<ResponseAcces> {
+    return this.http.post<ResponseAcces>(`${this.apiUrl}Register`, objeto)
+  }
 }

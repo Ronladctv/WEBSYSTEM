@@ -1,10 +1,13 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, inject, signal, ViewChild } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { materialProviders } from '../../shared-ui';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ProductoService } from '../../Services/producto.service';
+import { Productos } from '../../Interfaces/productos';
+import { MatDialog } from '@angular/material/dialog';
+import { ProductoModal } from '../../Modals/producto-modal/producto-modal';
 
 @Component({
   selector: 'app-producto',
@@ -14,7 +17,17 @@ import { ProductoService } from '../../Services/producto.service';
 })
 export class Producto {
   displayedColumns: string[] = ['Name', 'Description', 'Brand', 'Price', 'Stock'];
-  dataSource = new MatTableDataSource<Producto>();
+  dataSource = new MatTableDataSource<Productos>();
+
+  expandedProducto = signal<string | null>(null);
+
+  public mostrarTable = signal(false);
+  public mostrarRegistro = signal(true);
+
+  public empresaProducto = signal<Productos[]>([]);
+
+  readonly dialog = inject(MatDialog);
+
 
   constructor(private _productoService: ProductoService) {
 
@@ -49,12 +62,33 @@ export class Producto {
       }
     });
   }
-  editarProducto(id: string) {
-    console.log('Editar empresa con ID GUID:', id);
+
+  NewProducto() {
+    this.dialog.open(ProductoModal, {
+      disableClose: true,
+      width: "750px",
+      maxWidth: "none"
+    }).afterClosed().subscribe(resultado => {
+      if (resultado === "creado") {
+        this.mostrarProducto();
+      }
+    });
   }
 
-  eliminarProducto(id: string) {
-    console.log('Eliminar empresa con ID GUID:', id);
+  EditProducto(data: Productos) {
+    this.dialog.open(ProductoModal, {
+      disableClose: true,
+      width: "750px",
+      maxWidth: "none",
+      data: data
+    }).afterClosed().subscribe(resultado => {
+      if (resultado == "editado") {
+        this.mostrarProducto();
+      }
+    });
   }
 
+  toggleUser(id: string) {
+    this.expandedProducto.update(current => (current === id ? null : id));
+  }
 }

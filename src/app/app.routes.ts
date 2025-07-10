@@ -11,6 +11,8 @@ import { Inicio } from './components/inicio/inicio';
 import { Reporting } from './components/reporting/reporting';
 import { Configuration } from './components/configuration/configuration';
 import { Empresa } from './components/empresa/empresa';
+import { Producto } from './components/producto/producto';
+import { SecurityComponent } from './components/security-component/security-component';
 
 export const routes: Routes = [
     { path: 'login', component: Login },
@@ -29,7 +31,9 @@ export const routes: Routes = [
             { path: 'empresa', component: Empresa, canActivate: [authGuard] },
             { path: 'dashboard', component: Dashoard, canActivate: [authGuard] },
             { path: 'configuracion', component: Configuration, canActivate: [authGuard] },
+            { path: 'producto', component: Producto, canActivate: [authGuard] },
             { path: 'venta', component: Dashoard, canActivate: [authGuard] },
+            { path: 'security', component: SecurityComponent},
             { path: '**', redirectTo: '', pathMatch: 'full' }
         ]
     },
