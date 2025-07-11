@@ -11,7 +11,7 @@ import { Productos } from '../Interfaces/productos';
 export class ProductoService {
   
   private endpoint: string = settings.endPoint;
-  private apiUrl: string = this.endpoint + "api/empresa/";
+  private apiUrl: string = this.endpoint + "api/Producto/";
 
   constructor(private http: HttpClient) { }
 

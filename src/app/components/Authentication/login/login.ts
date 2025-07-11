@@ -10,6 +10,7 @@ import { Empresas } from '../../../Interfaces/empresas';
 import { signal } from '@angular/core';
 import { jwtDecode } from 'jwt-decode';
 import { Token } from '../../../Interfaces/token';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-login',
@@ -25,6 +26,10 @@ export class Login {
   public mostrarSelect = signal(false);
   public empresas = signal<Empresas[]>([]);
   private cd = inject(ChangeDetectorRef);
+
+  constructor(
+    private _snackBar: MatSnackBar
+  ) { }
 
 
   public formLogin: FormGroup = this.formBuild.group({
@@ -59,6 +64,7 @@ export class Login {
               localStorage.setItem('Name', decoded.Name);
               localStorage.setItem('ColorPrimary', decoded.ColorPrimary);
               localStorage.setItem('ColorSecundary', decoded.ColorSecundary);
+              this.mostrarAlerta("Sesión iniciada correctamente", "Éxito");
             }
             this.router.navigate(['/home']);
           }
@@ -69,7 +75,7 @@ export class Login {
             this.formLogin.get('empresa')?.updateValueAndValidity();
           }
         } else {
-          alert("Credenciales son incorrectas")
+          this.mostrarAlerta("Las credenciales ingresadas son incorrectas", "Error");
         }
       },
       error: (error) => {
@@ -82,5 +88,14 @@ export class Login {
   }
   Register() {
     this.router.navigate(["registro"])
+  }
+
+  mostrarAlerta(msg: string, accion: string) {
+    this._snackBar.open(msg, accion,
+      {
+        horizontalPosition: "end",
+        verticalPosition: "top",
+        duration: 3000
+      })
   }
 }

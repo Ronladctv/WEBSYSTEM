@@ -1,0 +1,71 @@
+mat-card {
+    width: 100%;
+    overflow-x: auto;
+    padding: 16px;
+    border: 2px solid #1976d2;
+    box-sizing: border-box;
+}
+
+.custom-table {
+    width: 80%;
+    border-collapse: collapse;
+    background-color: #fafafa;
+}
+
+.custom-table th {
+    background-color: #2c2c2c;
+    color: white;
+    font-weight: bold;
+    padding: 10px;
+    text-align: left;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+.custom-table td {
+    padding: 2px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.custom-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+.col-iva {
+    width: 100px;
+    max-width: 100px;
+    min-width: 100px;
+}
+
+.col-discount {
+    width: 150px;
+    max-width: 150px;
+    min-width: 150px;
+}
+.col-price {
+    width: 150px;
+    max-width: 150px;
+    min-width: 150px;
+}
+.col-code {
+    width: 150px;
+    max-width: 150px;
+    min-width: 150px;
+}
+.col-quantity {
+    width: 150px;
+    max-width: 150px;
+    min-width: 150px;
+}
+
+.col-subtotal {
+    width: 100px;
+    max-width: 100px;
+    min-width: 100px;
+}
+.col-total {
+    width: 100px;
+    max-width: 100px;
+    min-width: 100px;
+}
+

@@ -1,0 +1,145 @@
+table {
+    width: 100%;
+}
+
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fafafa;
+}
+
+.custom-table th {
+    background-color: #2c2c2c;
+    color: white;
+    font-weight: bold;
+    padding: 12px;
+    text-align: left;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+
+.custom-table td {
+    padding: 10px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+
+.custom-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+mat-card {
+    padding: 16px;
+    margin-top: 16px;
+    background-color: #fff;
+    border: 2px solid #1976d2;
+}
+
+mat-form-field {
+    width: 100%;
+    margin-bottom: 16px;
+}
+
+.mat-mdc-form-field-infix {
+    background-color: transparent !important;
+}
+
+.mat-mdc-form-field {
+    font-size: 14px;
+    width: 100%;
+    margin-bottom: 0;
+}
+
+.small-icon-button {
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    min-height: 36px !important;
+    padding: 0 !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    overflow: visible !important;
+    box-sizing: border-box !important;
+}
+
+.small-icon {
+    font-size: 20px !important;
+    line-height: 20px !important;
+    display: block;
+}
+
+.custom-table button.mat-icon-button {
+    background-color: transparent !important;
+    color: #2196f3 !important;
+    padding: 0 !important;
+    border-radius: 50% !important;
+}
+
+.small-raised-button {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.small-raised-button.color-primary {
+    background-color: #1976d2;
+    color: white;
+}
+
+.small-raised-button.color-primary:hover {
+    background-color: white;
+    color: #1565c0;
+}
+
+
+.small-raised-button.color-warn {
+    background-color: #d32f2f;
+    color: white;
+}
+
+.small-raised-button.color-warn:hover {
+    background-color: white;
+    color: #d32f2f;
+}
+
+.small-raised-button.color-accent {
+    background-color: #66e241ae;
+    color: white;
+}
+
+.small-raised-button.color-accent:hover {
+    background-color: white;
+    color: #66e241ae;
+}
+
+
+
+.custom-tooltip-Ron {
+    background-color: #6200EE !important;
+    color: white !important;
+    font-size: 14px !important;
+    padding: 8px 12px !important;
+    border-radius: 4px !important;
+    text-align: center !important;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2) !important;
+}
+
+.expandable-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-in-out;
+}
+
+.expandable-content.expanded {
+    max-height: 500px;
+}
+
+button.active {
+    background-color: #3f51b5;
+    color: white;
+}
+
+button.active:hover {
+    background-color: #303f9f;
+}

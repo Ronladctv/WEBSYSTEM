@@ -1,4 +1,4 @@
-import { Component, inject, signal, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { materialProviders } from '../../shared-ui';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -15,7 +15,7 @@ import { ProductoModal } from '../../Modals/producto-modal/producto-modal';
   templateUrl: './producto.html',
   styleUrl: './producto.css'
 })
-export class Producto {
+export class Producto implements AfterViewInit, OnInit{
   displayedColumns: string[] = ['Name', 'Description', 'Brand', 'Price', 'Stock'];
   dataSource = new MatTableDataSource<Productos>();
 
@@ -24,7 +24,7 @@ export class Producto {
   public mostrarTable = signal(false);
   public mostrarRegistro = signal(true);
 
-  public empresaProducto = signal<Productos[]>([]);
+  public productoAdmin = signal<Productos[]>([]);
 
   readonly dialog = inject(MatDialog);
 
@@ -52,7 +52,10 @@ export class Producto {
     this._productoService.getList().subscribe({
       next: (response) => {
         if (response.value) {
+          
+          console.log(response.value)
           this.dataSource.data = response.value;
+          this.productoAdmin.set(response.value)
         } else {
           console.error('Error en la petición:', response.msg);
         }

@@ -1,4 +1,4 @@
-import { Component, inject, signal, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { materialProviders } from '../../shared-ui';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -15,7 +15,7 @@ import { ProvedorModal } from '../../Modals/provedor-modal/provedor-modal';
   templateUrl: './provedor.html',
   styleUrl: './provedor.css'
 })
-export class Provedor {
+export class Provedor implements AfterViewInit, OnInit{
   displayedColumns: string[] = ['Name', 'LastName', 'Address', 'Email', 'Phone', 'Document', 'Ruc', 'Acciones'];
   dataSource = new MatTableDataSource<Provedores>();
 

@@ -20,3 +20,8 @@ export interface UserLogin {
     password:string;
     empresaId?:string;
 }
+
+export interface UserPassword {
+    password:string;
+}
+

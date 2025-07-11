@@ -13,27 +13,30 @@ import { Configuration } from './components/configuration/configuration';
 import { Empresa } from './components/empresa/empresa';
 import { Producto } from './components/producto/producto';
 import { SecurityComponent } from './components/security-component/security-component';
+import { Perfil } from './components/perfil/perfil';
+import { Venta } from './components/venta/venta';
 
 export const routes: Routes = [
     { path: 'login', component: Login },
+    { path: '', redirectTo: 'login', pathMatch: 'full' },
     {
         path: '',
         component: MainLayout,
         children: [
-            
+
             { path: 'inicio', component: Inicio, canActivate: [authGuard] },
-            { path: 'perfil', component: Home, canActivate: [authGuard] },  
-            { path: 'home', component: Home, canActivate: [authGuard] }, 
+            { path: 'perfil', component: Perfil, canActivate: [authGuard] },
+            { path: 'home', component: Home, canActivate: [authGuard] },
             { path: 'cliente', component: Cliente, canActivate: [authGuard] },
-            { path: 'historyVentas', component:Reporting, canActivate: [authGuard] },
+            { path: 'historyVentas', component: Reporting, canActivate: [authGuard] },
             { path: 'usuario', component: Users, canActivate: [authGuard] },
             { path: 'proveedor', component: Provedor, canActivate: [authGuard] },
             { path: 'empresa', component: Empresa, canActivate: [authGuard] },
             { path: 'dashboard', component: Dashoard, canActivate: [authGuard] },
             { path: 'configuracion', component: Configuration, canActivate: [authGuard] },
             { path: 'producto', component: Producto, canActivate: [authGuard] },
-            { path: 'venta', component: Dashoard, canActivate: [authGuard] },
-            { path: 'security', component: SecurityComponent},
+            { path: 'venta', component: Venta, canActivate: [authGuard] },
+            { path: 'security', component: SecurityComponent },
             { path: '**', redirectTo: '', pathMatch: 'full' }
         ]
     },

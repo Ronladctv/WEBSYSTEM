@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { settings } from '../Settings/appsettings';
 import { Observable } from 'rxjs';
-import { User, UserResponse } from '../Interfaces/user';
+import { User, UserPassword, UserResponse } from '../Interfaces/user';
 import { ResponseAcces } from '../Interfaces/ResponseAcces';
 
 @Injectable({
@@ -14,7 +14,7 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
-  getListAdmin(empresaId:string): Observable<ResponseAcces> {
+  getListAdmin(empresaId: string): Observable<ResponseAcces> {
     return this.http.get<ResponseAcces>(`${this.apiUrl}ListaEmpresa/${empresaId}`)
   }
 
@@ -22,11 +22,11 @@ export class UserService {
     return this.http.get<ResponseAcces>(`${this.apiUrl}Lista`)
   }
 
-  
+
   register(objeto: User): Observable<ResponseAcces> {
     return this.http.post<ResponseAcces>(`${this.apiUrl}Register`, objeto)
   }
-  
+
   update(objeto: User): Observable<ResponseAcces> {
     return this.http.post<ResponseAcces>(`${this.apiUrl}Update`, objeto)
   }
@@ -35,13 +35,19 @@ export class UserService {
     return this.http.post<ResponseAcces>(`${this.apiUrl}AsignarRole/${empresaId}/${usuarioId}/${rolId}`, null);
   }
 
-  updatepassword(password:string,userId:string ): Observable<ResponseAcces> {
-    return this.http.post<ResponseAcces>(`${this.apiUrl}UpdatePassword/${userId}`,password)
+  updatepassword(objeto: UserPassword, userId: string): Observable<ResponseAcces> {
+    return this.http.post<ResponseAcces>(`${this.apiUrl}UpdatePassword/${userId}`, objeto)
   }
 
-  obtainRole(userId:string, empresaId:string): Observable<ResponseAcces> {
+  obtainRole(userId: string, empresaId: string): Observable<ResponseAcces> {
     return this.http.get<ResponseAcces>(`${this.apiUrl}ObtainRol/${userId}/${empresaId}`)
   }
+
+
+  profile(usuarioId: string): Observable<ResponseAcces> {
+    return this.http.get<ResponseAcces>(`${this.apiUrl}Profile/${usuarioId}`)
+  }
+
 }
 
 
