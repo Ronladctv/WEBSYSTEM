@@ -23,12 +23,12 @@ export class UserService {
   }
 
 
-  register(objeto: User): Observable<ResponseAcces> {
-    return this.http.post<ResponseAcces>(`${this.apiUrl}Register`, objeto)
+  register(formData:FormData): Observable<ResponseAcces> {
+    return this.http.post<ResponseAcces>(`${this.apiUrl}Register`, formData)
   }
 
-  update(objeto: User): Observable<ResponseAcces> {
-    return this.http.post<ResponseAcces>(`${this.apiUrl}Update`, objeto)
+  update(formData: FormData): Observable<ResponseAcces> {
+    return this.http.post<ResponseAcces>(`${this.apiUrl}Update`, formData)
   }
 
   asignarRol(empresaId: string, usuarioId: string, rolId: string): Observable<ResponseAcces> {

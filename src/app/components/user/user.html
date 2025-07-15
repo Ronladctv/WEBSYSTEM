@@ -152,62 +152,63 @@
             <!-- Expandable Content -->
             <div class="expandable-content" [class.expanded]="expandedUserAdmin() === user.id">
                 <div style="padding: 12px; background-color: white;">
-                    <div style="display: flex; flex-wrap: wrap; row-gap: 25px; column-gap: 4%; padding-bottom: 16px;">
+                    <div
+                        style="max-width: 100%; border: 1px solid #ccc; border-radius: 6px; overflow: hidden; padding: 16px; display: flex; justify-content: space-between; align-items: flex-start;">
 
-                        <div style="flex: 1 1 48%; display: flex; align-items: center; height: 40px;">
-                            <span style="width: 100px; font-weight: 500;">Nombre Usuario:</span>
-                            <mat-form-field appearance="outline" style="flex: 1; margin: 0; height: 100%;">
-                                <input matInput [value]="user.nameProfile" disabled
-                                    style="padding: 2px 6px; height: 10px; font-size: 13px;" />
-                                <mat-icon matSuffix style="color: yellow; font-size: 18px;">account_box</mat-icon>
-                            </mat-form-field>
+                        <!-- Datos a la izquierda -->
+                        <div style="flex: 1; display: flex; flex-direction: column; gap: 24px;">
+                            <!-- Fila 1 -->
+                            <div style="display: flex; flex-wrap: wrap; gap: 4%;">
+                                <mat-form-field appearance="outline" style="flex: 1 1 48%; height: 56px;">
+                                    <mat-label>Nombre Usuario</mat-label>
+                                    <input matInput [value]="user.nameProfile" readonly style="font-size: 13px;" />
+                                    <mat-icon matSuffix style="color: yellow; font-size: 18px;">account_box</mat-icon>
+                                </mat-form-field>
+
+                                <mat-form-field appearance="outline" style="flex: 1 1 48%; height: 56px;">
+                                    <mat-label>Correo</mat-label>
+                                    <input matInput [value]="user.email" readonly style="font-size: 13px;" />
+                                    <mat-icon matSuffix style="color: blue; font-size: 18px;">alternate_email</mat-icon>
+                                </mat-form-field>
+                            </div>
+
+                            <!-- Fila 2 -->
+                            <div style="display: flex; flex-wrap: wrap; gap: 4%;">
+                                <mat-form-field appearance="outline" style="flex: 1 1 48%; height: 56px;">
+                                    <mat-label>Cédula</mat-label>
+                                    <input matInput [value]="user.cedula" readonly style="font-size: 13px;" />
+                                    <mat-icon matSuffix style="color: violet; font-size: 18px;">badge</mat-icon>
+                                </mat-form-field>
+
+                                <mat-form-field appearance="outline" style="flex: 1 1 48%; height: 56px;">
+                                    <mat-label>Teléfono</mat-label>
+                                    <input matInput [value]="user.phone" readonly style="font-size: 13px;" />
+                                    <mat-icon matSuffix style="color: blue; font-size: 18px;">call</mat-icon>
+                                </mat-form-field>
+                            </div>
+
+                            <!-- Fila 3 -->
+                            <div style="display: flex; flex-wrap: wrap; gap: 4%;">
+                                <mat-form-field appearance="outline" style="flex: 1 1 48%; height: 56px;">
+                                    <mat-label>Nombres</mat-label>
+                                    <input matInput [value]="user.name" readonly style="font-size: 13px;" />
+                                    <mat-icon matSuffix style="color: aqua; font-size: 18px;">person</mat-icon>
+                                </mat-form-field>
+
+                                <mat-form-field appearance="outline" style="flex: 1 1 48%; height: 56px;">
+                                    <mat-label>Apellidos</mat-label>
+                                    <input matInput [value]="user.lastName" readonly style="font-size: 13px;" />
+                                    <mat-icon matSuffix style="color: aqua; font-size: 18px;">person_outline</mat-icon>
+                                </mat-form-field>
+                            </div>
                         </div>
 
-                        <div style="flex: 1 1 48%; display: flex; align-items: center; height: 40px;">
-                            <span style="width: 100px; font-weight: 500;">Nombres:</span>
-                            <mat-form-field appearance="outline" style="flex: 1; margin: 0; height: 100%;">
-                                <input matInput [value]="user.name" disabled
-                                    style="padding: 2px 6px; height: 10px; font-size: 13px;" />
-                                <mat-icon matSuffix style="color: aqua; font-size: 18px;">person</mat-icon>
-                            </mat-form-field>
+                        <!-- Imagen a la derecha -->
+                        <div
+                            style="width: 180px; height: 180px; border-radius: 8px; overflow: hidden; margin-left: 24px; flex-shrink: 0; box-shadow: 0 0 5px rgba(0,0,0,0.1);">
+                            <img src="https://via.placeholder.com/180" alt="Imagen usuario"
+                                style="width: 100%; height: 100%; object-fit: cover;" />
                         </div>
-
-                        <div style="flex: 1 1 48%; display: flex; align-items: center; height: 40px;">
-                            <span style="width: 100px; font-weight: 500;">Apellidos:</span>
-                            <mat-form-field appearance="outline" style="flex: 1; margin: 0; height: 100%;">
-                                <input matInput [value]="user.lastName" disabled
-                                    style="padding: 2px 6px; height: 10px; font-size: 13px;" />
-                                <mat-icon matSuffix style="color: aqua; font-size: 18px;">person_outline</mat-icon>
-                            </mat-form-field>
-                        </div>
-
-                        <div style="flex: 1 1 48%; display: flex; align-items: center; height: 40px;">
-                            <span style="width: 100px; font-weight: 500;">Cédula:</span>
-                            <mat-form-field appearance="outline" style="flex: 1; margin: 0; height: 100%;">
-                                <input matInput [value]="user.cedula" disabled
-                                    style="padding: 2px 6px; height: 10px; font-size: 13px;" />
-                                <mat-icon matSuffix style="color: violet; font-size: 18px;">badge</mat-icon>
-                            </mat-form-field>
-                        </div>
-
-                        <div style="flex: 1 1 48%; display: flex; align-items: center; height: 40px;">
-                            <span style="width: 100px; font-weight: 500;">Correo:</span>
-                            <mat-form-field appearance="outline" style="flex: 1; margin: 0; height: 100%;">
-                                <input matInput [value]="user.email" disabled
-                                    style="padding: 2px 6px; height: 10px; font-size: 13px;" />
-                                <mat-icon matSuffix style="color: blue; font-size: 18px;">alternate_email</mat-icon>
-                            </mat-form-field>
-                        </div>
-
-                        <div style="flex: 1 1 48%; display: flex; align-items: center; height: 40px;">
-                            <span style="width: 100px; font-weight: 500;">Teléfono:</span>
-                            <mat-form-field appearance="outline" style="flex: 1; margin: 0; height: 100%;">
-                                <input matInput [value]="user.phone" disabled
-                                    style="padding: 2px 6px; height: 10px; font-size: 13px;" />
-                                <mat-icon matSuffix style="color: blue; font-size: 18px;">call</mat-icon>
-                            </mat-form-field>
-                        </div>
-
                     </div>
                 </div>
             </div>
@@ -237,62 +238,62 @@
             <!-- Expandable Content -->
             <div class="expandable-content" [class.expanded]="expandedUser() === user.id">
                 <div style="padding: 12px; background-color: white;">
-                    <div style="display: flex; flex-wrap: wrap; row-gap: 25px; column-gap: 4%; padding-bottom: 16px;">
+                    <div
+                        style="max-width: 100%; border: 1px solid #ccc; border-radius: 6px; overflow: hidden; padding: 16px; display: flex; justify-content: space-between; align-items: flex-start;">
 
-                        <div style="flex: 1 1 48%; display: flex; align-items: center; height: 40px;">
-                            <span style="width: 100px; font-weight: 500;">Nombre Usuario:</span>
-                            <mat-form-field appearance="outline" style="flex: 1; margin: 0; height: 100%;">
-                                <input matInput [value]="user.nameProfile" disabled
-                                    style="padding: 2px 6px; height: 10px; font-size: 13px;" />
-                                <mat-icon matSuffix style="color: yellow; font-size: 18px;">account_box</mat-icon>
-                            </mat-form-field>
+                        <!-- Datos a la izquierda -->
+                        <div style="flex: 1; display: flex; flex-direction: column; gap: 24px;">
+                            <!-- Fila 1 -->
+                            <div style="display: flex; flex-wrap: wrap; gap: 4%;">
+                                <mat-form-field appearance="outline" style="flex: 1 1 48%; height: 56px;">
+                                    <mat-label>Nombre Usuario</mat-label>
+                                    <input matInput [value]="user.nameProfile" readonly style="font-size: 13px;" />
+                                    <mat-icon matSuffix style="color: yellow; font-size: 18px;">account_box</mat-icon>
+                                </mat-form-field>
+
+                                <mat-form-field appearance="outline" style="flex: 1 1 48%; height: 56px;">
+                                    <mat-label>Correo</mat-label>
+                                    <input matInput [value]="user.email" readonly style="font-size: 13px;" />
+                                    <mat-icon matSuffix style="color: blue; font-size: 18px;">alternate_email</mat-icon>
+                                </mat-form-field>
+                            </div>
+
+                            <!-- Fila 2 -->
+                            <div style="display: flex; flex-wrap: wrap; gap: 4%;">
+                                <mat-form-field appearance="outline" style="flex: 1 1 48%; height: 56px;">
+                                    <mat-label>Cédula</mat-label>
+                                    <input matInput [value]="user.cedula" readonly style="font-size: 13px;" />
+                                    <mat-icon matSuffix style="color: violet; font-size: 18px;">badge</mat-icon>
+                                </mat-form-field>
+
+                                <mat-form-field appearance="outline" style="flex: 1 1 48%; height: 56px;">
+                                    <mat-label>Teléfono</mat-label>
+                                    <input matInput [value]="user.phone" readonly style="font-size: 13px;" />
+                                    <mat-icon matSuffix style="color: blue; font-size: 18px;">call</mat-icon>
+                                </mat-form-field>
+                            </div>
+
+                            <!-- Fila 3 -->
+                            <div style="display: flex; flex-wrap: wrap; gap: 4%;">
+                                <mat-form-field appearance="outline" style="flex: 1 1 48%; height: 56px;">
+                                    <mat-label>Nombres</mat-label>
+                                    <input matInput [value]="user.name" readonly style="font-size: 13px;" />
+                                    <mat-icon matSuffix style="color: aqua; font-size: 18px;">person</mat-icon>
+                                </mat-form-field>
+
+                                <mat-form-field appearance="outline" style="flex: 1 1 48%; height: 56px;">
+                                    <mat-label>Apellidos</mat-label>
+                                    <input matInput [value]="user.lastName" readonly style="font-size: 13px;" />
+                                    <mat-icon matSuffix style="color: aqua; font-size: 18px;">person_outline</mat-icon>
+                                </mat-form-field>
+                            </div>
                         </div>
 
-                        <div style="flex: 1 1 48%; display: flex; align-items: center; height: 40px;">
-                            <span style="width: 100px; font-weight: 500;">Nombres:</span>
-                            <mat-form-field appearance="outline" style="flex: 1; margin: 0; height: 100%;">
-                                <input matInput [value]="user.name" disabled
-                                    style="padding: 2px 6px; height: 10px; font-size: 13px;" />
-                                <mat-icon matSuffix style="color: aqua; font-size: 18px;">person</mat-icon>
-                            </mat-form-field>
+                        <div
+                            style="width: 180px; height: 180px; border-radius: 8px; overflow: hidden; margin-left: 24px; flex-shrink: 0; box-shadow: 0 0 5px rgba(0,0,0,0.1);">
+                            <img [src]="'https://recursosstorage.blob.core.windows.net/usuarios/' + user.urlImagen"
+                                alt="Imagen usuario" style="width: 100%; height: 100%; object-fit: cover;" />
                         </div>
-
-                        <div style="flex: 1 1 48%; display: flex; align-items: center; height: 40px;">
-                            <span style="width: 100px; font-weight: 500;">Apellidos:</span>
-                            <mat-form-field appearance="outline" style="flex: 1; margin: 0; height: 100%;">
-                                <input matInput [value]="user.lastName" disabled
-                                    style="padding: 2px 6px; height: 10px; font-size: 13px;" />
-                                <mat-icon matSuffix style="color: aqua; font-size: 18px;">person_outline</mat-icon>
-                            </mat-form-field>
-                        </div>
-
-                        <div style="flex: 1 1 48%; display: flex; align-items: center; height: 40px;">
-                            <span style="width: 100px; font-weight: 500;">Cédula:</span>
-                            <mat-form-field appearance="outline" style="flex: 1; margin: 0; height: 100%;">
-                                <input matInput [value]="user.cedula" disabled
-                                    style="padding: 2px 6px; height: 10px; font-size: 13px;" />
-                                <mat-icon matSuffix style="color: violet; font-size: 18px;">badge</mat-icon>
-                            </mat-form-field>
-                        </div>
-
-                        <div style="flex: 1 1 48%; display: flex; align-items: center; height: 40px;">
-                            <span style="width: 100px; font-weight: 500;">Correo:</span>
-                            <mat-form-field appearance="outline" style="flex: 1; margin: 0; height: 100%;">
-                                <input matInput [value]="user.email" disabled
-                                    style="padding: 2px 6px; height: 10px; font-size: 13px;" />
-                                <mat-icon matSuffix style="color: blue; font-size: 18px;">alternate_email</mat-icon>
-                            </mat-form-field>
-                        </div>
-
-                        <div style="flex: 1 1 48%; display: flex; align-items: center; height: 40px;">
-                            <span style="width: 100px; font-weight: 500;">Teléfono:</span>
-                            <mat-form-field appearance="outline" style="flex: 1; margin: 0; height: 100%;">
-                                <input matInput [value]="user.phone" disabled
-                                    style="padding: 2px 6px; height: 10px; font-size: 13px;" />
-                                <mat-icon matSuffix style="color: blue; font-size: 18px;">call</mat-icon>
-                            </mat-form-field>
-                        </div>
-
                     </div>
                 </div>
             </div>

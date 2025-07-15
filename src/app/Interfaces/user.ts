@@ -8,6 +8,7 @@ export interface User {
     phone?: string;
     typeUserId?:string;
     password?:string;
+    urlImagen?:string;
 }
 export interface UserResponse {
     isSuccess: boolean;

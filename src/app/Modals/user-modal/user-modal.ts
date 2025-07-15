@@ -20,6 +20,7 @@ import { CategoryType } from '../../Interfaces/category-type';
 import { CategoryTypeService } from '../../Services/category-type.service';
 import { AccessService } from '../../Services/Access.service';
 import { Router } from '@angular/router';
+import { MatCardModule } from '@angular/material/card';
 
 
 export const MY_DATE_FORMATS = {
@@ -47,7 +48,8 @@ export const MY_DATE_FORMATS = {
     MatInputModule,
     MatGridListModule,
     MatIconModule,
-    MatSelectModule
+    MatSelectModule,
+    MatCardModule
   ],
   templateUrl: './user-modal.html',
   styleUrl: './user-modal.css',
@@ -61,6 +63,8 @@ export class UserModal implements OnInit {
   inputpassword: boolean = true;
   public roles = signal<Roles[]>([]);
   public categoriType = signal<CategoryType[]>([]);
+  selectedFile: File | null = null;
+
 
   constructor(
     private dialogoReferencia: MatDialogRef<UserModal>,
@@ -152,28 +156,28 @@ export class UserModal implements OnInit {
   }
 
   saveUser() {
-    console.log(this.formUser)
-    console.log(this.formUser.value)
+
     const EMPTY_GUID = '00000000-0000-0000-0000-000000000000';
-
+    const formData = new FormData();
     const empresaId = localStorage.getItem('EmpresaId') ?? '';
+    const id = this.datauser?.id ?? EMPTY_GUID;
 
-    const modelo: User =
-    {
-      id: this.datauser ? this.datauser.id : EMPTY_GUID,
-      nameProfile: this.formUser.value.nameProfile,
-      name: this.formUser.value.name,
-      lastName: this.formUser.value.lastName,
-      email: this.formUser.value.email,
-      cedula: this.formUser.value.cedula,
-      phone: this.formUser.value.phone,
-      password: this.formUser.value.password,
-      typeUserId: this.formUser.value.categoriType
-      //para fechas
-      //fecha: moment(this.formuser.value.fechacontrato).format("DD/MM/YYYY")
+    formData.append('id', id);
+    formData.append('nameProfile', this.formUser.value.nameProfile);
+    formData.append('name', this.formUser.value.name);
+    formData.append('lastName', this.formUser.value.lastName);
+    formData.append('email', this.formUser.value.email);
+    formData.append('cedula', this.formUser.value.cedula);
+    formData.append('phone', this.formUser.value.phone);
+    formData.append('password', this.formUser.value.password);
+    formData.append('typeUserId', this.formUser.value.categoriType);
+
+    if (this.selectedFile) {
+      formData.append('file', this.selectedFile);
     }
+
     if (this.datauser == null) {
-      this._userService.register(modelo).subscribe({
+      this._userService.register(formData).subscribe({
         next: (data) => {
           if (data.status) {
             const selectedRole = this.formUser.value.roles;
@@ -199,7 +203,7 @@ export class UserModal implements OnInit {
       })
     }
     else {
-      this._userService.update(modelo).subscribe({
+      this._userService.update(formData).subscribe({
         next: (data) => {
           if (data.status) {
             const selectedRole = this.formUser.value.roles;
@@ -231,4 +235,10 @@ export class UserModal implements OnInit {
     event.preventDefault();
   }
 
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.selectedFile = input.files[0];
+    }
+  }
 }
