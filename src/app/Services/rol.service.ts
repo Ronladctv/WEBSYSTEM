@@ -17,5 +17,9 @@ export class RolService {
   getList(): Observable<ResponseAcces> {
     return this.http.get<ResponseAcces>(`${this.apiUrl}Lista`)
   }
+
+  getListRole(): Observable<ResponseAcces> {
+    return this.http.get<ResponseAcces>(`${this.apiUrl}ListaRole`)
+  }
   
 }

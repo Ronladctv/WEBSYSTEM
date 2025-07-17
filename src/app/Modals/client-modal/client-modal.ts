@@ -15,6 +15,7 @@ import { ClientService } from '../../Services/client.service';
 import { CategoryTypeService } from '../../Services/category-type.service';
 import { Clientes } from '../../Interfaces/clientes';
 import { MatDatepicker, MatDatepickerModule } from "@angular/material/datepicker";
+import { formatError } from '../../Helper/error.helper';
 
 export const MY_DATE_FORMATS = {
   parse: {
@@ -89,9 +90,15 @@ export class ClientModal implements OnInit {
     this._categoryType.getListCategoryUser().subscribe({
       next: (data) => {
         console.log(data)
-        if (data.status && data.value.length > 0) {
-          this.categoriType.set(data.value)
+        if (data.status) {
+          if (data.status && data.value.length > 0) {
+            this.categoriType.set(data.value)
+          }
+        } else {
+          this.mostrarAlerta(data.msg, "Error");
         }
+      }, error: (e) => {
+        this.mostrarAlerta(formatError(e), "Error");
       }
     })
   }

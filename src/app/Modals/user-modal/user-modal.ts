@@ -21,6 +21,7 @@ import { CategoryTypeService } from '../../Services/category-type.service';
 import { AccessService } from '../../Services/Access.service';
 import { Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
+import { formatError } from '../../Helper/error.helper';
 
 
 export const MY_DATE_FORMATS = {
@@ -93,19 +94,31 @@ export class UserModal implements OnInit {
 
     this._rolesService.getList().subscribe({
       next: (data) => {
-        console.log(data)
-        if (data.status && data.value.length > 0) {
-          this.roles.set(data.value)
+        if (data.status) {
+          if (data.status && data.value.length > 0) {
+            this.roles.set(data.value)
+          }
+        } else {
+          this.mostrarAlerta(data.msg, "Error");
         }
+      },
+      error: (e) => {
+        this.mostrarAlerta(formatError(e), "Error");
       }
     })
 
     this._categoryType.getListCategoryUser().subscribe({
       next: (data) => {
-        console.log(data)
-        if (data.status && data.value.length > 0) {
-          this.categoriType.set(data.value)
+        if (data.status) {
+          if (data.status && data.value.length > 0) {
+            this.categoriType.set(data.value)
+          }
+        } else {
+          this.mostrarAlerta(data.msg, "Error");
         }
+      },
+      error: (e) => {
+        this.mostrarAlerta(formatError(e), "Error");
       }
     })
   }
@@ -131,12 +144,16 @@ export class UserModal implements OnInit {
 
       this._userService.obtainRole(this.datauser.id!, empresaId).subscribe({
         next: (data) => {
-          if (data.status && data.value) {
-            this.formUser.get('roles')?.setValue(data.value.rolId);
+          if (data.status) {
+            if (data.status && data.value) {
+              this.formUser.get('roles')?.setValue(data.value.rolId);
+            }
+          } else {
+            this.mostrarAlerta(data.msg, "Error");
           }
         },
         error: (e) => {
-          this.mostrarAlerta("No se pudo obtener el rol del usuario.", "Error");
+          this.mostrarAlerta(formatError(e), "Error");
         }
       });
 

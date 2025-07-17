@@ -11,6 +11,7 @@ import { signal } from '@angular/core';
 import { jwtDecode } from 'jwt-decode';
 import { Token } from '../../../Interfaces/token';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { formatError } from '../../../Helper/error.helper';
 
 @Component({
   selector: 'app-login',
@@ -79,7 +80,7 @@ export class Login {
         }
       },
       error: (error) => {
-        console.log(error.message)
+        this.mostrarAlerta(formatError(error), "Error");
       }
     })
   }

@@ -10,6 +10,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { UpdatePasswordModal } from '../../Modals/update-password-modal/update-password-modal';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { formatError } from '../../Helper/error.helper';
 
 @Component({
   selector: 'app-perfil',
@@ -23,7 +25,7 @@ export class Perfil implements OnInit {
 
   readonly dialog = inject(MatDialog);
 
-  constructor(private _userService: UserService) { }
+  constructor(private _userService: UserService, private _snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
 
@@ -39,11 +41,11 @@ export class Perfil implements OnInit {
         if (response.status) {
           this.useradmin.set([response.value])
         } else {
-
+          this.mostrarAlerta(response.msg, "Error");
         }
       },
       error: (e) => {
-        console.error('Error en la petición HTTP:', e);
+        this.mostrarAlerta(formatError(e), "Error");
       }
     });
   }
@@ -111,5 +113,14 @@ export class Perfil implements OnInit {
 
   onCopy(event: ClipboardEvent) {
     event.preventDefault();
+  }
+
+  mostrarAlerta(msg: string, accion: string) {
+    this._snackBar.open(msg, accion,
+      {
+        horizontalPosition: "end",
+        verticalPosition: "top",
+        duration: 3000
+      })
   }
 }

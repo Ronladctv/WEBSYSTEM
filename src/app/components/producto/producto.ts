@@ -8,6 +8,8 @@ import { ProductoService } from '../../Services/producto.service';
 import { Productos } from '../../Interfaces/productos';
 import { MatDialog } from '@angular/material/dialog';
 import { ProductoModal } from '../../Modals/producto-modal/producto-modal';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { formatError } from '../../Helper/error.helper';
 
 @Component({
   selector: 'app-producto',
@@ -15,7 +17,7 @@ import { ProductoModal } from '../../Modals/producto-modal/producto-modal';
   templateUrl: './producto.html',
   styleUrl: './producto.css'
 })
-export class Producto implements AfterViewInit, OnInit{
+export class Producto implements AfterViewInit, OnInit {
   displayedColumns: string[] = ['Name', 'Description', 'Brand', 'Price', 'Stock'];
   dataSource = new MatTableDataSource<Productos>();
 
@@ -29,7 +31,7 @@ export class Producto implements AfterViewInit, OnInit{
   readonly dialog = inject(MatDialog);
 
 
-  constructor(private _productoService: ProductoService) {
+  constructor(private _productoService: ProductoService, private _snackBar: MatSnackBar) {
 
   }
 
@@ -51,17 +53,15 @@ export class Producto implements AfterViewInit, OnInit{
   mostrarProducto() {
     this._productoService.getList().subscribe({
       next: (response) => {
-        if (response.value) {
-          
-          console.log(response.value)
+        if (response.status) {
           this.dataSource.data = response.value;
           this.productoAdmin.set(response.value)
         } else {
-          console.error('Error en la petición:', response.msg);
+          this.mostrarAlerta(response.msg, "Error");
         }
       },
       error: (e) => {
-        console.error('Error en la petición HTTP:', e);
+        this.mostrarAlerta(formatError(e), "Error");
       }
     });
   }
@@ -93,5 +93,14 @@ export class Producto implements AfterViewInit, OnInit{
 
   toggleUser(id: string) {
     this.expandedProducto.update(current => (current === id ? null : id));
+  }
+
+  mostrarAlerta(msg: string, accion: string) {
+    this._snackBar.open(msg, accion,
+      {
+        horizontalPosition: "end",
+        verticalPosition: "top",
+        duration: 3000
+      })
   }
 }

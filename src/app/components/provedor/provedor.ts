@@ -8,6 +8,8 @@ import { ProvedorService } from '../../Services/provedor.service';
 import { Provedores } from '../../Interfaces/provedores';
 import { MatDialog } from '@angular/material/dialog';
 import { ProvedorModal } from '../../Modals/provedor-modal/provedor-modal';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { formatError } from '../../Helper/error.helper';
 
 @Component({
   selector: 'app-provedor',
@@ -15,7 +17,7 @@ import { ProvedorModal } from '../../Modals/provedor-modal/provedor-modal';
   templateUrl: './provedor.html',
   styleUrl: './provedor.css'
 })
-export class Provedor implements AfterViewInit, OnInit{
+export class Provedor implements AfterViewInit, OnInit {
   displayedColumns: string[] = ['Name', 'LastName', 'Address', 'Email', 'Phone', 'Document', 'Ruc', 'Acciones'];
   dataSource = new MatTableDataSource<Provedores>();
 
@@ -28,7 +30,7 @@ export class Provedor implements AfterViewInit, OnInit{
 
   readonly dialog = inject(MatDialog);
 
-  constructor(private _providerService: ProvedorService) {
+  constructor(private _providerService: ProvedorService, private _snackBar: MatSnackBar) {
 
   }
   ngOnInit(): void {
@@ -48,16 +50,15 @@ export class Provedor implements AfterViewInit, OnInit{
   mostrarProvedores() {
     this._providerService.getList().subscribe({
       next: (response) => {
-        if (response.value) {
-          console.log(response.value)
+        if (response.status) {
           this.dataSource.data = response.value;
           this.provedorAdmin.set(response.value)
         } else {
-          console.error('Error en la petición:', response.msg);
+          this.mostrarAlerta(response.msg, "Error");
         }
       },
       error: (e) => {
-        console.error('Error en la petición HTTP:', e);
+        this.mostrarAlerta(formatError(e), "Error");
       }
     });
   }
@@ -88,5 +89,14 @@ export class Provedor implements AfterViewInit, OnInit{
 
   toggleUser(id: string) {
     this.expandedProvedor.update(current => (current === id ? null : id));
+  }
+
+  mostrarAlerta(msg: string, accion: string) {
+    this._snackBar.open(msg, accion,
+      {
+        horizontalPosition: "end",
+        verticalPosition: "top",
+        duration: 3000
+      })
   }
 }

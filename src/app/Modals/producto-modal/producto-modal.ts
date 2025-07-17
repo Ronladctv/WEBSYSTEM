@@ -14,6 +14,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { ProductoService } from '../../Services/producto.service';
 import { CategoryTypeService } from '../../Services/category-type.service';
 import { CategoryType } from '../../Interfaces/category-type';
+import { formatError } from '../../Helper/error.helper';
 
 export const MY_DATE_FORMATS = {
   parse: {
@@ -80,10 +81,16 @@ export class ProductoModal implements OnInit {
 
     this._categoryType.getListCategoryProduct().subscribe({
       next: (data) => {
-        console.log(data)
-        if (data.status && data.value.length > 0) {
-          this.typeProduct.set(data.value)
+        if (data.status) {
+          if (data.status && data.value.length > 0) {
+            this.typeProduct.set(data.value)
+          }
+        } else {
+          this.mostrarAlerta(data.msg, "Error");
         }
+      },
+      error: (e) => {
+        this.mostrarAlerta(formatError(e), "Error");
       }
     })
   }
@@ -130,7 +137,7 @@ export class ProductoModal implements OnInit {
       price: this.formProducto.value.price,
       stock: this.formProducto.value.stock,
       state: this.formProducto.value.state,
-      typeProductId : this.formProducto.value.typeProduct,
+      typeProductId: this.formProducto.value.typeProduct,
       //para fechas
       //fecha: moment(this.formuser.value.fechacontrato).format("DD/MM/YYYY")
     }

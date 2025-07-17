@@ -8,6 +8,8 @@ import { EmpresaService } from '../../Services/empresa.service';
 import { MatDialog } from '@angular/material/dialog';
 import { EmpresaModal } from '../../Modals/empresa-modal/empresa-modal';
 import { Empresas } from '../../Interfaces/empresas';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { formatError } from '../../Helper/error.helper';
 
 @Component({
   selector: 'app-empresa',
@@ -29,7 +31,7 @@ export class Empresa implements AfterViewInit, OnInit {
   readonly dialog = inject(MatDialog);
 
 
-  constructor(private _empresaService: EmpresaService) {
+  constructor(private _empresaService: EmpresaService, private _snackBar: MatSnackBar) {
 
   }
 
@@ -50,15 +52,15 @@ export class Empresa implements AfterViewInit, OnInit {
   mostrarEmpresas() {
     this._empresaService.getList().subscribe({
       next: (response) => {
-        if (response.value) {
+        if (response.status) {
           this.dataSource.data = response.value;
           this.empresaAdmin.set(response.value)
         } else {
-          console.error('Error en la petición:', response.msg);
+          this.mostrarAlerta(response.msg, "Error");
         }
       },
       error: (e) => {
-        console.error('Error en la petición HTTP:', e);
+        this.mostrarAlerta(formatError(e), "Error");
       }
     });
   }
@@ -92,4 +94,12 @@ export class Empresa implements AfterViewInit, OnInit {
     this.expandedEmpresa.update(current => (current === id ? null : id));
   }
 
+  mostrarAlerta(msg: string, accion: string) {
+    this._snackBar.open(msg, accion,
+      {
+        horizontalPosition: "end",
+        verticalPosition: "top",
+        duration: 3000
+      })
+  }
 }

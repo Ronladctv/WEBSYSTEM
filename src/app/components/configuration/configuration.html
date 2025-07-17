@@ -1,1 +1,39 @@
-<p>configuration works!</p>
+@if(registerRole()){
+<mat-card class="mat-elevation-z8">
+    <mat-card-title style="font-size: 1.5rem; font-weight: 600; margin-bottom: 12px;">
+        Roles
+    </mat-card-title>
+    <div style="display: flex; justify-content: flex-end; align-items: center; margin-bottom: 12px;">
+        <button mat-raised-button color="primary" (click)="NewRole()" matTooltip="Agregar Nuevo Rol">
+            <mat-icon>person_add</mat-icon>
+            Agregar
+        </button>
+    </div>
+</mat-card>
+}
+@if(registerPermission()){
+<mat-card class="mat-elevation-z8">
+    <mat-card-title style="font-size: 1.5rem; font-weight: 600; margin-bottom: 12px;">
+        Permisos
+    </mat-card-title>
+    <div style="display: flex; justify-content: flex-end; align-items: center; margin-bottom: 12px;">
+        <button mat-raised-button color="primary" (click)="NewPermission()" matTooltip="Agregar Nuevo Permiso">
+            <mat-icon>person_add</mat-icon>
+            Agregar
+        </button>
+    </div>
+</mat-card>
+}
+@if(registerAccion()){
+<mat-card class="mat-elevation-z8">
+    <mat-card-title style="font-size: 1.5rem; font-weight: 600; margin-bottom: 12px;">
+        Permisos
+    </mat-card-title>
+    <div style="display: flex; justify-content: flex-end; align-items: center; margin-bottom: 12px;">
+        <button mat-raised-button color="primary" (click)="NewAccion()" matTooltip="Agregar Nuevo Acción">
+            <mat-icon>person_add</mat-icon>
+            Agregar
+        </button>
+    </div>
+</mat-card>
+}

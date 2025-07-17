@@ -98,89 +98,72 @@
                 <div style="flex: 1;">
                     <strong>{{ client.name }} {{ client.lastName }}</strong>
                 </div>
-                <button mat-icon-button style="flex-shrink: 0; margin-right: 35px;"
-                    (click)="EditUser(client); $event.stopPropagation()" matTooltip="Editar usuario"
+                <button mat-icon-button style="flex-shrink: 0; margin-right: 10px;"
+                    (click)="EditUser(client); $event.stopPropagation()" matTooltip="Editar Cliente"
                     class="small-icon-button color-primary">
                     <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button style="flex-shrink: 0; margin-right: 35px;" matTooltip="Eliminar Cliente"
+                    class="small-icon-button color-warn">
+                    <mat-icon>delete</mat-icon>
                 </button>
             </div>
 
             <!-- Expandable Content -->
             <div class="expandable-content" [class.expanded]="expandedClient() === client.id">
                 <div style="padding: 12px; background-color: white;">
-                    <div style="display: flex; flex-wrap: wrap; row-gap: 25px; column-gap: 4%; padding-bottom: 16px;">
-
-                        <!-- Reutiliza esta clase o estilo para todos los campos -->
-                        <div style="flex: 1 1 48%; display: flex; align-items: center; height: 40px;">
-                            <span style="width: 100px; font-weight: 500;">Nombre:</span>
-                            <mat-form-field appearance="outline" style="flex: 1; margin: 0; height: 100%;">
-                                <input matInput [value]="client.name" disabled
-                                    style="padding: 2px 6px; height: 10px; font-size: 13px;" />
-                                <mat-icon matSuffix style="color: green; font-size: 18px;">account_box</mat-icon>
-                            </mat-form-field>
+                    <div style="max-width: 100%; border: 1px solid #ccc; border-radius: 6px; overflow: hidden; padding: 16px; display: flex; justify-content: space-between; align-items: flex-start;">
+                        <div style="flex: 1; display: flex; flex-direction: column; gap: 24px;">
+                            <div style="display: flex; flex-wrap: wrap; gap: 4%;">
+                                <mat-form-field appearance="outline" style="flex: 1 1 48%; height: 56px;">
+                                    <mat-label>Nombre</mat-label>
+                                    <input matInput [value]="client.name" readonly style="font-size: 13px;" />
+                                    <mat-icon matSuffix style="color: green; font-size: 18px;">account_box</mat-icon>
+                                </mat-form-field>
+                                <mat-form-field appearance="outline" style="flex: 1 1 48%; height: 56px;">
+                                    <mat-label>Apellido</mat-label>
+                                    <input matInput [value]="client.lastName" readonly style="font-size: 13px;" />
+                                    <mat-icon matSuffix style="color: aqua; font-size: 18px;">person_outline</mat-icon>
+                                </mat-form-field>
+                            </div>
+                            <div style="display: flex; flex-wrap: wrap; gap: 4%;">
+                                <mat-form-field appearance="outline" style="flex: 1 1 48%; height: 56px;">
+                                    <mat-label>Cédula</mat-label>
+                                    <input matInput [value]="client.cedula" readonly style="font-size: 13px;" />
+                                    <mat-icon matSuffix style="color: violet; font-size: 18px;">badge</mat-icon>
+                                </mat-form-field>
+                                <mat-form-field appearance="outline" style="flex: 1 1 48%; height: 56px;">
+                                    <mat-label>Correo</mat-label>
+                                    <input matInput [value]="client.email" readonly style="font-size: 13px;" />
+                                    <mat-icon matSuffix style="color: blue; font-size: 18px;">alternate_email</mat-icon>
+                                </mat-form-field>
+                            </div>
+                            <div style="display: flex; flex-wrap: wrap; gap: 4%;">
+                                <mat-form-field appearance="outline" style="flex: 1 1 48%; height: 56px;">
+                                    <mat-label>Nacimiento</mat-label>
+                                    <input matInput [value]="client.birthdate | date: 'dd/MM/yyyy'" readonly
+                                        style="font-size: 13px;" />
+                                    <mat-icon matSuffix
+                                        style="color: orange; font-size: 18px;">calendar_today</mat-icon>
+                                </mat-form-field>
+                                <mat-form-field appearance="outline" style="flex: 1 1 48%; height: 56px;">
+                                    <mat-label>Teléfono</mat-label>
+                                    <input matInput [value]="client.phone" readonly style="font-size: 13px;" />
+                                    <mat-icon matSuffix style="color: yellow; font-size: 18px;">call</mat-icon>
+                                </mat-form-field>
+                            </div>
+                            <div style="display: flex; flex-wrap: wrap; gap: 4%;">
+                                <mat-form-field appearance="outline" style="flex: 1 1 48%; height: 56px;">
+                                    <mat-label>Dirección</mat-label>
+                                    <input matInput [value]="client.address" readonly style="font-size: 13px;" />
+                                    <mat-icon matSuffix style="color: brown; font-size: 18px;">home</mat-icon>
+                                </mat-form-field>
+                            </div>
                         </div>
-
-                        <div style="flex: 1 1 48%; display: flex; align-items: center; height: 40px;">
-                            <span style="width: 100px; font-weight: 500;">Apellido:</span>
-                            <mat-form-field appearance="outline" style="flex: 1; margin: 0; height: 100%;">
-                                <input matInput [value]="client.lastName" disabled
-                                    style="padding: 2px 6px; height: 10px; font-size: 13px;" />
-                                <mat-icon matSuffix style="color: aqua; font-size: 18px;">person_outline</mat-icon>
-                            </mat-form-field>
-                        </div>
-
-                        <div style="flex: 1 1 48%; display: flex; align-items: center; height: 40px;">
-                            <span style="width: 100px; font-weight: 500;">Cédula:</span>
-                            <mat-form-field appearance="outline" style="flex: 1; margin: 0; height: 100%;">
-                                <input matInput [value]="client.cedula" disabled
-                                    style="padding: 2px 6px; height: 10px; font-size: 13px;" />
-                                <mat-icon matSuffix style="color: violet; font-size: 18px;">badge</mat-icon>
-                            </mat-form-field>
-                        </div>
-
-                        <div style="flex: 1 1 48%; display: flex; align-items: center; height: 40px;">
-                            <span style="width: 100px; font-weight: 500;">Correo:</span>
-                            <mat-form-field appearance="outline" style="flex: 1; margin: 0; height: 100%;">
-                                <input matInput [value]="client.email" disabled
-                                    style="padding: 2px 6px; height: 10px; font-size: 13px;" />
-                                <mat-icon matSuffix style="color: blue; font-size: 18px;">alternate_email</mat-icon>
-                            </mat-form-field>
-                        </div>
-
-                        <div style="flex: 1 1 48%; display: flex; align-items: center; height: 40px;">
-                            <span style="width: 100px; font-weight: 500;">Ciudad:</span>
-                            <mat-form-field appearance="outline" style="flex: 1; margin: 0; height: 100%;">
-                                <input matInput [value]="client.city" disabled
-                                    style="padding: 2px 6px; height: 10px; font-size: 13px;" />
-                                <mat-icon matSuffix style="color: teal; font-size: 18px;">location_city</mat-icon>
-                            </mat-form-field>
-                        </div>
-
-                        <div style="flex: 1 1 48%; display: flex; align-items: center; height: 40px;">
-                            <span style="width: 100px; font-weight: 500;">Nacimiento:</span>
-                            <mat-form-field appearance="outline" style="flex: 1; margin: 0; height: 100%;">
-                                <input matInput [value]="client.birthdate | date: 'dd/MM/yyyy'" disabled
-                                    style="padding: 2px 6px; height: 10px; font-size: 13px;" />
-                                <mat-icon matSuffix style="color: orange; font-size: 18px;">calendar_today</mat-icon>
-                            </mat-form-field>
-                        </div>
-
-                        <div style="flex: 1 1 48%; display: flex; align-items: center; height: 40px;">
-                            <span style="width: 100px; font-weight: 500;">Teléfono:</span>
-                            <mat-form-field appearance="outline" style="flex: 1; margin: 0; height: 100%;">
-                                <input matInput [value]="client.phone" disabled
-                                    style="padding: 2px 6px; height: 10px; font-size: 13px;" />
-                                <mat-icon matSuffix style="color: yellow; font-size: 18px;">call</mat-icon>
-                            </mat-form-field>
-                        </div>
-
-                        <div style="flex: 1 1 48%; display: flex; align-items: center; height: 40px;">
-                            <span style="width: 100px; font-weight: 500;">Dirección:</span>
-                            <mat-form-field appearance="outline" style="flex: 1; margin: 0; height: 100%;">
-                                <input matInput [value]="client.address" disabled
-                                    style="padding: 2px 6px; height: 10px; font-size: 13px;" />
-                                <mat-icon matSuffix style="color: brown; font-size: 18px;">home</mat-icon>
-                            </mat-form-field>
+                        <div
+                            style="width: 180px; height: 180px; border-radius: 8px; overflow: hidden; margin-left: 24px; flex-shrink: 0; box-shadow: 0 0 5px rgba(0,0,0,0.1);">
+                            <img [src]="'https://recursosstorage.blob.core.windows.net/usuarios/'" alt="Imagen usuario"
+                                style="width: 100%; height: 100%; object-fit: cover;" />
                         </div>
                     </div>
                 </div>

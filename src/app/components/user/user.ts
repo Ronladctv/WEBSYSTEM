@@ -9,6 +9,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialog, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogTitle } from '@angular/material/dialog';
 import { UserModal } from '../../Modals/user-modal/user-modal';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { UpdatePasswordModal } from '../../Modals/update-password-modal/update-password-modal';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { formatError } from '../../Helper/error.helper';
 
 @Component({
   selector: 'app-index',
@@ -25,7 +28,7 @@ export class Users implements AfterViewInit, OnInit {
   dataSourceAdmin = new MatTableDataSource<User>();
 
   expandedUser = signal<string | null>(null);
-  
+
   expandedUserAdmin = signal<string | null>(null);
 
   public mostrarTable = signal(false);
@@ -36,7 +39,7 @@ export class Users implements AfterViewInit, OnInit {
 
   readonly dialog = inject(MatDialog);
 
-  constructor(private _userService: UserService) { }
+  constructor(private _userService: UserService, private _snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
     this.mostrarUser();
@@ -63,14 +66,14 @@ export class Users implements AfterViewInit, OnInit {
     this._userService.getList().subscribe({
       next: (response) => {
         if (response.value) {
-          this.dataSource.data = response.value;      
+          this.dataSource.data = response.value;
           this.user.set(response.value)
         } else {
-          console.error('Error en la petición:', response.msg);
+          this.mostrarAlerta(response.msg, "Error");
         }
       },
       error: (e) => {
-        console.error('Error en la petición HTTP:', e);
+        this.mostrarAlerta(formatError(e), "Error");
       }
     });
   }
@@ -83,11 +86,11 @@ export class Users implements AfterViewInit, OnInit {
           this.dataSourceAdmin.data = response.value;
           this.useradmin.set(response.value)
         } else {
-          console.error('Error en la petición:', response.msg);
+          this.mostrarAlerta(response.msg, "Error");
         }
       },
       error: (e) => {
-        console.error('Error en la petición HTTP:', e);
+        this.mostrarAlerta(formatError(e), "Error");
       }
     });
   }
@@ -98,8 +101,6 @@ export class Users implements AfterViewInit, OnInit {
       width: "750px",
       maxWidth: "none"
     }).afterClosed().subscribe(resultado => {
-      
-  console.log("Resultado recibido al cerrar:", resultado); 
       if (resultado === "creado") {
         this.mostrarUser();
         this.mostrarUserAdmin();
@@ -114,7 +115,6 @@ export class Users implements AfterViewInit, OnInit {
       maxWidth: "none",
       data: dataUser
     }).afterClosed().subscribe(resultado => {
-      console.log("Resultado recibido al cerrar:", resultado); 
       if (resultado == "editado") {
         this.mostrarUser();
         this.mostrarUserAdmin();
@@ -128,5 +128,27 @@ export class Users implements AfterViewInit, OnInit {
 
   toggleUserAdmin(id: string) {
     this.expandedUserAdmin.update(current => (current === id ? null : id));
+  }
+
+  UpdatePassword(dataUser: User) {
+    this.dialog.open(UpdatePasswordModal, {
+      disableClose: true,
+      width: "750px",
+      maxWidth: "none",
+      data: dataUser
+    }).afterClosed().subscribe(resultado => {
+      if (resultado == "editado") {
+        this.mostrarUser();
+      }
+    });
+  }
+
+  mostrarAlerta(msg: string, accion: string) {
+    this._snackBar.open(msg, accion,
+      {
+        horizontalPosition: "end",
+        verticalPosition: "top",
+        duration: 3000
+      })
   }
 }

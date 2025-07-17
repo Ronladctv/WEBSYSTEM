@@ -91,73 +91,66 @@
                 <div style="flex: 1;">
                     <strong>{{ producto.name }} {{ producto.description }}</strong>
                 </div>
-                <button mat-icon-button style="flex-shrink: 0; margin-right: 35px;"
-                    (click)="EditProducto(producto); $event.stopPropagation()" matTooltip="Editar usuario"
+                <button mat-icon-button style="flex-shrink: 0; margin-right: 10px;"
+                    (click)="EditProducto(producto); $event.stopPropagation()" matTooltip="Editar producto"
                     class="small-icon-button color-primary">
                     <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button style="flex-shrink: 0; margin-right: 35px;" matTooltip="Eliminar producto"
+                    class="small-icon-button color-warn">
+                    <mat-icon>delete</mat-icon>
                 </button>
             </div>
 
             <!-- Expandable Content -->
             <div class="expandable-content" [class.expanded]="expandedProducto() === producto.id">
                 <div style="padding: 12px; background-color: white;">
-                    <div style="display: flex; flex-wrap: wrap; row-gap: 25px; column-gap: 4%; padding-bottom: 16px;">
-
-                        <!-- Reutiliza esta clase o estilo para todos los campos -->
-                        <div style="flex: 1 1 48%; display: flex; align-items: center; height: 40px;">
-                            <span style="width: 100px; font-weight: 500;">Nombre Producto:</span>
-                            <mat-form-field appearance="outline" style="flex: 1; margin: 0; height: 100%;">
-                                <input matInput [value]="producto.name" disabled
-                                    style="padding: 2px 6px; height: 10px; font-size: 13px;" />
-                                <mat-icon matSuffix style="color: green; font-size: 18px;">shopping_bag</mat-icon>
-                            </mat-form-field>
+                    <div
+                        style="max-width: 100%; border: 1px solid #ccc; border-radius: 6px; overflow: hidden; padding: 16px; display: flex; justify-content: space-between; align-items: flex-start;">
+                        <div style="flex: 1; display: flex; flex-direction: column; gap: 24px;">
+                            <div style="display: flex; flex-wrap: wrap; gap: 4%;">
+                                <mat-form-field appearance="outline" style="flex: 1 1 48%; height: 56px;">
+                                    <mat-label>Nombre Producto</mat-label>
+                                    <input matInput [value]="producto.name" readonly style="font-size: 13px;" />
+                                    <mat-icon matSuffix style="color: green; font-size: 18px;">shopping_bag</mat-icon>
+                                </mat-form-field>
+                                <mat-form-field appearance="outline" style="flex: 1 1 48%; height: 56px;">
+                                    <mat-label>Descripción:</mat-label>
+                                    <input matInput [value]="producto.description" readonly style="font-size: 13px;" />
+                                    <mat-icon matSuffix style="color: aqua; font-size: 18px;">description</mat-icon>
+                                </mat-form-field>
+                            </div>
+                            <div style="display: flex; flex-wrap: wrap; gap: 4%;">
+                                <mat-form-field appearance="outline" style="flex: 1 1 48%; height: 56px;">
+                                    <mat-label>Marca</mat-label>
+                                    <input matInput [value]="producto.brand" readonly style="font-size: 13px;" />
+                                    <mat-icon matSuffix
+                                        style="color: aqua; font-size: 18px;">branding_watermark</mat-icon>
+                                </mat-form-field>
+                                <mat-form-field appearance="outline" style="flex: 1 1 48%; height: 56px;">
+                                    <mat-label>Precio de venta</mat-label>
+                                    <input matInput [value]="producto.price" readonly style="font-size: 13px;" />
+                                    <mat-icon matSuffix style="color: yellow; font-size: 18px;">attach_money</mat-icon>
+                                </mat-form-field>
+                            </div>
+                            <div style="display: flex; flex-wrap: wrap; gap: 4%;">
+                                <mat-form-field appearance="outline" style="flex: 1 1 48%; height: 56px;">
+                                    <mat-label>Stock</mat-label>
+                                    <input matInput [value]="producto.stock" readonly style="font-size: 13px;" />
+                                    <mat-icon matSuffix style="color: aqua; font-size: 18px;">inventory_2</mat-icon>
+                                </mat-form-field>
+                                <mat-form-field appearance="outline" style="flex: 1 1 48%; height: 56px;">
+                                    <mat-label>Estado</mat-label>
+                                    <input matInput [value]="producto.state" readonly style="font-size: 13px;" />
+                                    <mat-icon matSuffix style="color: teal; font-size: 18px;">toggle_on</mat-icon>
+                                </mat-form-field>
+                            </div>
                         </div>
-
-                        <div style="flex: 1 1 48%; display: flex; align-items: center; height: 40px;">
-                            <span style="width: 100px; font-weight: 500;">Descripción:</span>
-                            <mat-form-field appearance="outline" style="flex: 1; margin: 0; height: 100%;">
-                                <input matInput [value]="producto.description" disabled
-                                    style="padding: 2px 6px; height: 10px; font-size: 13px;" />
-                                <mat-icon matSuffix style="color: aqua; font-size: 18px;">description</mat-icon>
-                            </mat-form-field>
+                        <div
+                            style="width: 180px; height: 180px; border-radius: 8px; overflow: hidden; margin-left: 24px; flex-shrink: 0; box-shadow: 0 0 5px rgba(0,0,0,0.1);">
+                            <img [src]="'https://recursosstorage.blob.core.windows.net/usuarios/'" alt="Imagen usuario"
+                                style="width: 100%; height: 100%; object-fit: cover;" />
                         </div>
-
-                        <div style="flex: 1 1 48%; display: flex; align-items: center; height: 40px;">
-                            <span style="width: 100px; font-weight: 500;">Marca:</span>
-                            <mat-form-field appearance="outline" style="flex: 1; margin: 0; height: 100%;">
-                                <input matInput [value]="producto.brand" disabled
-                                    style="padding: 2px 6px; height: 10px; font-size: 13px;" />
-                                <mat-icon matSuffix style="font-size: 18px;">branding_watermark</mat-icon>
-                            </mat-form-field>
-                        </div>
-
-                        <div style="flex: 1 1 48%; display: flex; align-items: center; height: 40px;">
-                            <span style="width: 100px; font-weight: 500;">Precio de venta:</span>
-                            <mat-form-field appearance="outline" style="flex: 1; margin: 0; height: 100%;">
-                                <input matInput [value]="producto.price" disabled
-                                    style="padding: 2px 6px; height: 10px; font-size: 13px;" />
-                                <mat-icon matSuffix style="font-size: 18px;">attach_money</mat-icon>
-                            </mat-form-field>
-                        </div>
-
-                        <div style="flex: 1 1 48%; display: flex; align-items: center; height: 40px;">
-                            <span style="width: 100px; font-weight: 500;">Stock:</span>
-                            <mat-form-field appearance="outline" style="flex: 1; margin: 0; height: 100%;">
-                                <input matInput [value]="producto.stock" disabled
-                                    style="padding: 2px 6px; height: 10px; font-size: 13px;" />
-                                <mat-icon matSuffix style="color: teal; font-size: 18px;">inventory_2</mat-icon>
-                            </mat-form-field>
-                        </div>
-
-                        <div style="flex: 1 1 48%; display: flex; align-items: center; height: 40px;">
-                            <span style="width: 100px; font-weight: 500;">Estado:</span>
-                            <mat-form-field appearance="outline" style="flex: 1; margin: 0; height: 100%;">
-                                <input matInput [value]="producto.state" disabled
-                                    style="padding: 2px 6px; height: 10px; font-size: 13px;" />
-                                <mat-icon matSuffix style="color: teal; font-size: 18px;">toggle_on</mat-icon>
-                            </mat-form-field>
-                        </div>
-
                     </div>
                 </div>
             </div>

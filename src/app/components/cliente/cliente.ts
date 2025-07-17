@@ -10,6 +10,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { DatePipe } from '@angular/common';
 import { ClientModal } from '../../Modals/client-modal/client-modal';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { formatError } from '../../Helper/error.helper';
 
 @Component({
   selector: 'app-cliente',
@@ -31,7 +33,7 @@ export class Cliente {
   readonly dialog = inject(MatDialog);
 
 
-  constructor(private _clienteService: ClientService) { }
+  constructor(private _clienteService: ClientService, private _snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
     this.mostrarClient();
@@ -52,15 +54,15 @@ export class Cliente {
   mostrarClient() {
     this._clienteService.getList().subscribe({
       next: (response) => {
-        if (response.value) {
+        if (response.status) {
           this.dataSourcemaster.data = response.value;
           this.clientadmin.set(response.value)
         } else {
-          console.error('Error en la petición:', response.msg);
+          this.mostrarAlerta(response.msg, "Error");
         }
       },
       error: (e) => {
-        console.error('Error en la petición HTTP:', e);
+        this.mostrarAlerta(formatError(e), "Error");
       }
     });
   }
@@ -92,6 +94,16 @@ export class Cliente {
 
   toggleUser(id: string) {
     this.expandedClient.update(current => (current === id ? null : id));
+  }
+
+
+  mostrarAlerta(msg: string, accion: string) {
+    this._snackBar.open(msg, accion,
+      {
+        horizontalPosition: "end",
+        verticalPosition: "top",
+        duration: 3000
+      })
   }
 
 }

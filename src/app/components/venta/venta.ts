@@ -3,6 +3,8 @@ import { materialProviders } from '../../shared-ui';
 import { CommonModule } from '@angular/common';
 import { ProductoService } from '../../Services/producto.service';
 import { Productos } from '../../Interfaces/productos';
+import { formatError } from '../../Helper/error.helper';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-venta',
@@ -18,7 +20,7 @@ export class Venta implements OnInit {
 
   public listProducts = signal<Productos[]>([]);
 
-  constructor(private _productoService: ProductoService) { }
+  constructor(private _productoService: ProductoService, private _snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
     this.cargarProductos();
@@ -27,10 +29,17 @@ export class Venta implements OnInit {
   cargarProductos() {
     this._productoService.getList().subscribe({
       next: (data) => {
-        console.log(data)
-        if (data.status && data.value.length > 0) {
-          this.listProducts.set(data.value)
+        if (data.status) {
+          if (data.status && data.value.length > 0) {
+            this.listProducts.set(data.value)
+          }
         }
+        else {
+          this.mostrarAlerta(data.msg, "Error");
+        }
+      },
+      error: (e) => {
+        this.mostrarAlerta(formatError(e), "Error");
       }
     })
   }
@@ -60,5 +69,14 @@ export class Venta implements OnInit {
       this.dataSource[index].price = null;
     }
     this.dataSource = [...this.dataSource]; // Para que Angular detecte el cambio
+  }
+
+  mostrarAlerta(msg: string, accion: string) {
+    this._snackBar.open(msg, accion,
+      {
+        horizontalPosition: "end",
+        verticalPosition: "top",
+        duration: 3000
+      })
   }
 }
