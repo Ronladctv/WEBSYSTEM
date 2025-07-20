@@ -1,0 +1,26 @@
+<h2 mat-dialog-title>{{tituloAccion}} Usuario</h2>
+<mat-dialog-content>
+    <form [formGroup]="formAccion">
+        <mat-grid-list cols="2" rowHeight="85px" gutterSize="10px">
+            <mat-grid-tile colspan="2">
+                <mat-form-field appearance="outline" class="input-custom">
+                    <mat-label>Nombre de la Acción</mat-label>
+                    <input matInput formControlName="nombre" placeholder="Nombre de la Acción" autocomplete="off">
+                    <mat-icon matSuffix>title</mat-icon>
+                </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile colspan="2">
+                <mat-form-field appearance="outline" class="input-custom">
+                    <mat-label>Descripción de la Acción</mat-label>
+                    <input matInput formControlName="icon" placeholder="Descripción de la Acción" autocomplete="off">
+                    <mat-icon matSuffix>description</mat-icon>
+                </mat-form-field>
+            </mat-grid-tile>
+        </mat-grid-list>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button matButton mat-dialog-close color="warn">Volver</button>
+    <button matButton mat-dialog-close color="warn" [disabled]="formAccion.invalid"
+        (click)="save()">{{botonAccion}}</button>
+</mat-dialog-actions>

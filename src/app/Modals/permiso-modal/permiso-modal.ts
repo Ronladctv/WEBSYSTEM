@@ -2,18 +2,17 @@ import { Component, Inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DATE_FORMATS, MatNativeDateModule } from '@angular/material/core';
-import { MatDatepicker, MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MAT_DIALOG_DATA, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogRef, MatDialogTitle } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { Permissions } from '../../Interfaces/permission';
+import { Accions, Permissions } from '../../Interfaces/permission';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { RolService } from '../../Services/rol.service';
 import { PermissionService } from '../../Services/permission.service';
-import { Roles } from '../../Interfaces/roles';
+import { AccionService } from '../../Services/accion.service';
 import { formatError } from '../../Helper/error.helper';
 
 export const MY_DATE_FORMATS = {
@@ -29,7 +28,7 @@ export const MY_DATE_FORMATS = {
 };
 
 @Component({
-  selector: 'app-roles-modal',
+  selector: 'app-permiso-modal',
   imports: [
     MatDialogTitle,
     MatDialogContent,
@@ -45,45 +44,45 @@ export const MY_DATE_FORMATS = {
     MatNativeDateModule,
     MatIconModule
   ],
-  templateUrl: './roles-modal.html',
-  styleUrl: './roles-modal.css',
+  templateUrl: './permiso-modal.html',
+  styleUrl: './permiso-modal.css',
   providers: [{ provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS }]
 
 })
-export class RolesModal implements OnInit {
+export class PermisoModal implements OnInit {
 
-  formRole: FormGroup;
+  formPermission: FormGroup;
   tituloAccion: string = "Nuevo";
   botonAccion: string = "Guardar";
-  public permisoList = signal<Permissions[]>([]);
+  public accionList = signal<Accions[]>([]);
   selectedFile: File | null = null;
 
   constructor(
 
-    private dialogoReferencia: MatDialogRef<RolesModal>,
+    private dialogoReferencia: MatDialogRef<PermisoModal>,
     private fb: FormBuilder,
     private _snackBar: MatSnackBar,
-    private _rolesService: RolService,
     private _permissionService: PermissionService,
+    private _accionService: AccionService,
 
-    @Inject(MAT_DIALOG_DATA) public dataRoles: Roles
+    @Inject(MAT_DIALOG_DATA) public dataPermiso: Permissions
 
   ) {
-    this.formRole = this.fb.group({
+    this.formPermission = this.fb.group({
       ///Campo para el formulario
-      nameRol: ["", Validators.required],
+      nombre: ["", Validators.required],
       icon: ["", Validators.required],
-      description: ["", Validators.required],
-      permisoList: [[], Validators.required],
+      urlImagen: ["", Validators.required],
+      accions: [[], Validators.required],
 
     })
 
-    this._permissionService.getList().subscribe({
+    this._accionService.getList().subscribe({
       next: (data) => {
         console.log(data)
         if (data.status) {
           if (data.status && data.value.length > 0) {
-            this.permisoList.set(data.value)
+            this.accionList.set(data.value)
           }
         } else {
           this.mostrarAlerta(data.msg, "Error");
@@ -95,18 +94,18 @@ export class RolesModal implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.dataRoles) {
-      this.formRole.patchValue({
-        nameRol: this.dataRoles.nameRol,
-        icon: this.dataRoles.icon,
-        description: this.dataRoles.description,
-        permisoList: this.dataRoles.permissions.map(p => p.id),
+    if (this.dataPermiso) {
+      this.formPermission.patchValue({
+        nameRol: this.dataPermiso.name,
+        icon: this.dataPermiso.icon,
+        description: this.dataPermiso.urlImagen,
+        accionList: this.dataPermiso.accions.map(p => p.accionId),
       })
       this.tituloAccion = "Editar";
       this.botonAccion = "Actualizar";
     }
   }
-
+  
   mostrarAlerta(msg: string, accion: string) {
     this._snackBar.open(msg, accion,
       {

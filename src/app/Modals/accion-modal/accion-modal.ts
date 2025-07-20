@@ -1,20 +1,18 @@
-import { Component, Inject, OnInit, signal } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DATE_FORMATS, MatNativeDateModule } from '@angular/material/core';
-import { MatDatepicker, MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MAT_DIALOG_DATA, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogRef, MatDialogTitle } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { Permissions } from '../../Interfaces/permission';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { RolService } from '../../Services/rol.service';
-import { PermissionService } from '../../Services/permission.service';
-import { Roles } from '../../Interfaces/roles';
+import { AccionService } from '../../Services/accion.service';
 import { formatError } from '../../Helper/error.helper';
+import { Accions } from '../../Interfaces/accions';
 
 export const MY_DATE_FORMATS = {
   parse: {
@@ -29,7 +27,7 @@ export const MY_DATE_FORMATS = {
 };
 
 @Component({
-  selector: 'app-roles-modal',
+  selector: 'app-accion-modal',
   imports: [
     MatDialogTitle,
     MatDialogContent,
@@ -45,62 +43,42 @@ export const MY_DATE_FORMATS = {
     MatNativeDateModule,
     MatIconModule
   ],
-  templateUrl: './roles-modal.html',
-  styleUrl: './roles-modal.css',
+  templateUrl: './accion-modal.html',
+  styleUrl: './accion-modal.css',
   providers: [{ provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS }]
-
 })
-export class RolesModal implements OnInit {
+export class AccionModal implements OnInit {
 
-  formRole: FormGroup;
+  formAccion: FormGroup;
   tituloAccion: string = "Nuevo";
   botonAccion: string = "Guardar";
-  public permisoList = signal<Permissions[]>([]);
-  selectedFile: File | null = null;
+
 
   constructor(
 
-    private dialogoReferencia: MatDialogRef<RolesModal>,
+    private dialogoReferencia: MatDialogRef<AccionModal>,
     private fb: FormBuilder,
     private _snackBar: MatSnackBar,
-    private _rolesService: RolService,
-    private _permissionService: PermissionService,
+    private _accionService: AccionService,
 
-    @Inject(MAT_DIALOG_DATA) public dataRoles: Roles
+    @Inject(MAT_DIALOG_DATA) public dataAccion: Accions
 
   ) {
-    this.formRole = this.fb.group({
+    this.formAccion = this.fb.group({
       ///Campo para el formulario
-      nameRol: ["", Validators.required],
-      icon: ["", Validators.required],
-      description: ["", Validators.required],
-      permisoList: [[], Validators.required],
+      nombre: ["", Validators.required],
+      descripcion: ["", Validators.required]
 
-    })
-
-    this._permissionService.getList().subscribe({
-      next: (data) => {
-        console.log(data)
-        if (data.status) {
-          if (data.status && data.value.length > 0) {
-            this.permisoList.set(data.value)
-          }
-        } else {
-          this.mostrarAlerta(data.msg, "Error");
-        }
-      }, error: (e) => {
-        this.mostrarAlerta(formatError(e), "Error");
-      }
     })
   }
 
+
+
   ngOnInit(): void {
-    if (this.dataRoles) {
-      this.formRole.patchValue({
-        nameRol: this.dataRoles.nameRol,
-        icon: this.dataRoles.icon,
-        description: this.dataRoles.description,
-        permisoList: this.dataRoles.permissions.map(p => p.id),
+    if (this.dataAccion) {
+      this.formAccion.patchValue({
+        nombre: this.dataAccion.nombre,
+        descripcion: this.dataAccion.descripcion,
       })
       this.tituloAccion = "Editar";
       this.botonAccion = "Actualizar";
@@ -124,13 +102,5 @@ export class RolesModal implements OnInit {
   save() {
     const EMPTY_GUID = '00000000-0000-0000-0000-000000000000';
     const empresaId = localStorage.getItem('EmpresaId') ?? '';
-  }
-
-  
-  onFileSelected(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
-      this.selectedFile = input.files[0];
-    }
   }
 }

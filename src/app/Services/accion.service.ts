@@ -7,20 +7,15 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class PermissionService {
-
+export class AccionService {
 
   private endpoint: string = settings.endPoint;
-  private apiUrl: string = this.endpoint + "api/permission/";
+  private apiUrl: string = this.endpoint + "api/accion/";
 
   constructor(private http: HttpClient) { }
-  
+
   getList(): Observable<ResponseAcces> {
     return this.http.get<ResponseAcces>(`${this.apiUrl}Lista`)
-  }
-
-  getListRole(): Observable<ResponseAcces> {
-    return this.http.get<ResponseAcces>(`${this.apiUrl}ListaPermission`)
   }
 
 }
