@@ -11,3 +11,6 @@ export interface PermissionRole {
     id: string;
     name?: string;
 }
+export interface RolPermissionDTO {
+    permissionList: string[];
+}

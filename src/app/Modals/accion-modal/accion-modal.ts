@@ -9,10 +9,10 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { AccionService } from '../../Services/accion.service';
 import { formatError } from '../../Helper/error.helper';
 import { Accions } from '../../Interfaces/accions';
+import { NotifierService } from '../../notifier.service';
 
 export const MY_DATE_FORMATS = {
   parse: {
@@ -58,8 +58,8 @@ export class AccionModal implements OnInit {
 
     private dialogoReferencia: MatDialogRef<AccionModal>,
     private fb: FormBuilder,
-    private _snackBar: MatSnackBar,
     private _accionService: AccionService,
+    private notifierService: NotifierService,
 
     @Inject(MAT_DIALOG_DATA) public dataAccion: Accions
 
@@ -68,11 +68,8 @@ export class AccionModal implements OnInit {
       ///Campo para el formulario
       nombre: ["", Validators.required],
       descripcion: ["", Validators.required]
-
     })
   }
-
-
 
   ngOnInit(): void {
     if (this.dataAccion) {
@@ -85,22 +82,38 @@ export class AccionModal implements OnInit {
     }
   }
 
-  mostrarAlerta(msg: string, accion: string) {
-    this._snackBar.open(msg, accion,
-      {
-        horizontalPosition: "end",
-        verticalPosition: "top",
-        duration: 3000
-      })
-  }
-
   onPaste(event: ClipboardEvent) {
     event.preventDefault();
   }
 
-
   save() {
     const EMPTY_GUID = '00000000-0000-0000-0000-000000000000';
     const empresaId = localStorage.getItem('EmpresaId') ?? '';
+
+    const id = this.dataAccion?.accionId ?? EMPTY_GUID;
+
+    const modelo: Accions =
+    {
+      accionId: id,
+      nombre: this.formAccion.value.nombre,
+      descripcion: this.formAccion.value.descripcion
+    }
+
+    if (id != null) {
+      this._accionService.register(modelo).subscribe({
+        next: (data) => {
+          if (data.status) {
+            this.notifierService.showNotification('Acción registrado correctamente.', 'Listo', 'success');
+            window.location.reload();
+          } else {
+            this.notifierService.showNotification(data.msg, 'Error', 'error');
+          }
+        }, error: (e) => {
+          this.notifierService.showNotification(formatError(e), 'Error', 'error');
+        }
+      })
+    } else {
+      this.notifierService.showNotification('No fue posible registrar la acción.', 'Error', 'error');
+    }
   }
 }

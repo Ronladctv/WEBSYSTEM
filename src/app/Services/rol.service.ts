@@ -21,5 +21,12 @@ export class RolService {
   getListRole(): Observable<ResponseAcces> {
     return this.http.get<ResponseAcces>(`${this.apiUrl}ListaRole`)
   }
-  
+
+  register(formData: FormData): Observable<ResponseAcces> {
+    return this.http.post<ResponseAcces>(`{${this.apiUrl}}Save`, formData);
+  }
+
+  AsignarPermisos(roleId: string, permissionIds: string[]): Observable<ResponseAcces> {
+    return this.http.post<ResponseAcces>(`${this.apiUrl}/AsignarPermisos/${roleId}`, permissionIds);
+  }
 }

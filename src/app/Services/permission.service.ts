@@ -14,7 +14,7 @@ export class PermissionService {
   private apiUrl: string = this.endpoint + "api/permission/";
 
   constructor(private http: HttpClient) { }
-  
+
   getList(): Observable<ResponseAcces> {
     return this.http.get<ResponseAcces>(`${this.apiUrl}Lista`)
   }
@@ -23,4 +23,7 @@ export class PermissionService {
     return this.http.get<ResponseAcces>(`${this.apiUrl}ListaPermission`)
   }
 
+  register(formData: FormData): Observable<ResponseAcces> {
+    return this.http.post<ResponseAcces>(`{${this.apiUrl}}Register`, formData);
+  }
 }

@@ -3,6 +3,7 @@ import { settings } from '../Settings/appsettings';
 import { HttpClient } from '@angular/common/http';
 import { ResponseAcces } from '../Interfaces/ResponseAcces';
 import { Observable } from 'rxjs';
+import { Accions } from '../Interfaces/accions';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +17,10 @@ export class AccionService {
 
   getList(): Observable<ResponseAcces> {
     return this.http.get<ResponseAcces>(`${this.apiUrl}Lista`)
+  }
+
+  register(formData: Accions): Observable<ResponseAcces> {
+    return this.http.post<ResponseAcces>(`{${this.apiUrl}}Register`, formData);
   }
 
 }

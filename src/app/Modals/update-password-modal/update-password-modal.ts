@@ -9,10 +9,10 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { UserService } from '../../Services/user.service';
 import { User, UserPassword } from '../../Interfaces/user';
 import { Router } from '@angular/router';
+import { NotifierService } from '../../notifier.service';
 
 
 export const MY_DATE_FORMATS = {
@@ -57,8 +57,8 @@ export class UpdatePasswordModal implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private _snackBar: MatSnackBar,
     private _userService: UserService,
+    private notifierService: NotifierService,
 
     @Inject(MAT_DIALOG_DATA) public dataUser: User
   ) {
@@ -76,16 +76,6 @@ export class UpdatePasswordModal implements OnInit {
     }
   }
 
-  mostrarAlerta(msg: string, accion: string) {
-    this._snackBar.open(msg, accion,
-      {
-        horizontalPosition: "end",
-        verticalPosition: "top",
-        duration: 3000
-      })
-  }
-
-
   Save() {
 
     const userId = this.dataUser.id;
@@ -102,7 +92,7 @@ export class UpdatePasswordModal implements OnInit {
         next: (data) => {
           if (data.status) {
             const mensaje = "La clave del usuario se actualizo correctamente";
-            this.mostrarAlerta(mensaje, "Listo");
+            this.notifierService.showNotification(mensaje, 'Listo', 'success');
             if (userId == usuarioId) {
               localStorage.clear();
               this.router.navigate(['/login']);
@@ -110,18 +100,15 @@ export class UpdatePasswordModal implements OnInit {
               window.location.reload();
             }
           } else {
-            this.mostrarAlerta(data.msg, "Error")
+            this.notifierService.showNotification(data.msg, 'Error', 'error');
           }
         }, error: (e) => {
           const mensaje = "No se pudo actualizar la llave : Error en la petición";
-          this.mostrarAlerta(mensaje, "Error")
+          this.notifierService.showNotification(mensaje, 'Error', 'error');
         }
       })
     } else {
-      this.mostrarAlerta("No fue posible actualizar el usuario", "Error")
+      this.notifierService.showNotification('No fue posible actualizar el usuario', 'Error', 'error');
     }
-
   }
-
-
 }

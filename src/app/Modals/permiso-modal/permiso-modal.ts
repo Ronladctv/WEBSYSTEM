@@ -14,6 +14,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { PermissionService } from '../../Services/permission.service';
 import { AccionService } from '../../Services/accion.service';
 import { formatError } from '../../Helper/error.helper';
+import { NotifierService } from '../../notifier.service';
 
 export const MY_DATE_FORMATS = {
   parse: {
@@ -64,6 +65,7 @@ export class PermisoModal implements OnInit {
     private _snackBar: MatSnackBar,
     private _permissionService: PermissionService,
     private _accionService: AccionService,
+    private notifierService: NotifierService,
 
     @Inject(MAT_DIALOG_DATA) public dataPermiso: Permissions
 
@@ -72,7 +74,6 @@ export class PermisoModal implements OnInit {
       ///Campo para el formulario
       nombre: ["", Validators.required],
       icon: ["", Validators.required],
-      urlImagen: ["", Validators.required],
       accions: [[], Validators.required],
 
     })
@@ -85,10 +86,10 @@ export class PermisoModal implements OnInit {
             this.accionList.set(data.value)
           }
         } else {
-          this.mostrarAlerta(data.msg, "Error");
+          this.notifierService.showNotification(data.msg, 'Error', 'error');
         }
       }, error: (e) => {
-        this.mostrarAlerta(formatError(e), "Error");
+        this.notifierService.showNotification(formatError(e), 'Error', 'error');
       }
     })
   }
@@ -105,15 +106,6 @@ export class PermisoModal implements OnInit {
       this.botonAccion = "Actualizar";
     }
   }
-  
-  mostrarAlerta(msg: string, accion: string) {
-    this._snackBar.open(msg, accion,
-      {
-        horizontalPosition: "end",
-        verticalPosition: "top",
-        duration: 3000
-      })
-  }
 
   onPaste(event: ClipboardEvent) {
     event.preventDefault();
@@ -121,11 +113,43 @@ export class PermisoModal implements OnInit {
 
 
   save() {
+
     const EMPTY_GUID = '00000000-0000-0000-0000-000000000000';
-    const empresaId = localStorage.getItem('EmpresaId') ?? '';
+    const formData = new FormData();
+    const id = this.dataPermiso?.id ?? EMPTY_GUID;
+
+    formData.append('id', id);
+    formData.append('name', this.formPermission.value.name);
+    formData.append('icon', this.formPermission.value.lastName);
+
+    const accionList = this.formPermission.value.accionList || [];
+    accionList.forEach((accionId: string) => {
+      formData.append('accionId', accionId);
+    });
+
+    if (this.selectedFile) {
+      formData.append('file', this.selectedFile);
+    }
+
+    const isNew = this.dataPermiso == null;
+    this._permissionService.register(formData).subscribe({
+      next: (data) => {
+        if (data.status) {
+          const mensaje = isNew ? "El permiso se creó correctamente." : "El permiso se actualizó correctamente.";
+          this.notifierService.showNotification(mensaje, 'Listo', 'success');
+          window.location.reload();
+        } else {
+          this.notifierService.showNotification(data.msg, 'Error', 'error');
+        }
+      }, error: (e) => {
+        const mensaje = isNew ? "No se pudo registrar el permiso." : "No se pudo actualizar el permiso.";
+        this.notifierService.showNotification(formatError(e) + mensaje, 'Error', 'error');
+      }
+    })
+
   }
 
-  
+
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {

@@ -15,6 +15,7 @@ import { RolService } from '../../Services/rol.service';
 import { PermissionService } from '../../Services/permission.service';
 import { Roles } from '../../Interfaces/roles';
 import { formatError } from '../../Helper/error.helper';
+import { NotifierService } from '../../notifier.service';
 
 export const MY_DATE_FORMATS = {
   parse: {
@@ -62,9 +63,9 @@ export class RolesModal implements OnInit {
 
     private dialogoReferencia: MatDialogRef<RolesModal>,
     private fb: FormBuilder,
-    private _snackBar: MatSnackBar,
     private _rolesService: RolService,
     private _permissionService: PermissionService,
+    private notifierService: NotifierService,
 
     @Inject(MAT_DIALOG_DATA) public dataRoles: Roles
 
@@ -86,10 +87,10 @@ export class RolesModal implements OnInit {
             this.permisoList.set(data.value)
           }
         } else {
-          this.mostrarAlerta(data.msg, "Error");
+          this.notifierService.showNotification(data.msg, 'Error', 'error');
         }
       }, error: (e) => {
-        this.mostrarAlerta(formatError(e), "Error");
+        this.notifierService.showNotification(formatError(e), 'Error', 'error');
       }
     })
   }
@@ -107,15 +108,6 @@ export class RolesModal implements OnInit {
     }
   }
 
-  mostrarAlerta(msg: string, accion: string) {
-    this._snackBar.open(msg, accion,
-      {
-        horizontalPosition: "end",
-        verticalPosition: "top",
-        duration: 3000
-      })
-  }
-
   onPaste(event: ClipboardEvent) {
     event.preventDefault();
   }
@@ -124,9 +116,55 @@ export class RolesModal implements OnInit {
   save() {
     const EMPTY_GUID = '00000000-0000-0000-0000-000000000000';
     const empresaId = localStorage.getItem('EmpresaId') ?? '';
+    const formData = new FormData();
+    const id = this.dataRoles?.id ?? EMPTY_GUID;
+
+
+    formData.append('id', id);
+    formData.append('nameRol', this.formRole.value.nameRol);
+    formData.append('icon', this.formRole.value.icon);
+    formData.append('description', this.formRole.value.description);
+
+    if (this.selectedFile) {
+      formData.append('file', this.selectedFile);
+    }
+
+    const permisosIds = this.formRole.get('permisoList')?.value;
+
+    const isNew = this.dataRoles == null;
+    this._rolesService.register(formData).subscribe({
+      next: (data) => {
+        if (data.status) {
+          const mensaje = isNew ? "El permiso se creó correctamente." : "El permiso se actualizó correctamente.";
+          //regin para asignar los permisos
+          if (permisosIds.length > 0) {
+            this._rolesService.AsignarPermisos(data.value, permisosIds).subscribe({
+              next: (data) => {
+                if (data.status) {
+                  this.notifierService.showNotification('Permisos agredados correctamente', 'Listo', 'success');
+                } else {
+                  this.notifierService.showNotification(data.msg, 'Error', 'error');
+                }
+              }, error: (e) => {
+                this.notifierService.showNotification(formatError(e), 'Error', 'error');
+              }
+            })
+          }
+          //end region 
+          this.notifierService.showNotification(mensaje, 'Listo', 'success');
+          window.location.reload();
+        } else {
+          this.notifierService.showNotification(data.msg, 'Error', 'error');
+        }
+      }, error: (e) => {
+        const mensaje = isNew ? "No se pudo registrar el permiso." : "No se pudo actualizar el permiso.";
+        this.notifierService.showNotification(formatError(e) + mensaje, 'Error', 'error');
+      }
+    })
+
   }
 
-  
+
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {

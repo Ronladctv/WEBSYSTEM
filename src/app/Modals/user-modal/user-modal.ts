@@ -3,10 +3,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialogActions, MatDialogClose, MatDialogContent, MatDialogTitle } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { MAT_DATE_FORMATS } from '@angular/material/core';
-import * as moment from 'moment';
-import { parse } from 'path';
 import { UserService } from '../../Services/user.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -18,10 +15,10 @@ import { Roles } from '../../Interfaces/roles';
 import { MatSelectModule } from '@angular/material/select';
 import { CategoryType } from '../../Interfaces/category-type';
 import { CategoryTypeService } from '../../Services/category-type.service';
-import { AccessService } from '../../Services/Access.service';
 import { Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { formatError } from '../../Helper/error.helper';
+import { NotifierService } from '../../notifier.service';
 
 
 export const MY_DATE_FORMATS = {
@@ -70,10 +67,9 @@ export class UserModal implements OnInit {
   constructor(
     private dialogoReferencia: MatDialogRef<UserModal>,
     private fb: FormBuilder,
-    private _snackBar: MatSnackBar,
-    private _accessService: AccessService,
     private _userService: UserService,
     private _rolesService: RolService,
+    private notifierService: NotifierService,
 
     private _categoryType: CategoryTypeService,
     @Inject(MAT_DIALOG_DATA) public datauser: User
@@ -99,11 +95,11 @@ export class UserModal implements OnInit {
             this.roles.set(data.value)
           }
         } else {
-          this.mostrarAlerta(data.msg, "Error");
+            this.notifierService.showNotification(data.msg, 'Error', 'error');
         }
       },
       error: (e) => {
-        this.mostrarAlerta(formatError(e), "Error");
+          this.notifierService.showNotification(formatError(e), 'Error', 'error');
       }
     })
 
@@ -114,11 +110,11 @@ export class UserModal implements OnInit {
             this.categoriType.set(data.value)
           }
         } else {
-          this.mostrarAlerta(data.msg, "Error");
+            this.notifierService.showNotification(data.msg, 'Error', 'error');
         }
       },
       error: (e) => {
-        this.mostrarAlerta(formatError(e), "Error");
+          this.notifierService.showNotification(formatError(e), 'Error', 'error');
       }
     })
   }
@@ -149,11 +145,11 @@ export class UserModal implements OnInit {
               this.formUser.get('roles')?.setValue(data.value.rolId);
             }
           } else {
-            this.mostrarAlerta(data.msg, "Error");
+            this.notifierService.showNotification(data.msg, 'Error', 'error');
           }
         },
         error: (e) => {
-          this.mostrarAlerta(formatError(e), "Error");
+          this.notifierService.showNotification(formatError(e), 'Error', 'error');
         }
       });
 
@@ -161,15 +157,6 @@ export class UserModal implements OnInit {
       this.botonAccion = "Actualizar";
       this.inputpassword = false;
     }
-  }
-
-  mostrarAlerta(msg: string, accion: string) {
-    this._snackBar.open(msg, accion,
-      {
-        horizontalPosition: "end",
-        verticalPosition: "top",
-        duration: 3000
-      })
   }
 
   saveUser() {
@@ -202,20 +189,20 @@ export class UserModal implements OnInit {
               this._userService.asignarRol(empresaId, data.value.id, selectedRole).subscribe({
                 next: (data) => {
                   if (data.status) {
-                    this.mostrarAlerta("El rol se agregó correctamente.", "Listo")
+                    this.notifierService.showNotification('El rol se agregó correctamente.', 'Listo', 'success');
                   } else {
-                    this.mostrarAlerta(data.msg, "Error")
+                    this.notifierService.showNotification(data.msg, 'Error', 'error');
                   }
                 }
               });
             }
-            this.mostrarAlerta("El usuario se creó correctamente.", "Listo")
+            this.notifierService.showNotification('El usuario se creó correctamente.', 'Listo', 'success');
             window.location.reload();
           } else {
-            this.mostrarAlerta(data.msg, "Error")
+            this.notifierService.showNotification(data.msg, 'Error', 'error');
           }
         }, error: (e) => {
-          this.mostrarAlerta("No se pudo registrar el usuario.", "Error")
+          this.notifierService.showNotification(formatError(e) + 'No se pudo registrar el usuario.', 'Error', 'error');
         }
       })
     }
@@ -228,21 +215,21 @@ export class UserModal implements OnInit {
               this._userService.asignarRol(empresaId, data.value.id, selectedRole).subscribe({
                 next: (data) => {
                   if (data.status) {
-                    this.mostrarAlerta("El rol se agregó correctamente.", "Listo")
+                    this.notifierService.showNotification('El rol se agregó correctamente.', 'Listo', 'success');
                   }
                   else {
-                    this.mostrarAlerta(data.msg, "Error")
+                    this.notifierService.showNotification(data.msg, 'Error', 'error');
                   }
                 }
               });
             }
-            this.mostrarAlerta("El usuario se actualizó correctamente.", "Listo")
+            this.notifierService.showNotification('El usuario se actualizó correctamente.', 'Listo', 'success');
             window.location.reload();
           } else {
-            this.mostrarAlerta(data.msg, "Error")
+            this.notifierService.showNotification(data.msg, 'Error', 'error');
           }
         }, error: (e) => {
-          this.mostrarAlerta("No se pudo registrar el usuario.", "Error")
+          this.notifierService.showNotification(formatError(e) + 'No se pudo registrar el usuario.', 'Error', 'error');
         }
       })
     }
