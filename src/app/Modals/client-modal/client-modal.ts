@@ -9,13 +9,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { CategoryType } from '../../Interfaces/category-type';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { AccessService } from '../../Services/Access.service';
 import { ClientService } from '../../Services/client.service';
 import { CategoryTypeService } from '../../Services/category-type.service';
 import { Clientes } from '../../Interfaces/clientes';
 import { MatDatepicker, MatDatepickerModule } from "@angular/material/datepicker";
 import { formatError } from '../../Helper/error.helper';
+import { NotifierService } from '../../notifier.service';
 
 export const MY_DATE_FORMATS = {
   parse: {
@@ -58,14 +57,14 @@ export class ClientModal implements OnInit {
   botonAccion: string = "Guardar";
   inputpassword: boolean = true;
   public categoriType = signal<CategoryType[]>([]);
+  selectedFile: File | null = null;
 
   constructor(
 
     private dialogoReferencia: MatDialogRef<ClientModal>,
     private fb: FormBuilder,
-    private _snackBar: MatSnackBar,
-    private _accessService: AccessService,
     private _clientService: ClientService,
+    private notifierService: NotifierService,
 
     private _categoryType: CategoryTypeService,
     @Inject(MAT_DIALOG_DATA) public dataclient: Clientes
@@ -89,16 +88,15 @@ export class ClientModal implements OnInit {
 
     this._categoryType.getListCategoryUser().subscribe({
       next: (data) => {
-        console.log(data)
         if (data.status) {
           if (data.status && data.value.length > 0) {
             this.categoriType.set(data.value)
           }
         } else {
-          this.mostrarAlerta(data.msg, "Error");
+          this.notifierService.showNotification(data.msg, 'Error', 'error');
         }
       }, error: (e) => {
-        this.mostrarAlerta(formatError(e), "Error");
+        this.notifierService.showNotification(formatError(e), 'Error', 'error');
       }
     })
   }
@@ -123,53 +121,41 @@ export class ClientModal implements OnInit {
     }
   }
 
-  mostrarAlerta(msg: string, accion: string) {
-    this._snackBar.open(msg, accion,
-      {
-        horizontalPosition: "end",
-        verticalPosition: "top",
-        duration: 3000
-      })
-  }
-
-
   save() {
     const EMPTY_GUID = '00000000-0000-0000-0000-000000000000';
+    const formData = new FormData();
+    const id = this.dataclient?.id ?? EMPTY_GUID;
 
-    const empresaId = localStorage.getItem('EmpresaId') ?? '';
+    formData.append('id', id);
+    formData.append('name', this.formClient.value.name);
+    formData.append('lastName', this.formClient.value.lastName);
+    formData.append('email', this.formClient.value.email);
+    formData.append('cedula', this.formClient.value.cedula);
+    formData.append('phone', this.formClient.value.phone);
+    formData.append('typeClientId', this.formClient.value.categoriType);
+    formData.append('birthdate', this.formClient.value.birthdate);
+    formData.append('city', this.formClient.value.city);
+    formData.append('address', this.formClient.value.address);
+    formData.append('isAfiliate', this.formClient.value.isAfiliate);
+    formData.append('isConsumer', this.formClient.value.isConsumer);
 
-    const modelo: Clientes =
-    {
-      id: this.dataclient ? this.dataclient.id : EMPTY_GUID,
-      name: this.formClient.value.name,
-      lastName: this.formClient.value.lastName,
-      email: this.formClient.value.email,
-      cedula: this.formClient.value.cedula,
-      phone: this.formClient.value.phone,
-      typeClientId: this.formClient.value.categoriType,
-      birthdate: this.formClient.value.birthdate,
-      city: this.formClient.value.city,
-      address: this.formClient.value.address,
-      isAfiliate: this.formClient.value.isAfiliate,
-      isConsumer: this.formClient.value.isConsumer
-      //para fechas
-      //fecha: moment(this.formuser.value.fechacontrato).format("DD/MM/YYYY")
+    if (this.selectedFile) {
+      formData.append('file', this.selectedFile);
     }
 
     const isNew = this.dataclient == null;
-
-    this._clientService.register(modelo).subscribe({
+    this._clientService.register(formData).subscribe({
       next: (data) => {
         if (data.status) {
           const mensaje = isNew ? "El cliente se creó correctamente." : "El cliente se actualizó correctamente.";
-          this.mostrarAlerta(mensaje, "Listo");
+          this.notifierService.showNotification(mensaje, 'Listo', 'success');
           window.location.reload();
         } else {
-          this.mostrarAlerta(data.msg, "Error")
+          this.notifierService.showNotification(data.msg, 'Error', 'error');
         }
       }, error: (e) => {
         const mensaje = isNew ? "No se pudo registrar el cliente." : "No se pudo actualizar el cliente.";
-        this.mostrarAlerta(mensaje, "Error")
+        this.notifierService.showNotification(formatError(e) + mensaje, 'Error', 'error');
       }
     })
   }
@@ -181,5 +167,12 @@ export class ClientModal implements OnInit {
   getTodayDateOnly(): Date {
     const today = new Date();
     return new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.selectedFile = input.files[0];
+    }
   }
 }

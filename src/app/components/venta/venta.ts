@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { ProductoService } from '../../Services/producto.service';
 import { Productos } from '../../Interfaces/productos';
 import { formatError } from '../../Helper/error.helper';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { NotifierService } from '../../notifier.service';
 
 @Component({
   selector: 'app-venta',
@@ -20,7 +20,9 @@ export class Venta implements OnInit {
 
   public listProducts = signal<Productos[]>([]);
 
-  constructor(private _productoService: ProductoService, private _snackBar: MatSnackBar) { }
+  constructor(
+    private _productoService: ProductoService,
+    private notifierService: NotifierService) { }
 
   ngOnInit(): void {
     this.cargarProductos();
@@ -35,11 +37,11 @@ export class Venta implements OnInit {
           }
         }
         else {
-          this.mostrarAlerta(data.msg, "Error");
+          this.notifierService.showNotification(data.msg, 'Error', 'error');
         }
       },
       error: (e) => {
-        this.mostrarAlerta(formatError(e), "Error");
+        this.notifierService.showNotification(formatError(e), 'Error', 'error');
       }
     })
   }
@@ -71,12 +73,4 @@ export class Venta implements OnInit {
     this.dataSource = [...this.dataSource]; // Para que Angular detecte el cambio
   }
 
-  mostrarAlerta(msg: string, accion: string) {
-    this._snackBar.open(msg, accion,
-      {
-        horizontalPosition: "end",
-        verticalPosition: "top",
-        duration: 3000
-      })
-  }
 }

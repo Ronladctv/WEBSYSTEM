@@ -53,7 +53,7 @@ export class Login {
     debugger
     this.Access.Login(objeto).subscribe({
       next: (data) => {
-        if (data.value) {
+        if (data.status) {
           if (data.value.token != null) {
             localStorage.setItem("token", data.value.token)
             if (data.value.token) {

@@ -9,9 +9,10 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { EmpresaService } from '../../Services/empresa.service';
 import { Empresas } from '../../Interfaces/empresas';
+import { NotifierService } from '../../notifier.service';
+import { formatError } from '../../Helper/error.helper';
 
 
 export const MY_DATE_FORMATS = {
@@ -25,8 +26,6 @@ export const MY_DATE_FORMATS = {
     monthYearA11yLabel: 'YYYY MMM'
   }
 };
-
-
 
 @Component({
   selector: 'app-empresa-modal',
@@ -55,13 +54,15 @@ export class EmpresaModal implements OnInit {
   tituloAccion: string = "Nuevo";
   botonAccion: string = "Guardar";
   inputpassword: boolean = true;
+  selectedFileHeader: File | null = null;
+  selectedFileFooter: File | null = null;
 
   constructor(
 
     private dialogoReferencia: MatDialogRef<EmpresaModal>,
     private fb: FormBuilder,
-    private _snackBar: MatSnackBar,
     private _empresaService: EmpresaService,
+    private notifierService: NotifierService,
 
     @Inject(MAT_DIALOG_DATA) public dataEmpresa: Empresas
 
@@ -80,7 +81,6 @@ export class EmpresaModal implements OnInit {
     })
   }
 
-
   ngOnInit(): void {
     if (this.dataEmpresa) {
       console.log(this.dataEmpresa)
@@ -90,62 +90,67 @@ export class EmpresaModal implements OnInit {
         colorPrimary: this.dataEmpresa.colorPrimary,
         colorSecundary: this.dataEmpresa.colorSecundary,
         ruc: this.dataEmpresa.ruc,
-        email: this.dataEmpresa.email,
-        logHeader: this.dataEmpresa.logHeader,
-        logoFooter: this.dataEmpresa.logoFooter,
+        email: this.dataEmpresa.email
       })
       this.tituloAccion = "Editar";
       this.botonAccion = "Actualizar";
     }
   }
 
-  mostrarAlerta(msg: string, accion: string) {
-    this._snackBar.open(msg, accion,
-      {
-        horizontalPosition: "end",
-        verticalPosition: "top",
-        duration: 3000
-      })
-  }
-
   save() {
     const EMPTY_GUID = '00000000-0000-0000-0000-000000000000';
+    const formData = new FormData();
+    const id = this.dataEmpresa?.id ?? EMPTY_GUID;
 
-    const modelo: Empresas =
-    {
-      id: this.dataEmpresa ? this.dataEmpresa.id : EMPTY_GUID,
-      nameEmpresa: this.formEmpresa.value.nameEmpresa,
-      address: this.formEmpresa.value.address,
-      colorPrimary: this.formEmpresa.value.colorPrimary,
-      colorSecundary: this.formEmpresa.value.colorSecundary,
-      ruc: this.formEmpresa.value.ruc,
-      email: this.formEmpresa.value.email,
-      logHeader: this.formEmpresa.value.logHeader,
-      logoFooter: this.formEmpresa.value.logoFooter,
-      //para fechas
-      //fecha: moment(this.formuser.value.fechacontrato).format("DD/MM/YYYY")
+    formData.append('id', id);
+    formData.append('nameEmpresa', this.formEmpresa.value.nameEmpresa);
+    formData.append('address', this.formEmpresa.value.addressa);
+    formData.append('colorPrimary', this.formEmpresa.value.colorPrimary);
+    formData.append('colorSecundary', this.formEmpresa.value.colorSecundary);
+    formData.append('ruc', this.formEmpresa.value.ruc);
+    formData.append('email', this.formEmpresa.value.email);
+
+    if (this.selectedFileHeader) {
+      formData.append('Header', this.selectedFileHeader);
+    }
+
+    if (this.selectedFileFooter) {
+      formData.append('Footer', this.selectedFileFooter);
     }
 
     const isNew = this.dataEmpresa == null;
-
-    this._empresaService.register(modelo).subscribe({
+    this._empresaService.register(formData).subscribe({
       next: (data) => {
         if (data.status) {
           const mensaje = isNew ? "La empresa se creó correctamente." : "La empresa se actualizó correctamente.";
-          this.mostrarAlerta(mensaje, "Listo");
+          this.notifierService.showNotification(mensaje, 'Listo', 'success');
           window.location.reload();
         } else {
-          this.mostrarAlerta(data.msg, "Error")
+          this.notifierService.showNotification(data.msg, 'Error', 'error');
         }
       }, error: (e) => {
         const mensaje = isNew ? "No se pudo registrar la empresa." : "No se pudo actualizar la empresa.";
-        this.mostrarAlerta("No se pudo registrar el usuario.", "Error")
+        this.notifierService.showNotification(formatError(e) + mensaje, 'Error', 'error');
       }
     })
   }
 
   onPaste(event: ClipboardEvent) {
     event.preventDefault();
+  }
+
+  onFileSelectedHeader(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.selectedFileHeader = input.files[0];
+    }
+  }
+
+  onFileSelectedFooter(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.selectedFileFooter = input.files[0];
+    }
   }
 
 }

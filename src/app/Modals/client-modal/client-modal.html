@@ -99,6 +99,25 @@
                     <mat-icon matSuffix>shopping_cart</mat-icon>
                 </mat-form-field>
             </mat-grid-tile>
+            <mat-grid-tile colspan="2" style="border-top: none !important; box-shadow: none !important;">
+                <div style="display: flex; flex-direction: column; align-items: flex-start; width: 100%;">
+                    <div style="display: flex; align-items: center; gap: 16px;">
+                        <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*"
+                            style="display: none" />
+                        <button mat-raised-button color="primary" (click)="fileInput.click()">
+                            Seleccione una imagen.
+                        </button>
+                        @if (selectedFile){
+                        <span style="margin-left: 8px;">{{ selectedFile.name }}</span>
+                        }@else{
+                        <span style="color: rgba(0,0,0,0.54); font-style: italic; margin-left: 8px;">
+                            Ningún archivo seleccionado
+                        </span>
+                        }
+                    </div>
+                </div>
+            </mat-grid-tile>
+
 
         </mat-grid-list>
     </form>

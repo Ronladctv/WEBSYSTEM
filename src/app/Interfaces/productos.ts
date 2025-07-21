@@ -8,4 +8,5 @@ export interface Productos {
     stock: number,
     state: boolean,
     typeProductId: string;
+    codePr: string;
 }

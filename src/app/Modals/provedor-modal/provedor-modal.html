@@ -16,7 +16,7 @@
                     <mat-icon matSuffix>person_outline</mat-icon>
                 </mat-form-field>
             </mat-grid-tile>
-            
+
             <mat-grid-tile>
                 <mat-form-field appearance="outline" class="input-custom">
                     <mat-label>Lugar de residencia</mat-label>
@@ -28,21 +28,24 @@
             <mat-grid-tile>
                 <mat-form-field appearance="outline" class="input-custom">
                     <mat-label>Correo Electronico</mat-label>
-                    <input matInput formControlName="email" type="tel" placeholder="Correo Electronico" autocomplete="off">
+                    <input matInput formControlName="email" type="tel" placeholder="Correo Electronico"
+                        autocomplete="off">
                     <mat-icon matSuffix>email</mat-icon>
                 </mat-form-field>
             </mat-grid-tile>
             <mat-grid-tile>
                 <mat-form-field appearance="outline" class="input-custom">
                     <mat-label>Numero Telefonico</mat-label>
-                    <input matInput formControlName="phone" type="tel" placeholder="Numero Telefonico" autocomplete="off">
+                    <input matInput formControlName="phone" type="tel" placeholder="Numero Telefonico"
+                        autocomplete="off">
                     <mat-icon matSuffix>phone</mat-icon>
                 </mat-form-field>
             </mat-grid-tile>
             <mat-grid-tile>
                 <mat-form-field appearance="outline" class="input-custom">
                     <mat-label>Nmero de identificación</mat-label>
-                    <input matInput formControlName="document" placeholder="Numero de identificación" autocomplete="off">
+                    <input matInput formControlName="document" placeholder="Numero de identificación"
+                        autocomplete="off">
                     <mat-icon matSuffix>badge</mat-icon>
                 </mat-form-field>
             </mat-grid-tile>
@@ -53,7 +56,24 @@
                     <mat-icon matSuffix>assignment_ind</mat-icon>
                 </mat-form-field>
             </mat-grid-tile>
-
+            <mat-grid-tile colspan="2" style="border-top: none !important; box-shadow: none !important;">
+                <div style="display: flex; flex-direction: column; align-items: flex-start; width: 100%;">
+                    <div style="display: flex; align-items: center; gap: 16px;">
+                        <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*"
+                            style="display: none" />
+                        <button mat-raised-button color="primary" (click)="fileInput.click()">
+                            Seleccione una imagen del Provedor.
+                        </button>
+                        @if (selectedFile){
+                        <span style="margin-left: 8px;">{{ selectedFile.name }}</span>
+                        }@else{
+                        <span style="color: rgba(0,0,0,0.54); font-style: italic; margin-left: 8px;">
+                            Ningún archivo seleccionado
+                        </span>
+                        }
+                    </div>
+                </div>
+            </mat-grid-tile>
         </mat-grid-list>
     </form>
 </mat-dialog-content>

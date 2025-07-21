@@ -19,6 +19,13 @@
                     <mat-icon matSuffix>description</mat-icon>
                 </mat-form-field>
             </mat-grid-tile>
+            <mat-grid-tile colspan="2">
+                <mat-form-field appearance="outline" class="input-custom">
+                    <mat-label>Codigo de Producto</mat-label>
+                    <input matInput formControlName="codePr" placeholder="Ingrese el código del producto." autocomplete="off">
+                    <mat-icon matSuffix>description</mat-icon>
+                </mat-form-field>
+            </mat-grid-tile>
 
             <!-- Tipo de producto -->
             <mat-grid-tile colspan="2">
@@ -73,6 +80,25 @@
                     </mat-select>
                     <mat-icon matSuffix>toggle_on</mat-icon>
                 </mat-form-field>
+            </mat-grid-tile>
+
+            <mat-grid-tile colspan="2" style="border-top: none !important; box-shadow: none !important;">
+                <div style="display: flex; flex-direction: column; align-items: flex-start; width: 100%;">
+                    <div style="display: flex; align-items: center; gap: 16px;">
+                        <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*"
+                            style="display: none" />
+                        <button mat-raised-button color="primary" (click)="fileInput.click()">
+                            Seleccione una imagen de Producto.
+                        </button>
+                        @if (selectedFile){
+                        <span style="margin-left: 8px;">{{ selectedFile.name }}</span>
+                        }@else{
+                        <span style="color: rgba(0,0,0,0.54); font-style: italic; margin-left: 8px;">
+                            Ningún archivo seleccionado
+                        </span>
+                        }
+                    </div>
+                </div>
             </mat-grid-tile>
 
         </mat-grid-list>

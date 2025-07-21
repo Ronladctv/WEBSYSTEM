@@ -23,8 +23,8 @@ export class ClientService {
     return this.http.get<ResponseAcces>(`${this.apiUrl}Profile/${usuarioId}`)
   }
 
-  register(objeto: Clientes): Observable<ResponseAcces> {
-    return this.http.post<ResponseAcces>(`${this.apiUrl}Register`, objeto)
+  register(formData: FormData): Observable<ResponseAcces> {
+    return this.http.post<ResponseAcces>(`${this.apiUrl}Register`, formData)
   }
 
 

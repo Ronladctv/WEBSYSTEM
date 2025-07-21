@@ -6,6 +6,4 @@ export interface Empresas {
     colorSecundary?: string;
     ruc?: string;
     email?: string;
-    logHeader?: string;
-    logoFooter?: string;
 }

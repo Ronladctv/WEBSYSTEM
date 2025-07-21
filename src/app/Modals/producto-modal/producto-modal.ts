@@ -2,7 +2,6 @@ import { Component, Inject, OnInit, signal } from '@angular/core';
 import { Productos } from '../../Interfaces/productos';
 import { MAT_DIALOG_DATA, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogRef, MatDialogTitle } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -15,6 +14,7 @@ import { ProductoService } from '../../Services/producto.service';
 import { CategoryTypeService } from '../../Services/category-type.service';
 import { CategoryType } from '../../Interfaces/category-type';
 import { formatError } from '../../Helper/error.helper';
+import { NotifierService } from '../../notifier.service';
 
 export const MY_DATE_FORMATS = {
   parse: {
@@ -55,14 +55,15 @@ export class ProductoModal implements OnInit {
   botonAccion: string = "Guardar";
   inputpassword: boolean = true;
   public typeProduct = signal<CategoryType[]>([]);
+  selectedFile: File | null = null;
 
   constructor(
 
     private dialogoReferencia: MatDialogRef<ProductoModal>,
     private fb: FormBuilder,
-    private _snackBar: MatSnackBar,
     private _productoService: ProductoService,
     private _categoryType: CategoryTypeService,
+    private notifierService: NotifierService,
 
     @Inject(MAT_DIALOG_DATA) public dataProducto: Productos
 
@@ -77,6 +78,7 @@ export class ProductoModal implements OnInit {
       stock: ["", Validators.required],
       state: [false, Validators.required],
       typeProduct: ["", Validators.required],
+      codePr: ["", Validators.required],
     })
 
     this._categoryType.getListCategoryProduct().subscribe({
@@ -86,11 +88,11 @@ export class ProductoModal implements OnInit {
             this.typeProduct.set(data.value)
           }
         } else {
-          this.mostrarAlerta(data.msg, "Error");
+          this.notifierService.showNotification(data.msg, 'Error', 'error');
         }
       },
       error: (e) => {
-        this.mostrarAlerta(formatError(e), "Error");
+        this.notifierService.showNotification(formatError(e), 'Error', 'error');
       }
     })
   }
@@ -105,6 +107,7 @@ export class ProductoModal implements OnInit {
         price: this.dataProducto.price,
         stock: this.dataProducto.stock,
         state: this.dataProducto.state,
+        codePr: this.dataProducto.codePr,
         typeProduct: this.dataProducto.typeProductId,
 
       })
@@ -113,55 +116,50 @@ export class ProductoModal implements OnInit {
     }
   }
 
-  mostrarAlerta(msg: string, accion: string) {
-    this._snackBar.open(msg, accion,
-      {
-        horizontalPosition: "end",
-        verticalPosition: "top",
-        duration: 3000
-      })
-  }
-
-
   save() {
     const EMPTY_GUID = '00000000-0000-0000-0000-000000000000';
+    const formData = new FormData();
+    const id = this.dataProducto?.id ?? EMPTY_GUID;
 
-    const empresaId = localStorage.getItem('EmpresaId') ?? '';
+    formData.append('id', id);
+    formData.append('name', this.formProducto.value.name);
+    formData.append('description', this.formProducto.value.description);
+    formData.append('brand', this.formProducto.value.brand);
+    formData.append('price', this.formProducto.value.price);
+    formData.append('stock', this.formProducto.value.stock);
+    formData.append('state', this.formProducto.value.state);
+    formData.append('typeProductId', this.formProducto.value.typeProduct);
+    formData.append('codePr', this.formProducto.value.codePr);
 
-    const modelo: Productos =
-    {
-      id: this.dataProducto ? this.dataProducto.id : EMPTY_GUID,
-      name: this.formProducto.value.name,
-      description: this.formProducto.value.description,
-      brand: this.formProducto.value.brand,
-      price: this.formProducto.value.price,
-      stock: this.formProducto.value.stock,
-      state: this.formProducto.value.state,
-      typeProductId: this.formProducto.value.typeProduct,
-      //para fechas
-      //fecha: moment(this.formuser.value.fechacontrato).format("DD/MM/YYYY")
+    if (this.selectedFile) {
+      formData.append('file', this.selectedFile);
     }
 
     const isNew = this.dataProducto == null;
-
-    this._productoService.register(modelo).subscribe({
+    this._productoService.register(formData).subscribe({
       next: (data) => {
         if (data.status) {
           const mensaje = isNew ? "El producto se creó correctamente." : "El producto se actualizó correctamente.";
-          this.mostrarAlerta(mensaje, "Listo");
+          this.notifierService.showNotification(mensaje, 'Listo', 'success');
           window.location.reload();
         } else {
-          this.mostrarAlerta(data.msg, "Error")
+          this.notifierService.showNotification(data.msg, 'Error', 'error');
         }
       }, error: (e) => {
         const mensaje = isNew ? "No se pudo registrar el producto." : "No se pudo actualizar el producto.";
-        this.mostrarAlerta(mensaje, "Error")
+        this.notifierService.showNotification(formatError(e) + mensaje, 'Error', 'error');
       }
     })
   }
 
-
   onPaste(event: ClipboardEvent) {
     event.preventDefault();
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.selectedFile = input.files[0];
+    }
   }
 }

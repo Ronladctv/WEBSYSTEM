@@ -23,8 +23,8 @@ export class EmpresaService {
     return this.http.post<Empresa>(`{${this.apiUrl}}`, modelo);
   }
 
-  register(objeto: Empresas): Observable<ResponseAcces> {
-    return this.http.post<ResponseAcces>(`${this.apiUrl}Register`, objeto)
+  register(formData: FormData): Observable<ResponseAcces> {
+    return this.http.post<ResponseAcces>(`${this.apiUrl}Register`, formData)
   }
 
   profileEmpresa(empresaId: string): Observable<ResponseAcces> {

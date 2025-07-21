@@ -9,9 +9,10 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { ProvedorService } from '../../Services/provedor.service';
 import { Provedores } from '../../Interfaces/provedores';
+import { NotifierService } from '../../notifier.service';
+import { formatError } from '../../Helper/error.helper';
 
 export const MY_DATE_FORMATS = {
   parse: {
@@ -54,12 +55,13 @@ export class ProvedorModal implements OnInit {
   tituloAccion: string = "Nuevo";
   botonAccion: string = "Guardar";
   inputpassword: boolean = true;
+  selectedFile: File | null = null;
 
   constructor(
     private dialogoReferencia: MatDialogRef<ProvedorModal>,
     private fb: FormBuilder,
-    private _snackBar: MatSnackBar,
     private _provedorService: ProvedorService,
+    private notifierService: NotifierService,
 
     @Inject(MAT_DIALOG_DATA) public dataProvedor: Provedores
 
@@ -94,50 +96,37 @@ export class ProvedorModal implements OnInit {
     }
   }
 
-  mostrarAlerta(msg: string, accion: string) {
-    this._snackBar.open(msg, accion,
-      {
-        horizontalPosition: "end",
-        verticalPosition: "top",
-        duration: 3000
-      })
-  }
-
   save() {
     const EMPTY_GUID = '00000000-0000-0000-0000-000000000000';
+    const formData = new FormData();
+    const id = this.dataProvedor?.id ?? EMPTY_GUID;
 
-    const empresaId = localStorage.getItem('EmpresaId') ?? '';
+    formData.append('id', id);
+    formData.append('name', this.formProvedor.value.name);
+    formData.append('lastName', this.formProvedor.value.lastName);
+    formData.append('address', this.formProvedor.value.address);
+    formData.append('email', this.formProvedor.value.email);
+    formData.append('phone', this.formProvedor.value.phone);
+    formData.append('document', this.formProvedor.value.document);
+    formData.append('ruc', this.formProvedor.value.ruc);
 
-    const modelo: Provedores =
-    {
-      id: this.dataProvedor ? this.dataProvedor.id : EMPTY_GUID,
-      name: this.formProvedor.value.name,
-      lastName: this.formProvedor.value.lastName,
-      address: this.formProvedor.value.address,
-      email: this.formProvedor.value.email,
-
-      phone: this.formProvedor.value.phone,
-      document: this.formProvedor.value.document,
-      ruc: this.formProvedor.value.ruc,
-
-      //para fechas
-      //fecha: moment(this.formuser.value.fechacontrato).format("DD/MM/YYYY")
+    if (this.selectedFile) {
+      formData.append('file', this.selectedFile);
     }
 
     const isNew = this.dataProvedor == null;
-
-    this._provedorService.register(modelo).subscribe({
+    this._provedorService.register(formData).subscribe({
       next: (data) => {
         if (data.status) {
           const mensaje = isNew ? "El provedor se creó correctamente." : "El provedor se actualizó correctamente.";
-          this.mostrarAlerta(mensaje, "Listo");
+          this.notifierService.showNotification(mensaje, 'Listo', 'success');
           window.location.reload();
         } else {
-          this.mostrarAlerta(data.msg, "Error")
+          this.notifierService.showNotification(data.msg, 'Error', 'error');
         }
       }, error: (e) => {
         const mensaje = isNew ? "No se pudo registrar el provedor." : "No se pudo actualizar el provedor.";
-        this.mostrarAlerta(mensaje, "Error")
+        this.notifierService.showNotification(formatError(e) + mensaje, 'Error', 'error');
       }
     })
   }
@@ -150,5 +139,12 @@ export class ProvedorModal implements OnInit {
   getTodayDateOnly(): Date {
     const today = new Date();
     return new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.selectedFile = input.files[0];
+    }
   }
 }

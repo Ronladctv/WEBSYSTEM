@@ -53,21 +53,43 @@
             </mat-grid-tile>
 
             <!-- Logo Header -->
-            <mat-grid-tile>
-                <mat-form-field appearance="outline" class="input-custom">
-                    <mat-label>Logo Header</mat-label>
-                    <input matInput formControlName="logHeader" placeholder="URL del Logo Header" autocomplete="off">
-                    <mat-icon matSuffix>insert_photo</mat-icon>
-                </mat-form-field>
+            <mat-grid-tile colspan="2" style="border-top: none !important; box-shadow: none !important;">
+                <div style="display: flex; flex-direction: column; align-items: flex-start; width: 100%;">
+                    <div style="display: flex; align-items: center; gap: 16px;">
+                        <input type="file" #fileInput (change)="onFileSelectedHeader($event)" accept="image/*"
+                            style="display: none" />
+                        <button mat-raised-button color="primary" (click)="fileInput.click()">
+                            Seleccione una imagen para el encabezado.
+                        </button>
+                        @if (selectedFileHeader){
+                        <span style="margin-left: 8px;">{{ selectedFileHeader.name }}</span>
+                        }@else{
+                        <span style="color: rgba(0,0,0,0.54); font-style: italic; margin-left: 8px;">
+                            Ningún archivo seleccionado
+                        </span>
+                        }
+                    </div>
+                </div>
             </mat-grid-tile>
 
             <!-- Logo Footer -->
-            <mat-grid-tile>
-                <mat-form-field appearance="outline" class="input-custom">
-                    <mat-label>Logo Footer</mat-label>
-                    <input matInput formControlName="logoFooter" placeholder="URL del Logo Footer" autocomplete="off">
-                    <mat-icon matSuffix>insert_photo</mat-icon>
-                </mat-form-field>
+            <mat-grid-tile colspan="2" style="border-top: none !important; box-shadow: none !important;">
+                <div style="display: flex; flex-direction: column; align-items: flex-start; width: 100%;">
+                    <div style="display: flex; align-items: center; gap: 16px;">
+                        <input type="file" #fileInput (change)="onFileSelectedFooter($event)" accept="image/*"
+                            style="display: none" />
+                        <button mat-raised-button color="primary" (click)="fileInput.click()">
+                            Seleccione una imagen para el pie de página.
+                        </button>
+                        @if (selectedFileFooter){
+                        <span style="margin-left: 8px;">{{ selectedFileFooter.name }}</span>
+                        }@else{
+                        <span style="color: rgba(0,0,0,0.54); font-style: italic; margin-left: 8px;">
+                            Ningún archivo seleccionado
+                        </span>
+                        }
+                    </div>
+                </div>
             </mat-grid-tile>
 
         </mat-grid-list>

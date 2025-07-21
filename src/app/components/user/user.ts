@@ -10,8 +10,8 @@ import { MatDialog, MatDialogActions, MatDialogClose, MatDialogContent, MatDialo
 import { UserModal } from '../../Modals/user-modal/user-modal';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { UpdatePasswordModal } from '../../Modals/update-password-modal/update-password-modal';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { formatError } from '../../Helper/error.helper';
+import { NotifierService } from '../../notifier.service';
 
 @Component({
   selector: 'app-index',
@@ -39,7 +39,9 @@ export class Users implements AfterViewInit, OnInit {
 
   readonly dialog = inject(MatDialog);
 
-  constructor(private _userService: UserService, private _snackBar: MatSnackBar) { }
+  constructor(
+    private _userService: UserService,
+    private notifierService: NotifierService) { }
 
   ngOnInit(): void {
     this.mostrarUser();
@@ -69,11 +71,11 @@ export class Users implements AfterViewInit, OnInit {
           this.dataSource.data = response.value;
           this.user.set(response.value)
         } else {
-          this.mostrarAlerta(response.msg, "Error");
+          this.notifierService.showNotification(response.msg, 'Error', 'error');
         }
       },
       error: (e) => {
-        this.mostrarAlerta(formatError(e), "Error");
+        this.notifierService.showNotification(formatError(e), 'Error', 'error');
       }
     });
   }
@@ -86,11 +88,11 @@ export class Users implements AfterViewInit, OnInit {
           this.dataSourceAdmin.data = response.value;
           this.useradmin.set(response.value)
         } else {
-          this.mostrarAlerta(response.msg, "Error");
+          this.notifierService.showNotification(response.msg, 'Error', 'error');
         }
       },
       error: (e) => {
-        this.mostrarAlerta(formatError(e), "Error");
+        this.notifierService.showNotification(formatError(e), 'Error', 'error');
       }
     });
   }
@@ -141,14 +143,5 @@ export class Users implements AfterViewInit, OnInit {
         this.mostrarUser();
       }
     });
-  }
-
-  mostrarAlerta(msg: string, accion: string) {
-    this._snackBar.open(msg, accion,
-      {
-        horizontalPosition: "end",
-        verticalPosition: "top",
-        duration: 3000
-      })
   }
 }

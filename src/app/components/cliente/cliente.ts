@@ -12,6 +12,7 @@ import { DatePipe } from '@angular/common';
 import { ClientModal } from '../../Modals/client-modal/client-modal';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { formatError } from '../../Helper/error.helper';
+import { NotifierService } from '../../notifier.service';
 
 @Component({
   selector: 'app-cliente',
@@ -33,7 +34,9 @@ export class Cliente {
   readonly dialog = inject(MatDialog);
 
 
-  constructor(private _clienteService: ClientService, private _snackBar: MatSnackBar) { }
+  constructor(
+    private _clienteService: ClientService,
+    private notifierService: NotifierService) { }
 
   ngOnInit(): void {
     this.mostrarClient();
@@ -58,11 +61,11 @@ export class Cliente {
           this.dataSourcemaster.data = response.value;
           this.clientadmin.set(response.value)
         } else {
-          this.mostrarAlerta(response.msg, "Error");
+          this.notifierService.showNotification(response.msg, 'Error', 'error');
         }
       },
       error: (e) => {
-        this.mostrarAlerta(formatError(e), "Error");
+        this.notifierService.showNotification(formatError(e), 'Error', 'error');
       }
     });
   }
@@ -95,15 +98,4 @@ export class Cliente {
   toggleUser(id: string) {
     this.expandedClient.update(current => (current === id ? null : id));
   }
-
-
-  mostrarAlerta(msg: string, accion: string) {
-    this._snackBar.open(msg, accion,
-      {
-        horizontalPosition: "end",
-        verticalPosition: "top",
-        duration: 3000
-      })
-  }
-
 }

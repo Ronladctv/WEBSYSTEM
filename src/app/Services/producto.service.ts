@@ -18,7 +18,7 @@ export class ProductoService {
   getList(): Observable<ResponseAcces> {
     return this.http.get<ResponseAcces>((`${this.apiUrl}Lista`))
   }
-  register(modelo: Productos): Observable<ResponseAcces> {
-    return this.http.post<ResponseAcces>(`{${this.apiUrl}}Register`, modelo);
+  register(formData: FormData): Observable<ResponseAcces> {
+    return this.http.post<ResponseAcces>(`{${this.apiUrl}}Register`, formData);
   }
 }

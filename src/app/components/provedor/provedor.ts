@@ -8,8 +8,8 @@ import { ProvedorService } from '../../Services/provedor.service';
 import { Provedores } from '../../Interfaces/provedores';
 import { MatDialog } from '@angular/material/dialog';
 import { ProvedorModal } from '../../Modals/provedor-modal/provedor-modal';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { formatError } from '../../Helper/error.helper';
+import { NotifierService } from '../../notifier.service';
 
 @Component({
   selector: 'app-provedor',
@@ -30,7 +30,9 @@ export class Provedor implements AfterViewInit, OnInit {
 
   readonly dialog = inject(MatDialog);
 
-  constructor(private _providerService: ProvedorService, private _snackBar: MatSnackBar) {
+  constructor(
+    private _providerService: ProvedorService,
+    private notifierService: NotifierService) {
 
   }
   ngOnInit(): void {
@@ -54,11 +56,11 @@ export class Provedor implements AfterViewInit, OnInit {
           this.dataSource.data = response.value;
           this.provedorAdmin.set(response.value)
         } else {
-          this.mostrarAlerta(response.msg, "Error");
+          this.notifierService.showNotification(response.msg, 'Error', 'error');
         }
       },
       error: (e) => {
-        this.mostrarAlerta(formatError(e), "Error");
+        this.notifierService.showNotification(formatError(e), 'Error', 'error');
       }
     });
   }
@@ -89,14 +91,5 @@ export class Provedor implements AfterViewInit, OnInit {
 
   toggleUser(id: string) {
     this.expandedProvedor.update(current => (current === id ? null : id));
-  }
-
-  mostrarAlerta(msg: string, accion: string) {
-    this._snackBar.open(msg, accion,
-      {
-        horizontalPosition: "end",
-        verticalPosition: "top",
-        duration: 3000
-      })
   }
 }

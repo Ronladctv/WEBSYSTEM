@@ -2,12 +2,10 @@ import { AfterViewInit, Component, inject, OnInit, signal, ViewChild } from '@an
 import { materialProviders } from '../../shared-ui';
 import { MatDialog } from '@angular/material/dialog';
 import { RolesModal } from '../../Modals/roles-modal/roles-modal';
-import { After } from 'v8';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { Roles } from '../../Interfaces/roles';
 import { RolService } from '../../Services/rol.service';
 import { formatError } from '../../Helper/error.helper';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { PermissionService } from '../../Services/permission.service';
 import { Permissions } from '../../Interfaces/permission';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -17,6 +15,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { Accions } from '../../Interfaces/accions';
 import { PermisoModal } from '../../Modals/permiso-modal/permiso-modal';
 import { AccionModal } from '../../Modals/accion-modal/accion-modal';
+import { NotifierService } from '../../notifier.service';
 
 @Component({
   selector: 'app-configuration',
@@ -41,7 +40,11 @@ export class Configuration implements AfterViewInit, OnInit {
   readonly dialog = inject(MatDialog);
 
 
-  constructor(private _roleService: RolService, private _snackBar: MatSnackBar, private _permissionService: PermissionService) {
+  constructor(
+    private _roleService: RolService,
+    private _permissionService: PermissionService,
+    private notifierService: NotifierService
+  ) {
 
   }
 
@@ -66,11 +69,11 @@ export class Configuration implements AfterViewInit, OnInit {
           this.RoleAdmin.set(response.value)
         }
         else {
-          this.mostrarAlerta(response.msg, "Error");
+          this.notifierService.showNotification(response.msg, 'Error', 'error');
         }
       },
       error: (e) => {
-        this.mostrarAlerta(formatError(e), "Error");
+        this.notifierService.showNotification(formatError(e), 'Error', 'error');
       }
     });
   }
@@ -82,11 +85,11 @@ export class Configuration implements AfterViewInit, OnInit {
           this.PermissionAdmin.set(response.value)
         }
         else {
-          this.mostrarAlerta(response.msg, "Error");
+          this.notifierService.showNotification(response.msg, 'Error', 'error');
         }
       },
       error: (e) => {
-        this.mostrarAlerta(formatError(e), "Error");
+        this.notifierService.showNotification(formatError(e), 'Error', 'error');
       }
     });
   }
@@ -168,15 +171,6 @@ export class Configuration implements AfterViewInit, OnInit {
         this.ViewPermission();
       }
     });
-  }
-
-  mostrarAlerta(msg: string, accion: string) {
-    this._snackBar.open(msg, accion,
-      {
-        horizontalPosition: "end",
-        verticalPosition: "top",
-        duration: 3000
-      })
   }
 
   toggleUserRole(id: string) {
