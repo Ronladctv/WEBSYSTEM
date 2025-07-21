@@ -1,0 +1,11 @@
+<div class="snackbar-container" [ngClass]="data.type">
+    <div class="snackbar-title">
+        {{ data.type | titlecase }}
+    </div>
+    <button class="close-btn" aria-label="Close" (click)="snackBarRef.dismiss()">
+        ×
+    </button>
+    <div class="content-style">
+        {{ data.message }}
+    </div>
+</div>

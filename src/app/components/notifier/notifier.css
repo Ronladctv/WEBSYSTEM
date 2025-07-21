@@ -1,0 +1,55 @@
+.snackbar-container {
+    padding: 12px 16px;
+    border-radius: 6px;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-family: Roboto, Arial, sans-serif;
+    font-size: 14px;
+}
+
+.snackbar-container .content-style {
+    border: 1px solid white;
+    border-radius: 4px;
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.snackbar-container.error {
+    background-color: #e57373;
+}
+
+.snackbar-container.success {
+    background-color: #81c784;
+}
+
+.snackbar-container.warning {
+    background-color: #ffa500;
+    color: #000;
+}
+
+.snackbar-container.info {
+    background-color: #17a2b8;
+}
+
+
+.close-btn {
+    position: absolute;
+    top: 14px;
+    right: 12px;
+    background: transparent;
+    border: none;
+    color: inherit;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+    font-weight: bold;
+    user-select: none;
+}
+
+.close-btn:hover {
+    color: #ccc;
+}
