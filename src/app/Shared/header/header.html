@@ -1,8 +1,12 @@
 <header>
     <nav class="header-nav">
-        <button class="username-display">
+        <button class="username-display" (click)="profile()">
+            <mat-icon class="avatar-icon">account_circle</mat-icon>
             {{ username || '' }}
         </button>
-        <button mat-button color="warn" (click)="logout()">Salir</button>
+        <button mat-button color="warn" (click)="logout()">
+            <mat-icon>logout</mat-icon>
+            Salir
+        </button>
     </nav>
 </header>

@@ -13,10 +13,6 @@
                     <mat-icon matListItemIcon>home</mat-icon>
                     <span style="color: white;">Inicio</span>
                 </mat-list-item>
-                <mat-list-item routerLink="/perfil" (click)="sidenav.mode === 'over' && sidenav.close()">
-                    <mat-icon matListItemIcon>person</mat-icon>
-                    <span style="color: white;">Perfil</span>
-                </mat-list-item>
                 @for (menu of menus(); track menu.id) {
                 <mat-list-item [routerLink]="menu.url" (click)="sidenav.mode === 'over' && sidenav.close()">
                     <mat-icon matListItemIcon>{{ menu.icono }}</mat-icon>

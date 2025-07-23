@@ -10,7 +10,8 @@
                 <div style="display: flex; flex-wrap: wrap; gap: 4%;">
                     <mat-form-field appearance="outline" style="flex: 1 1 48%; height: 56px;">
                         <mat-label>Nombre Usuario</mat-label>
-                        <input matInput [value]="user.nameProfile" readonly style="font-size: 13px;" (copy)="onCopy($event)" />
+                        <input matInput [value]="user.nameProfile" readonly style="font-size: 13px;"
+                            (copy)="onCopy($event)" />
                         <mat-icon matSuffix style="color: yellow; font-size: 18px;">account_box</mat-icon>
                     </mat-form-field>
 
@@ -64,9 +65,9 @@
 
             <!-- Imagen a la derecha -->
             <div
-                style="width: 180px; height: 180px; border-radius: 8px; overflow: hidden; margin-left: 24px; flex-shrink: 0; box-shadow: 0 0 5px rgba(0,0,0,0.1);">
-                <img src="https://via.placeholder.com/180" alt="Imagen usuario"
-                    style="width: 100%; height: 100%; object-fit: cover;" />
+                style="width: 180px; height: 215px; border-radius: 8px; overflow: hidden; margin-left: 24px; flex-shrink: 0; box-shadow: 0 0 5px rgba(0,0,0,0.1);">
+                <img [src]="user.urlImagen ? 'https://recursosstorage.blob.core.windows.net/usuarios/' + user.urlImagen : 'https://recursosstorage.blob.core.windows.net/default/usuariodefault.png'" 
+                    style=" width: 100%; height: 100%; object-fit: cover;" />
             </div>
         </div>
         }

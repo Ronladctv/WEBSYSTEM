@@ -161,11 +161,12 @@
                             </div>
                         </div>
                         <div
-                            style="width: 180px; height: 180px; border-radius: 8px; overflow: hidden; margin-left: 24px; flex-shrink: 0;box-shadow: 0 0 5px rgba(0,0,0,0.1); display: flex; flex-direction: column;">
-                            <img [src]="'https://recursosstorage.blob.core.windows.net/usuarios/logo.png'"
-                                alt="Imagen superior" style="width: 100%; height: 50%; object-fit: cover;" />
-                            <img [src]="'https://recursosstorage.blob.core.windows.net/usuarios/imagen-secundaria.png'"
-                                alt="Imagen inferior" style="width: 100%; height: 50%; object-fit: cover;" />
+                            style="width: 230px; height: 210px; border-radius: 8px; overflow: hidden; margin-left: 24px; flex-shrink: 0;box-shadow: 0 0 5px rgba(0,0,0,0.1); display: flex; flex-direction: column;">
+                            <img [src]="empresa.logHeader ? 'https://recursosstorage.blob.core.windows.net/empresas/' + empresa.logHeader : 'https://recursosstorage.blob.core.windows.net/default/empresasdefault.png'"
+                                alt="Imagen superior"
+                                style="width: 100%; height: 100%; object-fit: cover;margin-bottom: 10px;" />
+                            <img [src]="empresa.logoFooter ? 'https://recursosstorage.blob.core.windows.net/empresas/' + empresa.logoFooter : 'https://recursosstorage.blob.core.windows.net/default/empresasdefault.png'"
+                                alt="Imagen inferior" style="width: 100%; height: 100%; object-fit: cover;" />
                         </div>
                     </div>
                 </div>

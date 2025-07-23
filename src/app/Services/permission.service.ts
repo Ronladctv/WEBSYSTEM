@@ -19,11 +19,11 @@ export class PermissionService {
     return this.http.get<ResponseAcces>(`${this.apiUrl}Lista`)
   }
 
-  getListRole(): Observable<ResponseAcces> {
+  getListAccion(): Observable<ResponseAcces> {
     return this.http.get<ResponseAcces>(`${this.apiUrl}ListaPermission`)
   }
 
   register(formData: FormData): Observable<ResponseAcces> {
-    return this.http.post<ResponseAcces>(`{${this.apiUrl}}Register`, formData);
+    return this.http.post<ResponseAcces>(`${this.apiUrl}Register`, formData);
   }
 }

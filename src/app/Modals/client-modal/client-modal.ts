@@ -133,7 +133,7 @@ export class ClientModal implements OnInit {
     formData.append('cedula', this.formClient.value.cedula);
     formData.append('phone', this.formClient.value.phone);
     formData.append('typeClientId', this.formClient.value.categoriType);
-    formData.append('birthdate', this.formClient.value.birthdate);
+    formData.append('birthdate', new Date(this.formClient.value.birthdate).toISOString());
     formData.append('city', this.formClient.value.city);
     formData.append('address', this.formClient.value.address);
     formData.append('isAfiliate', this.formClient.value.isAfiliate);

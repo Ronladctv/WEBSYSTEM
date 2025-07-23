@@ -16,15 +16,25 @@
                     <mat-icon matSuffix>insert_emoticon</mat-icon>
                 </mat-form-field>
             </mat-grid-tile>
-
-            <mat-grid-tile>
+            <mat-grid-tile colspan="2">
                 <mat-form-field appearance="outline" class="input-custom">
                     <mat-label>Descripción del rol</mat-label>
                     <input matInput formControlName="description" placeholder="Descripción del rol" autocomplete="off">
                     <mat-icon matSuffix>description</mat-icon>
                 </mat-form-field>
             </mat-grid-tile>
-
+            <mat-grid-tile colspan="2">
+                <mat-form-field appearance="outline" class="input-custom">
+                    <mat-label>Permisos Seleccionados</mat-label>
+                    <mat-select formControlName="permisoList" multiple>
+                        <mat-option value="" disabled>Seleccione los permisos para el rol</mat-option>
+                        @for (permiso of permisoList(); track permiso.id ) {
+                        <mat-option [value]="permiso.id">{{ permiso.name }}</mat-option>
+                        }
+                    </mat-select>
+                    <mat-icon matSuffix>assignment_ind</mat-icon>
+                </mat-form-field>
+            </mat-grid-tile>
             <mat-grid-tile colspan="2" style="border-top: none !important; box-shadow: none !important;">
                 <div style="display: flex; flex-direction: column; align-items: flex-start; width: 100%;">
                     <div style="display: flex; align-items: center; gap: 16px;">
@@ -43,21 +53,6 @@
                     </div>
                 </div>
             </mat-grid-tile>
-
-            <mat-grid-tile colspan="2">
-                <mat-form-field appearance="outline" class="input-custom">
-                    <mat-label>Permisos Seleccionados</mat-label>
-                    <mat-select formControlName="permisoList" multiple>
-                        <mat-option value="" disabled>Seleccione los permisos para el rol</mat-option>
-                        @for (permiso of permisoList(); track permiso.id ) {
-                        <mat-option [value]="permiso.id">{{ permiso.name }}</mat-option>
-                        }
-                    </mat-select>
-                    <mat-icon matSuffix>assignment_ind</mat-icon>
-                </mat-form-field>
-            </mat-grid-tile>
-
-
         </mat-grid-list>
     </form>
 </mat-dialog-content>

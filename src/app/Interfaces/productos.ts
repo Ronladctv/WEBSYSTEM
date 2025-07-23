@@ -9,4 +9,5 @@ export interface Productos {
     state: boolean,
     typeProductId: string;
     codePr: string;
+    urlImagen:string
 }

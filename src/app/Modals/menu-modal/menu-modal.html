@@ -1,0 +1,33 @@
+<h2 mat-dialog-title>{{tituloAccion}} Usuario</h2>
+<mat-dialog-content>
+    <form [formGroup]="formMenu">
+        <mat-grid-list cols="2" rowHeight="85px" gutterSize="10px">
+            <mat-grid-tile colspan="2">
+                <mat-form-field appearance="outline" class="input-custom">
+                    <mat-label>Nombre del menu</mat-label>
+                    <input matInput formControlName="nombre" placeholder="Nombre del menu" autocomplete="off">
+                    <mat-icon matSuffix>text_fields</mat-icon>
+                </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile>
+                <mat-form-field appearance="outline" class="input-custom">
+                    <mat-label>Dirección del Menu</mat-label>
+                    <input matInput formControlName="url" placeholder="Dirección del Menu" autocomplete="off">
+                    <mat-icon matSuffix>link</mat-icon>
+                </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile>
+                <mat-form-field appearance="outline" class="input-custom">
+                    <mat-label>Icono del Menu</mat-label>
+                    <input matInput formControlName="icono" placeholder="Icono del Menu" autocomplete="off">
+                    <mat-icon matSuffix>insert_emoticon</mat-icon>
+                </mat-form-field>
+            </mat-grid-tile>
+        </mat-grid-list>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button matButton mat-dialog-close color="warn">Volver</button>
+    <button matButton mat-dialog-close color="warn" [disabled]="formMenu.invalid"
+        (click)="save()">{{botonAccion}}</button>
+</mat-dialog-actions>

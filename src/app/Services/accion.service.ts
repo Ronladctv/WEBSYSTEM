@@ -20,7 +20,7 @@ export class AccionService {
   }
 
   register(formData: Accions): Observable<ResponseAcces> {
-    return this.http.post<ResponseAcces>(`{${this.apiUrl}}Register`, formData);
+    return this.http.post<ResponseAcces>(`${this.apiUrl}Register`, formData);
   }
 
 }

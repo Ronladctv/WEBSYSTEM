@@ -18,7 +18,7 @@ import { NotifierService } from '../../notifier.service';
   styleUrl: './producto.css'
 })
 export class Producto implements AfterViewInit, OnInit {
-  displayedColumns: string[] = ['Name', 'Description', 'Brand', 'Price', 'Stock'];
+  displayedColumns: string[] = ['Name', 'Description', 'Brand', 'Price', 'Stock','Acciones'];
   dataSource = new MatTableDataSource<Productos>();
 
   expandedProducto = signal<string | null>(null);

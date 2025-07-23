@@ -6,5 +6,6 @@ export interface Provedores {
     email:number,
     phone:number,
     document:number,
-    ruc:number,    
+    ruc:number,
+    urlImagen:string    
 }

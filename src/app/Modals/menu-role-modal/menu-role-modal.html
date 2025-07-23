@@ -1,0 +1,36 @@
+<h2 mat-dialog-title>{{tituloAccion}} Usuario</h2>
+<mat-dialog-content>
+    <form [formGroup]="formMenuRol">
+        <mat-grid-list cols="2" rowHeight="85px" gutterSize="10px">
+            <mat-grid-tile colspan="2">
+                <mat-form-field appearance="outline" class="input-custom">
+                    <mat-label>Tipo de identificación</mat-label>
+                    <mat-select formControlName="roleList">
+                        <mat-option value="" disabled>Seleccione el rol al que desea asignar los menús.</mat-option>
+                        @for (role of roleList(); track role.id ) {
+                        <mat-option [value]="role.id">{{ role.nameRol}}</mat-option>
+                        }
+                    </mat-select>
+                    <mat-icon matSuffix>supervisor_account</mat-icon>
+                </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile colspan="2">
+                <mat-form-field appearance="outline" class="input-custom">
+                    <mat-label>Permisos Seleccionados</mat-label>
+                    <mat-select formControlName="menuList" multiple>
+                        <mat-option value="" disabled>Seleccione los menús que desea asignar al rol.</mat-option>
+                        @for (menu of menuList(); track menu.id ) {
+                        <mat-option [value]="menu.id">{{ menu.nombre }}</mat-option>
+                        }
+                    </mat-select>
+                    <mat-icon matSuffix>menu_open</mat-icon>
+                </mat-form-field>
+            </mat-grid-tile>
+        </mat-grid-list>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button matButton mat-dialog-close color="warn">Volver</button>
+    <button matButton mat-dialog-close color="warn" [disabled]="formMenuRol.invalid"
+        (click)="save()">{{botonAccion}}</button>
+</mat-dialog-actions>

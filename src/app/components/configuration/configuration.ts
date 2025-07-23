@@ -16,6 +16,7 @@ import { Accions } from '../../Interfaces/accions';
 import { PermisoModal } from '../../Modals/permiso-modal/permiso-modal';
 import { AccionModal } from '../../Modals/accion-modal/accion-modal';
 import { NotifierService } from '../../notifier.service';
+import { AccionService } from '../../Services/accion.service';
 
 @Component({
   selector: 'app-configuration',
@@ -25,7 +26,7 @@ import { NotifierService } from '../../notifier.service';
 })
 export class Configuration implements AfterViewInit, OnInit {
 
-  displayedColumnsmaster: string[] = ['Id', 'Nombre', 'Descripcion'];
+  displayedColumnsmaster: string[] = ['Id', 'Nombre', 'Descripcion','Acciones'];
   dataSourcemaster = new MatTableDataSource<Accions>();
 
   public registerRole = signal(true);
@@ -43,6 +44,7 @@ export class Configuration implements AfterViewInit, OnInit {
   constructor(
     private _roleService: RolService,
     private _permissionService: PermissionService,
+    private _accionService: AccionService,
     private notifierService: NotifierService
   ) {
 
@@ -79,7 +81,7 @@ export class Configuration implements AfterViewInit, OnInit {
   }
 
   ViewPermission() {
-    this._permissionService.getListRole().subscribe({
+    this._permissionService.getListAccion().subscribe({
       next: (response) => {
         if (response.status) {
           this.PermissionAdmin.set(response.value)
@@ -95,6 +97,19 @@ export class Configuration implements AfterViewInit, OnInit {
   }
 
   ViewAccion() {
+    this._accionService.getList().subscribe({
+      next: (response) => {
+        if (response.status) {
+          this.dataSourcemaster.data = response.value;
+        }
+        else {
+          this.notifierService.showNotification(response.msg, 'Error', 'error');
+        }
+      },
+      error: (e) => {
+        this.notifierService.showNotification(formatError(e), 'Error', 'error');
+      }
+    });
   }
 
   NewRole() {

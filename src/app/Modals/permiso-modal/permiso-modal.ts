@@ -72,15 +72,14 @@ export class PermisoModal implements OnInit {
   ) {
     this.formPermission = this.fb.group({
       ///Campo para el formulario
-      nombre: ["", Validators.required],
+      name: ["", Validators.required],
       icon: ["", Validators.required],
-      accions: [[], Validators.required],
+      accionList: [[], Validators.required],
 
     })
 
     this._accionService.getList().subscribe({
       next: (data) => {
-        console.log(data)
         if (data.status) {
           if (data.status && data.value.length > 0) {
             this.accionList.set(data.value)
@@ -96,10 +95,10 @@ export class PermisoModal implements OnInit {
 
   ngOnInit(): void {
     if (this.dataPermiso) {
+      console.log(this.dataPermiso)
       this.formPermission.patchValue({
-        nameRol: this.dataPermiso.name,
+        name: this.dataPermiso.name,
         icon: this.dataPermiso.icon,
-        description: this.dataPermiso.urlImagen,
         accionList: this.dataPermiso.accions.map(p => p.accionId),
       })
       this.tituloAccion = "Editar";
@@ -120,7 +119,7 @@ export class PermisoModal implements OnInit {
 
     formData.append('id', id);
     formData.append('name', this.formPermission.value.name);
-    formData.append('icon', this.formPermission.value.lastName);
+    formData.append('icon', this.formPermission.value.icon);
 
     const accionList = this.formPermission.value.accionList || [];
     accionList.forEach((accionId: string) => {

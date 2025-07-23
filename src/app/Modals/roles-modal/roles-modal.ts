@@ -81,7 +81,6 @@ export class RolesModal implements OnInit {
 
     this._permissionService.getList().subscribe({
       next: (data) => {
-        console.log(data)
         if (data.status) {
           if (data.status && data.value.length > 0) {
             this.permisoList.set(data.value)
@@ -142,6 +141,7 @@ export class RolesModal implements OnInit {
               next: (data) => {
                 if (data.status) {
                   this.notifierService.showNotification('Permisos agredados correctamente', 'Listo', 'success');
+                  window.location.reload();
                 } else {
                   this.notifierService.showNotification(data.msg, 'Error', 'error');
                 }
@@ -152,7 +152,6 @@ export class RolesModal implements OnInit {
           }
           //end region 
           this.notifierService.showNotification(mensaje, 'Listo', 'success');
-          window.location.reload();
         } else {
           this.notifierService.showNotification(data.msg, 'Error', 'error');
         }

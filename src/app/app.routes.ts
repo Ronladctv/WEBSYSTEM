@@ -15,6 +15,7 @@ import { Producto } from './components/producto/producto';
 import { SecurityComponent } from './components/security-component/security-component';
 import { Perfil } from './components/perfil/perfil';
 import { Venta } from './components/venta/venta';
+import { Menu } from './components/menu/menu';
 
 export const routes: Routes = [
     { path: 'login', component: Login },
@@ -36,6 +37,7 @@ export const routes: Routes = [
             { path: 'configuracion', component: Configuration, canActivate: [authGuard] },
             { path: 'producto', component: Producto, canActivate: [authGuard] },
             { path: 'venta', component: Venta, canActivate: [authGuard] },
+            { path: 'menu', component: Menu, canActivate: [authGuard] },
             { path: 'security', component: SecurityComponent },
             { path: '**', redirectTo: '', pathMatch: 'full' }
         ]

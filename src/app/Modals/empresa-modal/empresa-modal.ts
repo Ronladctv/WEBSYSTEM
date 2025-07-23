@@ -75,8 +75,6 @@ export class EmpresaModal implements OnInit {
       colorSecundary: ["", Validators.required],
       ruc: ["", Validators.required],
       email: ["", Validators.required],
-      logHeader: ["", Validators.required],
-      logoFooter: ["", Validators.required],
 
     })
   }
@@ -104,7 +102,7 @@ export class EmpresaModal implements OnInit {
 
     formData.append('id', id);
     formData.append('nameEmpresa', this.formEmpresa.value.nameEmpresa);
-    formData.append('address', this.formEmpresa.value.addressa);
+    formData.append('address', this.formEmpresa.value.address);
     formData.append('colorPrimary', this.formEmpresa.value.colorPrimary);
     formData.append('colorSecundary', this.formEmpresa.value.colorSecundary);
     formData.append('ruc', this.formEmpresa.value.ruc);

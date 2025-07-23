@@ -23,10 +23,10 @@ export class RolService {
   }
 
   register(formData: FormData): Observable<ResponseAcces> {
-    return this.http.post<ResponseAcces>(`{${this.apiUrl}}Save`, formData);
+    return this.http.post<ResponseAcces>(`${this.apiUrl}Register`, formData);
   }
 
   AsignarPermisos(roleId: string, permissionIds: string[]): Observable<ResponseAcces> {
-    return this.http.post<ResponseAcces>(`${this.apiUrl}/AsignarPermisos/${roleId}`, permissionIds);
+    return this.http.post<ResponseAcces>(`${this.apiUrl}AsignarPermisos/${roleId}`, permissionIds);
   }
 }

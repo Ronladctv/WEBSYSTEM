@@ -20,6 +20,6 @@ export class ProvedorService {
       return this.http.get<ResponseAcces>((`${this.apiUrl}Lista`))
     }
     register(formData: FormData): Observable<ResponseAcces> {
-      return this.http.post<ResponseAcces>(`{${this.apiUrl}}Register`, formData);
+      return this.http.post<ResponseAcces>(`${this.apiUrl}Register`, formData);
     }
 }

@@ -1,15 +1,21 @@
 .header-nav {
     margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .username-display {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
     font-family: Roboto, "Helvetica Neue", sans-serif;
     font-size: 13px;
     font-weight: 500;
     line-height: 36px;
     letter-spacing: 0.0892857em;
     text-transform: uppercase;
-    color: rgba(0, 0, 0, 0.87);
+    color: rgba(66, 165, 245, 0.87);
     padding: 0 16px;
     user-select: none;
     cursor: pointer;
@@ -22,6 +28,7 @@
 .username-display:hover {
     background-color: rgba(0, 0, 0, 0.05);
 }
+
 .username-display .avatar {
     width: 28px;
     height: 28px;

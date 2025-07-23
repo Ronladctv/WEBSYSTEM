@@ -9,11 +9,10 @@
             Agregar
         </button>
     </div>
-
-    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
+    <div
+        style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; grid-auto-rows: minmax(auto, max-content);">
         @for (Role of RoleAdmin(); track Role.id) {
-        <div style="width: 100%; border: 1px solid #ccc; border-radius: 6px; overflow: hidden;">
-
+        <div style="width: 100%; border: 1px solid #ccc; border-radius: 6px; overflow: hidden; align-self: start;">
             <!-- Header -->
             <div style="width: 100%; padding:  8px 16px 8px 16px; background-color: #f3f3f3; display: flex; justify-content: space-between; align-items: center; cursor: pointer;"
                 (click)="toggleUserRole(Role.id!)">
@@ -22,16 +21,15 @@
                     <strong>{{ Role.description }}</strong>
                 </div>
                 <button mat-icon-button style="flex-shrink: 0; margin-right: 10px;"
-                    (click)="EditRole(Role); $event.stopPropagation()" matTooltip="Editar Cliente"
+                    (click)="EditRole(Role); $event.stopPropagation()" matTooltip="Editar Role"
                     class="small-icon-button color-primary">
                     <mat-icon>edit</mat-icon>
                 </button>
-                <button mat-icon-button style="flex-shrink: 0; margin-right: 35px;" matTooltip="Eliminar Cliente"
+                <button mat-icon-button style="flex-shrink: 0; margin-right: 35px;" matTooltip="Eliminar Role"
                     class="small-icon-button color-warn">
                     <mat-icon>delete</mat-icon>
                 </button>
             </div>
-
             <!-- Expandable Content -->
             <div class="expandable-content" [class.expanded]="expandedRole() === Role.id">
                 <div style="padding: 12px; background-color: white;">
@@ -60,11 +58,10 @@
                             <!-- Imagen con altura igual a la altura del bloque Nombre + Apellido -->
                             <div
                                 style="width: 180px; height: auto; border-radius: 8px; overflow: hidden; box-shadow: 0 0 5px rgba(0,0,0,0.1);">
-                                <img [src]="'https://recursosstorage.blob.core.windows.net/usuarios/'"
+                                <img [src]="Role.urlImagen ? 'https://recursosstorage.blob.core.windows.net/roles/' + Role.urlImagen : 'https://recursosstorage.blob.core.windows.net/default/roldefault.png'" 
                                     alt="Imagen usuario" style="width: 100%; height: 100%; object-fit: cover;" />
                             </div>
                         </div>
-
                         <!-- Bloque permisos separado debajo -->
                         <h4 style="margin-bottom: 5px; font-weight: 600; color: #444;">Permisos</h4>
                         <div style="margin-top: 24px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;">
@@ -80,9 +77,9 @@
         </div>
         }
     </div>
-
 </mat-card>
 }
+
 @if(registerPermission()){
 <mat-card class="mat-elevation-z8">
     <mat-card-title style="font-size: 1.5rem; font-weight: 600; margin-bottom: 12px;">
@@ -94,11 +91,11 @@
             Agregar
         </button>
     </div>
-
-    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
+    <div
+        style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; grid-auto-rows: minmax(auto, max-content);">
         @for (permission of PermissionAdmin(); track permission.id) {
-        <div style="width: 100%; border: 1px solid #ccc; border-radius: 6px; overflow: hidden;">
-
+        <div style="width: 100%; border: 1px solid #ccc; border-radius: 6px; overflow: hidden; align-self: start;">
+            <!-- resto del contenido igual -->
             <!-- Header -->
             <div style="width: 100%; padding:  8px 16px 8px 16px; background-color: #f3f3f3; display: flex; justify-content: space-between; align-items: center; cursor: pointer;"
                 (click)="toggleUserPermission(permission.id!)">
@@ -116,7 +113,6 @@
                     <mat-icon>delete</mat-icon>
                 </button>
             </div>
-
             <!-- Expandable Content -->
             <div class="expandable-content" [class.expanded]="expandedPermission() === permission.id">
                 <div style="padding: 12px; background-color: white;">
@@ -133,23 +129,22 @@
                                             style="color: green; font-size: 18px;">account_box</mat-icon>
                                     </mat-form-field>
                                 </div>
-                                <!-- <div style="display: flex; flex-wrap: wrap; gap: 4%;">
+                                <div style="display: flex; flex-wrap: wrap; gap: 4%;">
                                     <mat-form-field appearance="outline" style="flex: 1 1 48%; height: 56px;">
-                                        <mat-label>Descripción</mat-label>
-                                        <input matInput [value]="permission.description" readonly style="font-size: 13px;" />
+                                        <mat-label>Icono</mat-label>
+                                        <input matInput [value]="permission.icon" readonly style="font-size: 13px;" />
                                         <mat-icon matSuffix
                                             style="color: aqua; font-size: 18px;">person_outline</mat-icon>
                                     </mat-form-field>
-                                </div> -->
+                                </div>
                             </div>
                             <!-- Imagen con altura igual a la altura del bloque Nombre + Apellido -->
                             <div
-                                style="width: 180px; height: auto; border-radius: 8px; overflow: hidden; box-shadow: 0 0 5px rgba(0,0,0,0.1);">
-                                <img [src]="'https://recursosstorage.blob.core.windows.net/usuarios/'"
+                                style="width: 140px; height: 140px; border-radius: 8px; overflow: hidden; box-shadow: 0 0 5px rgba(0,0,0,0.1);">
+                                <img [src]="permission.urlImagen ? 'https://recursosstorage.blob.core.windows.net/permisos/' + permission.urlImagen : 'https://recursosstorage.blob.core.windows.net/default/permisosdefault.png'" 
                                     alt="Imagen usuario" style="width: 100%; height: 100%; object-fit: cover;" />
                             </div>
                         </div>
-
                         <!-- Bloque permisos separado debajo -->
                         <h4 style="margin-bottom: 5px; font-weight: 600; color: #444;">Permisos</h4>
                         <div style="margin-top: 24px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;">
@@ -165,7 +160,6 @@
         </div>
         }
     </div>
-
 </mat-card>
 }
 
@@ -193,14 +187,14 @@
     </div>
     <table mat-table [dataSource]="dataSourcemaster" class="custom-table">
         <ng-container matColumnDef="Id">
-            <th mat-header-cell *matHeaderCellDef>Identificado</th>
-            <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+            <th mat-header-cell *matHeaderCellDef>Identificador</th>
+            <td mat-cell *matCellDef="let element"> {{element.accionId}} </td>
         </ng-container>
-        <ng-container matColumnDef="Name">
+        <ng-container matColumnDef="Nombre">
             <th mat-header-cell *matHeaderCellDef>Nombre</th>
             <td mat-cell *matCellDef="let element"> {{element.nombre}} </td>
         </ng-container>
-        <ng-container matColumnDef="LastName">
+        <ng-container matColumnDef="Descripcion">
             <th mat-header-cell *matHeaderCellDef>Descripciónth>
             <td mat-cell *matCellDef="let element"> {{element.descripcion}} </td>
         </ng-container>
