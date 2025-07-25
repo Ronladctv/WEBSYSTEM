@@ -79,6 +79,8 @@ export class ProductoModal implements OnInit {
       state: [false, Validators.required],
       typeProduct: ["", Validators.required],
       codePr: ["", Validators.required],
+      porcentageDiscount: ["", Validators.required],
+      porcentageIva: ["", Validators.required],
     })
 
     this._categoryType.getListCategoryProduct().subscribe({
@@ -109,6 +111,8 @@ export class ProductoModal implements OnInit {
         state: this.dataProducto.state,
         codePr: this.dataProducto.codePr,
         typeProduct: this.dataProducto.typeProductId,
+        porcentageDiscount: this.dataProducto.porcentageDiscount,
+        porcentageIva: this.dataProducto.porcentageIva
 
       })
       this.tituloAccion = "Editar";
@@ -125,11 +129,21 @@ export class ProductoModal implements OnInit {
     formData.append('name', this.formProducto.value.name);
     formData.append('description', this.formProducto.value.description);
     formData.append('brand', this.formProducto.value.brand);
-    formData.append('price', this.formProducto.value.price);
+
+    const price = this.formProducto.value.price.toString().replace('.', ',');
+    formData.append('price', price);
+
+    const porcentageDiscount = this.formProducto.value.porcentageDiscount.toString().replace('.', ',');
+    formData.append('porcentageDiscount', porcentageDiscount);
+
+    const porcentageIva = this.formProducto.value.porcentageIva.toString().replace('.', ',');
+    formData.append('porcentageIva', porcentageIva);
+
     formData.append('stock', this.formProducto.value.stock);
     formData.append('state', this.formProducto.value.state);
     formData.append('typeProductId', this.formProducto.value.typeProduct);
     formData.append('codePr', this.formProducto.value.codePr);
+
 
     if (this.selectedFile) {
       formData.append('file', this.selectedFile);

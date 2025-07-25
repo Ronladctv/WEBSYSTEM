@@ -6,10 +6,23 @@ mat-card {
     box-sizing: border-box;
 }
 
+/* CARD ANIDADO */
+.custom-card {
+    width: 100%;
+    overflow-x: auto;
+    padding: 16px;
+    border: 2px;
+    box-sizing: border-box;
+
+}
+
 .custom-table {
-    width: 80%;
+    width: 100%;
+    table-layout: fixed;
     border-collapse: collapse;
     background-color: #fafafa;
+    font-size: 0.55rem;
+
 }
 
 .custom-table th {
@@ -18,54 +31,40 @@ mat-card {
     font-weight: bold;
     padding: 10px;
     text-align: left;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
 }
 
 .custom-table td {
-    padding: 2px;
-    border-bottom: 1px solid #e0e0e0;
+    padding: 1px;
+    border-bottom: 0px;
 }
 
-.custom-table tr:hover {
-    background-color: #f1f1f1;
+.mat-column-actions {
+    width: 3vw;
+    min-width: 10px;
 }
 
-.col-iva {
-    width: 100px;
-    max-width: 100px;
-    min-width: 100px;
-}
-
-.col-discount {
-    width: 150px;
-    max-width: 150px;
-    min-width: 150px;
-}
-.col-price {
-    width: 150px;
-    max-width: 150px;
-    min-width: 150px;
-}
-.col-code {
-    width: 150px;
-    max-width: 150px;
-    min-width: 150px;
-}
-.col-quantity {
-    width: 150px;
-    max-width: 150px;
+.mat-column-product {
+    width: 20vw;
     min-width: 150px;
 }
 
-.col-subtotal {
-    width: 100px;
-    max-width: 100px;
-    min-width: 100px;
-}
-.col-total {
-    width: 100px;
-    max-width: 100px;
-    min-width: 100px;
+.actions-cell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
 }
 
+.mat-form-field,
+.mat-select,
+mat-option,
+input {
+    font-size: 0.95rem !important;
+}
+
+.mat-form-field {
+    margin: 0 !important;
+    padding: 0 !important;
+    height: 36px !important;
+    line-height: 1.2 !important;
+}

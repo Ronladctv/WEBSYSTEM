@@ -65,7 +65,7 @@ export class Login {
               localStorage.setItem('Name', decoded.Name);
               localStorage.setItem('ColorPrimary', decoded.ColorPrimary);
               localStorage.setItem('ColorSecundary', decoded.ColorSecundary);
-              this.notifierService.showNotification('Sesión iniciada correctamente', 'Éxito', 'success');
+              this.notifierService.showNotification('Inicio de sesión exitoso.¡Bienvenido!', 'Éxito', 'success');
             }
             this.router.navigate(['/home']);
           }
@@ -76,7 +76,7 @@ export class Login {
             this.formLogin.get('empresa')?.updateValueAndValidity();
           }
         } else {
-          this.notifierService.showNotification('Las credenciales ingresadas son incorrectas', 'Error', 'error');
+          this.notifierService.showNotification('Verifica tus credenciales e inténtalo nuevamente.', 'Acceso denegado', 'error');
         }
       },
       error: (error) => {

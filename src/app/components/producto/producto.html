@@ -33,7 +33,7 @@
             <td mat-cell *matCellDef="let element"> {{element.name}} </td>
         </ng-container>
         <ng-container matColumnDef="Description">
-            <th mat-header-cell *matHeaderCellDef>Correo Electronico</th>
+            <th mat-header-cell *matHeaderCellDef>Descripción</th>
             <td mat-cell *matCellDef="let element"> {{element.description}} </td>
         </ng-container>
         <ng-container matColumnDef="Brand">
@@ -41,11 +41,22 @@
             <td mat-cell *matCellDef="let element"> {{element.brand}} </td>
         </ng-container>
         <ng-container matColumnDef="Price">
-            <th mat-header-cell *matHeaderCellDef> Ruc </th>
+            <th mat-header-cell *matHeaderCellDef> Precio </th>
             <td mat-cell *matCellDef="let element"> {{element.price}} </td>
         </ng-container>
+        
+        <ng-container matColumnDef="PorcentageDiscount">
+            <th mat-header-cell *matHeaderCellDef> % de descuento </th>
+            <td mat-cell *matCellDef="let element"> {{element.porcentageDiscount}} </td>
+        </ng-container>
+        
+        <ng-container matColumnDef="PorcentageIva">
+            <th mat-header-cell *matHeaderCellDef> % de iva </th>
+            <td mat-cell *matCellDef="let element"> {{element.porcentageIva}} </td>
+        </ng-container>
+
         <ng-container matColumnDef="Stock">
-            <th mat-header-cell *matHeaderCellDef> Email </th>
+            <th mat-header-cell *matHeaderCellDef> Stock </th>
             <td mat-cell *matCellDef="let element"> {{element.stock}} </td>
         </ng-container>
         <ng-container matColumnDef="Acciones">
@@ -131,6 +142,19 @@
                                     <mat-label>Precio de venta</mat-label>
                                     <input matInput [value]="producto.price" readonly style="font-size: 13px;" />
                                     <mat-icon matSuffix style="color: yellow; font-size: 18px;">attach_money</mat-icon>
+                                </mat-form-field>
+                            </div>
+                            <div style="display: flex; flex-wrap: wrap; gap: 4%;">
+                                <mat-form-field appearance="outline" style="flex: 1 1 48%; height: 56px;">
+                                    <mat-label>% de Descuento</mat-label>
+                                    <input matInput [value]="producto.porcentageDiscount" readonly style="font-size: 13px;" />
+                                    <mat-icon matSuffix
+                                        style="color: aqua; font-size: 18px;">percent</mat-icon>
+                                </mat-form-field>
+                                <mat-form-field appearance="outline" style="flex: 1 1 48%; height: 56px;">
+                                    <mat-label>% de Iva</mat-label>
+                                    <input matInput [value]="producto.porcentageIva" readonly style="font-size: 13px;" />
+                                    <mat-icon matSuffix style="color: yellow; font-size: 18px;">tax</mat-icon>
                                 </mat-form-field>
                             </div>
                             <div style="display: flex; flex-wrap: wrap; gap: 4%;">

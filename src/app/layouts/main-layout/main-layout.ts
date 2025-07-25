@@ -44,6 +44,12 @@ export class MainLayout {
     const usuarioId = localStorage.getItem('UsuarioId') ?? '';
     const empresaId = localStorage.getItem('EmpresaId') ?? '';
 
+    const colorPrimary = localStorage.getItem('ColorPrimary');
+    const colorSecondary = localStorage.getItem('ColorSecondary');
+    document.documentElement.style.setProperty('--color-primary', colorPrimary);
+    document.documentElement.style.setProperty('--color-secondary', colorSecondary);
+
+
     this.Menu.GetMneu(usuarioId, empresaId).subscribe({
       next: (data) => {
         if (data.value) {
