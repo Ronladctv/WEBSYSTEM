@@ -135,8 +135,6 @@ export class UserModal implements OnInit {
       this.formUser.get('password')?.clearValidators();
       this.formUser.get('password')?.updateValueAndValidity();
 
-      this.formUser.get('roles')?.setValidators([Validators.required]);
-      this.formUser.get('roles')?.updateValueAndValidity();
 
       this._userService.obtainRole(this.datauser.id!, empresaId).subscribe({
         next: (data) => {
