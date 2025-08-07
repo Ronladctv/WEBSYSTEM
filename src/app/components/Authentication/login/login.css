@@ -1,4 +1,5 @@
 .login-background {
+    background-image: linear-gradient(to right, #4CAF50, #2196F3);
     background-image: url('../../../../../public/Fondo2.jpg');
     background-size: cover;
     background-position: center;

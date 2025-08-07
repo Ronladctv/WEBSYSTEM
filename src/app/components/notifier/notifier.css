@@ -4,17 +4,32 @@
     color: #fff;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    position: relative;
     font-family: Roboto, Arial, sans-serif;
     font-size: 14px;
+    min-width: 250px;
 }
 
-.snackbar-container .content-style {
+.snackbar-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.snackbar-icon {
+    font-size: 20px;
+    line-height: 1;
+    margin-top: 4px;
+}
+
+.content-style {
+    border-top: 10px;
     border: 1px solid white;
     border-radius: 4px;
     padding: 10px;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    flex: 1;
+    display: flex;
+    align-items: center;
 }
 
 .snackbar-container.error {
@@ -34,11 +49,10 @@
     background-color: #17a2b8;
 }
 
-
 .close-btn {
     position: absolute;
-    top: 14px;
-    right: 12px;
+    top: 5px;
+    right: 5px;
     background: transparent;
     border: none;
     color: inherit;
@@ -48,8 +62,25 @@
     line-height: 1;
     font-weight: bold;
     user-select: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.close-btn mat-icon {
+    font-size: 20px;
+    height: 20px;
+    width: 20px;
+    line-height: 1;
 }
 
 .close-btn:hover {
     color: #ccc;
+}
+
+.message-icon {
+    margin-right: 8px;
+    vertical-align: middle;
+    line-height: 1;
+    display: inline-flex;
 }

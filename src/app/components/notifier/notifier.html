@@ -3,9 +3,18 @@
         {{ data.type | titlecase }}
     </div>
     <button class="close-btn" aria-label="Close" (click)="snackBarRef.dismiss()">
-        ×
+        <mat-icon>close</mat-icon>
     </button>
     <div class="content-style">
+        @if (data.type === 'success') {
+        <mat-icon class="message-icon">check_circle</mat-icon>
+        } @else if (data.type === 'error') {
+        <mat-icon class="message-icon">warning_24</mat-icon>
+        } @else if (data.type === 'warning') {
+        <mat-icon class="message-icon">warning</mat-icon>
+        } @else if (data.type === 'info') {
+        <mat-icon class="message-icon">info</mat-icon>
+        }
         {{ data.message }}
     </div>
 </div>

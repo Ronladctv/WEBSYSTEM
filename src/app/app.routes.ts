@@ -16,6 +16,7 @@ import { SecurityComponent } from './components/security-component/security-comp
 import { Perfil } from './components/perfil/perfil';
 import { Venta } from './components/venta/venta';
 import { Menu } from './components/menu/menu';
+import { routeGuard } from './Custom/route-guard';
 
 export const routes: Routes = [
     { path: 'login', component: Login },
@@ -35,9 +36,9 @@ export const routes: Routes = [
             { path: 'empresa', component: Empresa, canActivate: [authGuard] },
             { path: 'dashboard', component: Dashoard, canActivate: [authGuard] },
             { path: 'configuracion', component: Configuration, canActivate: [authGuard] },
-            { path: 'producto', component: Producto, canActivate: [authGuard] },
+            { path: 'producto', component: Producto, canActivate: [authGuard,routeGuard] },
             { path: 'venta', component: Venta, canActivate: [authGuard] },
-            { path: 'menu', component: Menu, canActivate: [authGuard] },
+            { path: 'menu', component: Menu, canActivate: [authGuard, routeGuard] },
             { path: 'security', component: SecurityComponent },
             { path: '**', redirectTo: '', pathMatch: 'full' }
         ]
