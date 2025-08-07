@@ -4,7 +4,8 @@ export interface Roles {
     icon: string,
     description: string,
     permissions: PermissionRole[],
-    urlImagen: string
+    urlImagen: string,
+    state: boolean
 }
 
 

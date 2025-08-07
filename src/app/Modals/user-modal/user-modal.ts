@@ -12,7 +12,7 @@ import { User } from '../../Interfaces/user';
 import { MatIconModule } from '@angular/material/icon';
 import { RolService } from '../../Services/rol.service';
 import { Roles } from '../../Interfaces/roles';
-import { MatSelectModule } from '@angular/material/select';
+import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { CategoryType } from '../../Interfaces/category-type';
 import { CategoryTypeService } from '../../Services/category-type.service';
 import { Router } from '@angular/router';
@@ -62,7 +62,7 @@ export class UserModal implements OnInit {
   public roles = signal<Roles[]>([]);
   public categoriType = signal<CategoryType[]>([]);
   selectedFile: File | null = null;
-
+  public disableSaveButton = false;
 
   constructor(
     private dialogoReferencia: MatDialogRef<UserModal>,
@@ -95,11 +95,11 @@ export class UserModal implements OnInit {
             this.roles.set(data.value)
           }
         } else {
-            this.notifierService.showNotification(data.msg, 'Error', 'error');
+          this.notifierService.showNotification(data.msg, 'Error', 'error');
         }
       },
       error: (e) => {
-          this.notifierService.showNotification(formatError(e), 'Error', 'error');
+        this.notifierService.showNotification(formatError(e), 'Error', 'error');
       }
     })
 
@@ -110,11 +110,11 @@ export class UserModal implements OnInit {
             this.categoriType.set(data.value)
           }
         } else {
-            this.notifierService.showNotification(data.msg, 'Error', 'error');
+          this.notifierService.showNotification(data.msg, 'Error', 'error');
         }
       },
       error: (e) => {
-          this.notifierService.showNotification(formatError(e), 'Error', 'error');
+        this.notifierService.showNotification(formatError(e), 'Error', 'error');
       }
     })
   }
@@ -138,9 +138,14 @@ export class UserModal implements OnInit {
 
       this._userService.obtainRole(this.datauser.id!, empresaId).subscribe({
         next: (data) => {
+          debugger
           if (data.status) {
             if (data.status && data.value) {
               this.formUser.get('roles')?.setValue(data.value.rolId);
+              if (!data.value.state) {
+                this.disableSaveButton = true;
+                this.notifierService.showNotification('El usuario tiene un rol deshabilitado, no es posible actualizarlo.', 'Alerta', 'warning');
+              }
             }
           } else {
             this.notifierService.showNotification(data.msg, 'Error', 'error');
@@ -155,6 +160,14 @@ export class UserModal implements OnInit {
       this.botonAccion = "Actualizar";
       this.inputpassword = false;
     }
+    this.formUser.get('roles')?.valueChanges.subscribe(rolId => {
+      const rolCompleto = this.roles().find(r => r.id === rolId);
+      if (rolCompleto?.state) {
+        this.disableSaveButton = false;
+      } else {
+        this.disableSaveButton = true;
+      }
+    });
   }
 
   saveUser() {
@@ -243,4 +256,5 @@ export class UserModal implements OnInit {
       this.selectedFile = input.files[0];
     }
   }
+
 }

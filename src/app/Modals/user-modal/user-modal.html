@@ -72,7 +72,7 @@
                     <mat-select formControlName="roles">
                         <mat-option value="" disabled>Seleccione un Rol para el Usuario</mat-option>
                         @for (roles of roles(); track roles.id ) {
-                        <mat-option [value]="roles.id">{{ roles.nameRol }}</mat-option>
+                        <mat-option [value]="roles.id" [disabled]="!roles.state">{{ roles.nameRol }}</mat-option>
                         }
                     </mat-select>
                     <mat-icon matSuffix>supervisor_account</mat-icon>
@@ -102,6 +102,6 @@
 </mat-dialog-content>
 <mat-dialog-actions>
     <button matButton mat-dialog-close color="warn">Volver</button>
-    <button matButton mat-dialog-close color="warn" [disabled]="formUser.invalid"
+    <button matButton mat-dialog-close color="warn" [disabled]="disableSaveButton" [disabled]="formUser.invalid"
         (click)="saveUser()">{{botonAccion}}</button>
 </mat-dialog-actions>
