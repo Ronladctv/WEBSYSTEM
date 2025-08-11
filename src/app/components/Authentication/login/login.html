@@ -12,7 +12,8 @@
                     </mat-form-field>
                     <mat-form-field appearance="outline" class="input-custom">
                         <mat-label>Contraseña</mat-label>
-                        <input matInput formControlName="password" type="password" placeholder="Contraseña" (paste)="onPaste($event)">
+                        <input matInput formControlName="password" type="password" placeholder="Contraseña"
+                            (paste)="onPaste($event)">
                     </mat-form-field>
                     @if (mostrarSelect()) {
                     <mat-form-field appearance="outline" class="input-custom">
@@ -32,4 +33,15 @@
             </mat-card-content>
         </mat-card>
     </div>
+    <footer class="footer-custom">
+        <div class="footer-content">
+            <div class="footer-left">
+                <img src="ITQ.png" alt="Logo de la empresa" class="logo-footer" style="height: 60px;">
+            </div>
+            <div class="footer-right" style="text-align:right;">
+                <p><STrong>&copy; {{ fechaActual }} - PROYECTO DE INTEGRACIÓN CURRICULAR.</STrong></p>
+                <p><STRong>&copy; RONALD VINICIO CARGUAQUISPE TITOAÑA.</STRong></p>
+            </div>
+        </div>
+    </footer>
 </div>

@@ -22,8 +22,15 @@ export class UserService {
     return this.http.get<ResponseAcces>(`${this.apiUrl}Lista`)
   }
 
+  getListAdminInactive(empresaId: string): Observable<ResponseAcces> {
+    return this.http.get<ResponseAcces>(`${this.apiUrl}ListaEmpresaInactive/${empresaId}`)
+  }
 
-  register(formData:FormData): Observable<ResponseAcces> {
+  getListInactive(): Observable<ResponseAcces> {
+    return this.http.get<ResponseAcces>(`${this.apiUrl}ListaInactive`)
+  }
+
+  register(formData: FormData): Observable<ResponseAcces> {
     return this.http.post<ResponseAcces>(`${this.apiUrl}Register`, formData)
   }
 
@@ -46,6 +53,22 @@ export class UserService {
 
   profile(usuarioId: string): Observable<ResponseAcces> {
     return this.http.get<ResponseAcces>(`${this.apiUrl}Profile/${usuarioId}`)
+  }
+
+  disableUserEmpresa(usuarioId: string, empresaId: string): Observable<ResponseAcces> {
+    return this.http.post<ResponseAcces>(`${this.apiUrl}disableUserEmpresa/${usuarioId}/${empresaId}`, null)
+  }
+
+  disableUser(usuarioId: string): Observable<ResponseAcces> {
+    return this.http.post<ResponseAcces>(`${this.apiUrl}DisableUser/${usuarioId}`, null)
+  }
+
+  activeUserEmpresa(usuarioId: string, empresaId: string): Observable<ResponseAcces> {
+    return this.http.post<ResponseAcces>(`${this.apiUrl}ActivateUserEmpresa/${usuarioId}/${empresaId}`, null)
+  }
+
+  activeUser(usuarioId: string): Observable<ResponseAcces> {
+    return this.http.post<ResponseAcces>(`${this.apiUrl}ActivateUser/${usuarioId}`, null)
   }
 
 }

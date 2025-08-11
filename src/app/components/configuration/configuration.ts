@@ -26,7 +26,7 @@ import { AccionService } from '../../Services/accion.service';
 })
 export class Configuration implements AfterViewInit, OnInit {
 
-  displayedColumnsmaster: string[] = ['Id', 'Nombre', 'Descripcion','Acciones'];
+  displayedColumnsmaster: string[] = ['Id', 'Nombre', 'Descripcion', 'Acciones'];
   dataSourcemaster = new MatTableDataSource<Accions>();
 
   public registerRole = signal(true);
@@ -62,6 +62,7 @@ export class Configuration implements AfterViewInit, OnInit {
 
   ngAfterViewInit(): void {
 
+    this.dataSourcemaster.paginator = this.paginator;
   }
 
   ViewRole() {

@@ -2,7 +2,7 @@
     <button mat-icon-button (click)="sidenav.toggle()">
         <mat-icon>{{ sidenav.opened ? 'close' : 'menu' }}</mat-icon>
     </button>
-    <app-header class="header-nav"></app-header>
+    <app-header></app-header>
 </mat-toolbar>
 
 <mat-sidenav-container class="sidenav-container" style="background-color: #f5f5f5">
@@ -29,4 +29,12 @@
         </div>
     </mat-sidenav-content>
 </mat-sidenav-container>
+
 <app-footer></app-footer>
+
+<mat-toolbar color="primary">
+    <button mat-icon-button (click)="sidenav.toggle()">
+        <mat-icon>{{ sidenav.opened ? 'close' : 'menu' }}</mat-icon>
+    </button>
+    <app-header></app-header>
+</mat-toolbar>

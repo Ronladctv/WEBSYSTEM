@@ -27,10 +27,13 @@ export class Login {
   public mostrarSelect = signal(false);
   public empresas = signal<Empresas[]>([]);
   private cd = inject(ChangeDetectorRef);
+  public fechaActual: number;
 
   constructor(
     private notifierService: NotifierService
-  ) { }
+  ) {
+    this.fechaActual = new Date().getFullYear();
+  }
 
 
   public formLogin: FormGroup = this.formBuild.group({
@@ -63,8 +66,15 @@ export class Login {
               localStorage.setItem('NameProfile', decoded.NameProfile);
               localStorage.setItem('Email', decoded.Email);
               localStorage.setItem('Name', decoded.Name);
+              localStorage.setItem('NameEmpresa', decoded.NameEmpresa);
               localStorage.setItem('ColorPrimary', decoded.ColorPrimary);
               localStorage.setItem('ColorSecundary', decoded.ColorSecundary);
+              localStorage.setItem('LogoHeader', decoded.LogoHeader);
+              localStorage.setItem('LogoFooter', decoded.LogoFooter);
+              if (decoded.exp) {
+                localStorage.setItem('SessionExp', decoded.exp.toString());
+              }
+
               this.notifierService.showNotification('Inicio de sesión exitoso.¡Bienvenido!', 'Éxito', 'success');
             }
             this.router.navigate(['/home']);

@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { MatButtonModule } from '@angular/material/button';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MAT_DIALOG_DATA, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogTitle } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogRef, MatDialogTitle } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
@@ -59,7 +59,8 @@ export class UpdatePasswordModal implements OnInit {
     private fb: FormBuilder,
     private _userService: UserService,
     private notifierService: NotifierService,
-
+    private dialogoReferencia: MatDialogRef<UpdatePasswordModal>,
+    
     @Inject(MAT_DIALOG_DATA) public dataUser: User
   ) {
     this.formUserPassword = this.fb.group({
@@ -96,8 +97,9 @@ export class UpdatePasswordModal implements OnInit {
             if (userId == usuarioId) {
               localStorage.clear();
               this.router.navigate(['/login']);
+              this.dialogoReferencia.close();
             } else {
-              window.location.reload();
+              this.dialogoReferencia.close("editado");
             }
           } else {
             this.notifierService.showNotification(data.msg, 'Error', 'error');

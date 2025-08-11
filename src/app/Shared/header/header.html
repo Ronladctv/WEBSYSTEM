@@ -1,12 +1,40 @@
-<header>
-    <nav class="header-nav">
+<header class="header-nav">
+    <div class="logo-group">
+        @if (logHeader) {
+        <img [src]="'https://recursosstorage.blob.core.windows.net/empresas/' + logHeader" alt="Imagen superior"
+            style="height: 60px;" />
+        }
+        <button class="username-display company-name">
+            <mat-icon class="avatar-icon">webhook_24</mat-icon>
+            {{ nameEmpresa || '' }}
+        </button>
+    </div>
+
+    <nav class="user-actions">
         <button class="username-display" (click)="profile()">
             <mat-icon class="avatar-icon">account_circle</mat-icon>
             {{ username || '' }}
+            @if (timeSession) {
+            <span> ({{ timeSession }})</span>
+            }
         </button>
         <button mat-button color="warn" (click)="logout()">
             <mat-icon>logout</mat-icon>
             Salir
         </button>
     </nav>
+
+    <button mat-icon-button class="hamburger-button" (click)="toggleMenu()">
+        <mat-icon>menu_open_24</mat-icon>
+    </button>
+
+    <nav class="dropdown-menu" [class.is-open]="isMenuOpen">
+        <button mat-icon-button class="username-display" (click)="profile()">
+            <mat-icon>account_circle</mat-icon> Perfil
+        </button>
+        <button mat-icon-button class="username-display" (click)="logout()">
+            <mat-icon>logout</mat-icon> Salir
+        </button>
+    </nav>
+
 </header>

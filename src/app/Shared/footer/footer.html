@@ -1,3 +1,10 @@
 <footer class="app-footer">
-    <p>© {{ currentYear }} Mi Aplicación - Todos los derechos reservados</p>
+    <div class="footer-content">
+        <!-- <p>© {{ currentYear }} Ronald Carguaquispe - Proyecto de integración curricular</p> -->
+        @if (logoFooter) {
+        <img [src]="'https://recursosstorage.blob.core.windows.net/empresas/' + logoFooter" alt="Imagen superior"
+            class="footer-logo right-logo" />
+        }
+        <img src="ITQ.png" alt="Logo Izquierdo" class="footer-logo left-logo">
+    </div>
 </footer>

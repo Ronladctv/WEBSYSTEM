@@ -1,5 +1,20 @@
 .header-nav {
-    margin-left: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 0 16px;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.logo-group {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.user-actions {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -29,10 +44,72 @@
     background-color: rgba(0, 0, 0, 0.05);
 }
 
-.username-display .avatar {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    margin-right: 8px;
-    object-fit: cover;
+.dropdown-menu {
+    position: absolute;
+    top: 60px;
+    right: 0;
+    background-color: white;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    width: 200px;
+    flex-direction: column;
+    align-items: center;
+    display: none;
+    overflow: hidden;
+}
+
+.dropdown-menu.show {
+    display: flex;
+}
+
+.dropdown-menu button {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 12px 16px;
+    text-align: left;
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+
+.dropdown-menu button:hover {
+    background-color: #f1f1f1;
+}
+
+.hamburger-button {
+    display: none;
+}
+
+
+/* ---------------------------------------------------- */
+/* Estilos específicos para pantallas pequeñas */
+/* ---------------------------------------------------- */
+@media (max-width: 768px) {
+    .logo-group img {
+        display: none;
+    }
+
+    .company-name {
+        display: none;
+    }
+
+    .user-actions {
+        display: none;
+    }
+
+    .hamburger-button {
+        display: block;
+    }
+
+    .dropdown-menu {
+        display: none;
+        position: absolute;
+        top: 55px;
+    }
+
+    .dropdown-menu.is-open {
+        display: block;
+    }
 }

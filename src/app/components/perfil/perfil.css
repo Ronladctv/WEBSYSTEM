@@ -143,3 +143,27 @@ button.active {
 button.active:hover {
     background-color: #303f9f;
 }
+
+@media (max-width: 550px) {
+    .user-details-and-image {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .user-details-container {
+        width: 100%;
+    }
+
+    .input-row mat-form-field {
+        flex: 1 1 100%;
+        margin-bottom: 16px;
+    }
+
+    .user-image-wrapper {
+        display: none;
+    }
+
+    .button-row {
+        justify-content: center;
+    }
+}

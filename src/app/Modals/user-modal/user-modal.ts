@@ -138,7 +138,6 @@ export class UserModal implements OnInit {
 
       this._userService.obtainRole(this.datauser.id!, empresaId).subscribe({
         next: (data) => {
-          debugger
           if (data.status) {
             if (data.status && data.value) {
               this.formUser.get('roles')?.setValue(data.value.rolId);
@@ -208,7 +207,7 @@ export class UserModal implements OnInit {
               });
             }
             this.notifierService.showNotification('El usuario se creó correctamente.', 'Listo', 'success');
-            window.location.reload();
+            this.dialogoReferencia.close("creado");
           } else {
             this.notifierService.showNotification(data.msg, 'Error', 'error');
           }
@@ -235,7 +234,7 @@ export class UserModal implements OnInit {
               });
             }
             this.notifierService.showNotification('El usuario se actualizó correctamente.', 'Listo', 'success');
-            window.location.reload();
+            this.dialogoReferencia.close("editado");
           } else {
             this.notifierService.showNotification(data.msg, 'Error', 'error');
           }

@@ -17,7 +17,7 @@ import { NotifierService } from '../../notifier.service';
   templateUrl: './provedor.html',
   styleUrl: './provedor.css'
 })
-export class Provedor implements AfterViewInit, OnInit {
+export class Provedor implements OnInit {
   displayedColumns: string[] = ['Name', 'LastName', 'Address', 'Email', 'Phone', 'Document', 'Ruc', 'Acciones'];
   dataSource = new MatTableDataSource<Provedores>();
 
@@ -41,12 +41,24 @@ export class Provedor implements AfterViewInit, OnInit {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-  }
+  // ngAfterViewInit() {
+  //   this.dataSource.paginator = this.paginator;
+  // }
+
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  public UpdatePaginator() {
+    this.mostrarTable.set(true);
+    this.mostrarRegistro.set(false);
+
+    setTimeout(() => {
+      if (this.paginator) {
+        this.dataSource.paginator = this.paginator;
+      }
+    });
   }
 
   mostrarProvedores() {

@@ -99,7 +99,7 @@ export class AccionModal implements OnInit {
       descripcion: this.formAccion.value.descripcion
     }
 
-    // if (id != null) {
+    if (id != null) {
       this._accionService.register(modelo).subscribe({
         next: (data) => {
           if (data.status) {
@@ -112,8 +112,8 @@ export class AccionModal implements OnInit {
           this.notifierService.showNotification(formatError(e), 'Error', 'error');
         }
       })
-    // } else {
-    //   this.notifierService.showNotification('No fue posible registrar la acción.', 'Error', 'error');
-    // }
+    } else {
+      this.notifierService.showNotification('No fue posible registrar la acción.', 'Error', 'error');
+    }
   }
 }

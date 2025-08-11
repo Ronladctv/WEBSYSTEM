@@ -120,7 +120,9 @@ export class ProvedorModal implements OnInit {
         if (data.status) {
           const mensaje = isNew ? "El provedor se creó correctamente." : "El provedor se actualizó correctamente.";
           this.notifierService.showNotification(mensaje, 'Listo', 'success');
-          window.location.reload();
+          //Cierre Del Modal
+          const result = isNew ? "creado" : "editado";
+          this.dialogoReferencia.close(result);
         } else {
           this.notifierService.showNotification(data.msg, 'Error', 'error');
         }
