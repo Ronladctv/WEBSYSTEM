@@ -9,7 +9,7 @@ import { Productos } from '../Interfaces/productos';
   providedIn: 'root'
 })
 export class ProductoService {
-  
+
   private endpoint: string = settings.endPoint;
   private apiUrl: string = this.endpoint + "api/Producto/";
 
@@ -20,5 +20,13 @@ export class ProductoService {
   }
   register(formData: FormData): Observable<ResponseAcces> {
     return this.http.post<ResponseAcces>(`${this.apiUrl}Register`, formData);
+  }
+
+  activeProduct(productId: string): Observable<ResponseAcces> {
+    return this.http.post<ResponseAcces>(`${this.apiUrl}ActivateProduct/${productId}`, null)
+  }
+
+  disableProduct(productId: string): Observable<ResponseAcces> {
+    return this.http.post<ResponseAcces>(`${this.apiUrl}DesactiveProduct/${productId}`, null)
   }
 }

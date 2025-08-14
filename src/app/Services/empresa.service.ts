@@ -31,4 +31,12 @@ export class EmpresaService {
     return this.http.get<ResponseAcces>(`${this.apiUrl}Profile/${empresaId}`)
   }
 
+  activeEmpresa(empresaId: string): Observable<ResponseAcces> {
+    return this.http.post<ResponseAcces>(`${this.apiUrl}ActivateEmpresa/${empresaId}`, null)
+  }
+
+  disableEmpresa(empresaId: string): Observable<ResponseAcces> {
+    return this.http.post<ResponseAcces>(`${this.apiUrl}DesactiveEmpresa/${empresaId}`, null)
+  }
+
 }

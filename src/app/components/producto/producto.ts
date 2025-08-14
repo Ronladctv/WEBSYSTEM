@@ -10,6 +10,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { ProductoModal } from '../../Modals/producto-modal/producto-modal';
 import { formatError } from '../../Helper/error.helper';
 import { NotifierService } from '../../notifier.service';
+import Swal from 'sweetalert2';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-producto',
@@ -17,16 +19,21 @@ import { NotifierService } from '../../notifier.service';
   templateUrl: './producto.html',
   styleUrl: './producto.css'
 })
-export class Producto implements AfterViewInit, OnInit {
-  displayedColumns: string[] = ['Name', 'Description', 'Brand', 'Price', 'Stock','PorcentageDiscount','PorcentageIva','Acciones'];
+export class Producto implements OnInit {
+  displayedColumns: string[] = ['Name', 'Description', 'Brand', 'Price', 'Stock', 'PorcentageDiscount', 'PorcentageIva', 'Acciones'];
   dataSource = new MatTableDataSource<Productos>();
 
+  displayedColumnsInactive: string[] = ['Name', 'Description', 'Brand', 'Price', 'Stock', 'PorcentageDiscount', 'PorcentageIva', 'Acciones'];
+  dataSourceInactive = new MatTableDataSource<Productos>();
+
   expandedProducto = signal<string | null>(null);
+  expandedProductoInactive = signal<string | null>(null);
 
   public mostrarTable = signal(false);
   public mostrarRegistro = signal(true);
 
   public productoAdmin = signal<Productos[]>([]);
+  public productoAdminInactive = signal<Productos[]>([]);
 
   readonly dialog = inject(MatDialog);
 
@@ -41,23 +48,44 @@ export class Producto implements AfterViewInit, OnInit {
     this.mostrarProducto();
   }
 
+  @ViewChild('paginatorProduct') paginator!: MatPaginator;
+  @ViewChild('paginatorProductInactive') paginatorProductInactive!: MatPaginator;
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-  }
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  applyFilterInactive(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSourceInactive.filter = filterValue.trim().toLowerCase();
+  }
+
+  public UpdatePaginator() {
+    this.mostrarTable.set(true);
+    this.mostrarRegistro.set(false);
+
+    setTimeout(() => {
+      if (this.paginator) {
+        this.dataSource.paginator = this.paginator;
+      }
+      if (this.paginatorProductInactive) {
+        this.dataSourceInactive.paginator = this.paginatorProductInactive;
+      }
+    });
   }
 
   mostrarProducto() {
     this._productoService.getList().subscribe({
       next: (response) => {
         if (response.status) {
-          this.dataSource.data = response.value;
-          this.productoAdmin.set(response.value)
+          const provedoresActivos = response.value.filter((producto: Productos) => producto.state);
+          const provedoresInactivos = response.value.filter((producto: Productos) => !producto.state);
+          this.dataSource.data = provedoresActivos;
+          this.productoAdmin.set(provedoresActivos);
+          this.dataSourceInactive.data = provedoresInactivos;
+          this.productoAdminInactive.set(provedoresInactivos);
+
         } else {
           this.notifierService.showNotification(response.msg, 'Error', 'error');
         }
@@ -87,13 +115,103 @@ export class Producto implements AfterViewInit, OnInit {
       maxWidth: "none",
       data: data
     }).afterClosed().subscribe(resultado => {
-      if (resultado == "editado") {
+      if (resultado === "editado") {
+        this.mostrarProducto();
+      }
+    });
+  }
+  DeleteProduct(productId: string) {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      html: `
+      ¡Esta acción no se puede deshacer!<br>
+      <small style="color: gray;">
+        También puedes deshabilitar este producto desde la opción <b>Editar producto</b>.
+      </small>
+    `,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: '<i class="fa fa-trash"></i> Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+      reverseButtons: true,
+      focusCancel: true,
+      showLoaderOnConfirm: true,
+      preConfirm: () => {
+        return firstValueFrom(this._productoService.disableProduct(productId))
+          .then((data) => {
+            if (data?.status) {
+              Swal.fire('¡Borrado!', 'El producto ha sido deshabilitado correctamente.', 'success');
+              return true;
+            } else {
+              Swal.showValidationMessage(
+                `Error: ${data?.msg || 'No se pudo eliminar el proveedor'}`
+              );
+              return false;
+            }
+          })
+          .catch((err) => {
+            Swal.showValidationMessage(
+              `Error: ${err.message || 'No se pudo conectar al servidor'}`
+            );
+            return false;
+          });
+      },
+      allowOutsideClick: () => !Swal.isLoading()
+    }).then((result) => {
+      if (result.isConfirmed) {
         this.mostrarProducto();
       }
     });
   }
 
-  toggleUser(id: string) {
+  ActivateProduct(productId: string) {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: '¡Esta acción activará el provedor!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: '<i class="fa fa-check"></i> Sí, activar',
+      cancelButtonText: 'Cancelar',
+      reverseButtons: true,
+      focusCancel: true,
+      showLoaderOnConfirm: true,
+      preConfirm: () => {
+        return firstValueFrom(this._productoService.activeProduct(productId))
+          .then((data) => {
+            if (data?.status) {
+              Swal.fire('¡Success!', 'El producto ha sido habilitado correctamente.', 'success');
+              return true;
+            } else {
+              Swal.showValidationMessage(
+                `Error: ${data?.msg || 'No se pudo eliminar el producto'}`
+              );
+              return false;
+            }
+          })
+          .catch((err) => {
+            Swal.showValidationMessage(
+              `Error: ${err.message || 'No se pudo conectar al servidor'}`
+            );
+            return false;
+          });
+      },
+      allowOutsideClick: () => !Swal.isLoading()
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.mostrarProducto();
+      }
+    });
+  }
+
+  toggleProduct(id: string) {
     this.expandedProducto.update(current => (current === id ? null : id));
+  }
+
+  toggleProductInactive(id: string) {
+    this.expandedProductoInactive.update(current => (current === id ? null : id));
   }
 }

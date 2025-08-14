@@ -96,6 +96,7 @@ export class Menu implements AfterViewInit, OnInit {
     }).afterClosed().subscribe(resultado => {
       if (resultado === "creado") {
         this.mostrarMenu();
+        this.mostrarMenuRelation();
       }
     });
   }
@@ -108,8 +109,9 @@ export class Menu implements AfterViewInit, OnInit {
       maxWidth: "none",
       data: data
     }).afterClosed().subscribe(resultado => {
-      if (resultado == "editado") {
+      if (resultado === "editado") {
         this.mostrarMenu();
+        this.mostrarMenuRelation();
       }
     });
   }
@@ -120,8 +122,10 @@ export class Menu implements AfterViewInit, OnInit {
       width: "750px",
       maxWidth: "none",
     }).afterClosed().subscribe(resultado => {
-      if (resultado == "editado") {
+      if (resultado === "creado") {
         this.mostrarMenu();
+        this.mostrarMenuRelation();
+        window.location.reload();
       }
     });
   }
@@ -134,8 +138,10 @@ export class Menu implements AfterViewInit, OnInit {
       maxWidth: "none",
       data: data
     }).afterClosed().subscribe(resultado => {
-      if (resultado == "editado") {
+      if (resultado === "editado") {
         this.mostrarMenu();
+        this.mostrarMenuRelation();
+        window.location.reload();
       }
     });
 

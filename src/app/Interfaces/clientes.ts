@@ -11,6 +11,7 @@ export interface Clientes {
     address?: string;
     isAfiliate: boolean;
     isConsumer: boolean;
-    urlImagen: string
+    urlImagen: string;
+    isActivate: boolean
 }
 

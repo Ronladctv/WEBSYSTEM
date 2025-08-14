@@ -10,6 +10,8 @@ import { EmpresaModal } from '../../Modals/empresa-modal/empresa-modal';
 import { Empresas } from '../../Interfaces/empresas';
 import { formatError } from '../../Helper/error.helper';
 import { NotifierService } from '../../notifier.service';
+import Swal from 'sweetalert2';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-empresa',
@@ -17,16 +19,21 @@ import { NotifierService } from '../../notifier.service';
   templateUrl: './empresa.html',
   styleUrl: './empresa.css'
 })
-export class Empresa implements AfterViewInit, OnInit {
-  displayedColumns: string[] = ['NameEmpresa', 'Address', 'Ruc', 'Email', 'LogHeader', 'LogoFooter', 'ColorPrimay', 'ColorSecundary', 'Acciones'];
+export class Empresa implements OnInit {
+  displayedColumns: string[] = ['NameEmpresa', 'Address', 'Ruc', 'Email', 'ColorPrimay', 'ColorSecundary', 'Acciones'];
   dataSource = new MatTableDataSource<Empresas>();
 
+  displayedColumnsInactive: string[] = ['NameEmpresa', 'Address', 'Ruc', 'Email', 'ColorPrimay', 'ColorSecundary', 'Acciones'];
+  dataSourceInactive = new MatTableDataSource<Empresas>();
+
   expandedEmpresa = signal<string | null>(null);
+  expandedEmpresaInactive = signal<string | null>(null);
 
   public mostrarTable = signal(false);
   public mostrarRegistro = signal(true);
 
   public empresaAdmin = signal<Empresas[]>([]);
+  public empresaAdminInactive = signal<Empresas[]>([]);
 
   readonly dialog = inject(MatDialog);
 
@@ -41,12 +48,29 @@ export class Empresa implements AfterViewInit, OnInit {
     this.mostrarEmpresas();
   }
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild('paginatorEmpresa') paginator!: MatPaginator;
+  @ViewChild('paginatorEmpresaInactive') paginatorInactive!: MatPaginator;
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
+  public UpdatePaginator() {
+    this.mostrarTable.set(true);
+    this.mostrarRegistro.set(false);
+
+    setTimeout(() => {
+      if (this.paginator) {
+        this.dataSource.paginator = this.paginator;
+      }
+      if (this.paginatorInactive) {
+        this.dataSourceInactive.paginator = this.paginatorInactive;
+      }
+    });
   }
+
   applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  applyFilterInactive(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
@@ -55,8 +79,12 @@ export class Empresa implements AfterViewInit, OnInit {
     this._empresaService.getList().subscribe({
       next: (response) => {
         if (response.status) {
-          this.dataSource.data = response.value;
-          this.empresaAdmin.set(response.value)
+          const empresaActivos = response.value.filter((empresa: Empresas) => empresa.isActive);
+          const empresaInactivos = response.value.filter((empresa: Empresas) => !empresa.isActive);
+          this.dataSource.data = empresaActivos;
+          this.empresaAdmin.set(empresaActivos)
+          this.dataSourceInactive.data = empresaInactivos;
+          this.empresaAdminInactive.set(empresaInactivos)
         } else {
           this.notifierService.showNotification(response.msg, 'Error', 'error');
         }
@@ -86,13 +114,101 @@ export class Empresa implements AfterViewInit, OnInit {
       maxWidth: "none",
       data: data
     }).afterClosed().subscribe(resultado => {
-      if (resultado == "editado") {
+      if (resultado === "editado") {
         this.mostrarEmpresas();
       }
     });
   }
 
-  toggleUser(id: string) {
+
+  DeleteEmpresa(empresaId: string) {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: '¡Esta acción no se puede deshacer!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: '<i class="fa fa-trash"></i> Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+      reverseButtons: true,
+      focusCancel: true,
+      showLoaderOnConfirm: true,
+      preConfirm: () => {
+        return firstValueFrom(this._empresaService.disableEmpresa(empresaId))
+          .then((data) => {
+            if (data?.status) {
+              Swal.fire('¡Borrado!', 'La empresa ha sido deshabilitado correctamente.', 'success');
+              return true;
+            } else {
+              Swal.showValidationMessage(
+                `Error: ${data?.msg || 'No se pudo deshabilitar la empresa'}`
+              );
+              return false;
+            }
+          })
+          .catch((err) => {
+            Swal.showValidationMessage(
+              `Error: ${err.message || 'No se pudo conectar al servidor'}`
+            );
+            return false;
+          });
+      },
+      allowOutsideClick: () => !Swal.isLoading()
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.mostrarEmpresas();
+      }
+    });
+  }
+
+  ActivateEmpresa(empresaId: string) {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: '¡Esta acción activará la empresa!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: '<i class="fa fa-check"></i> Sí, activar',
+      cancelButtonText: 'Cancelar',
+      reverseButtons: true,
+      focusCancel: true,
+      showLoaderOnConfirm: true,
+      preConfirm: () => {
+        return firstValueFrom(this._empresaService.activeEmpresa(empresaId))
+          .then((data) => {
+            if (data?.status) {
+              Swal.fire('¡Success!', 'La empresa ha sido habilitado correctamente.', 'success');
+              return true;
+            } else {
+              Swal.showValidationMessage(
+                `Error: ${data?.msg || 'No se pudo habilitar la empresa'}`
+              );
+              return false;
+            }
+          })
+          .catch((err) => {
+            Swal.showValidationMessage(
+              `Error: ${err.message || 'No se pudo conectar al servidor'}`
+            );
+            return false;
+          });
+      },
+      allowOutsideClick: () => !Swal.isLoading()
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.mostrarEmpresas();
+      }
+    });
+  }
+
+
+  toggleEmpresa(id: string) {
     this.expandedEmpresa.update(current => (current === id ? null : id));
+  }
+
+  toggleEmpresaInactive(id: string) {
+    this.expandedEmpresaInactive.update(current => (current === id ? null : id));
   }
 }

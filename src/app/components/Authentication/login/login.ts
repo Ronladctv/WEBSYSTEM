@@ -53,7 +53,6 @@ export class Login {
       password: this.formLogin.value.password,
       empresaId: this.mostrarSelect() ? this.formLogin.value.empresa : null
     }
-    debugger
     this.Access.Login(objeto).subscribe({
       next: (data) => {
         if (data.status) {
@@ -85,8 +84,9 @@ export class Login {
             this.formLogin.get('empresa')?.setValidators(Validators.required);
             this.formLogin.get('empresa')?.updateValueAndValidity();
           }
+          
         } else {
-          this.notifierService.showNotification('Verifica tus credenciales e inténtalo nuevamente.', 'Acceso denegado', 'error');
+          this.notifierService.showNotification(`Acceso denegado: ${data.msg}`, 'Acceso denegado', 'error');
         }
       },
       error: (error) => {

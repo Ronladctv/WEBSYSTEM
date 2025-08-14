@@ -149,7 +149,8 @@ export class ClientModal implements OnInit {
         if (data.status) {
           const mensaje = isNew ? "El cliente se creó correctamente." : "El cliente se actualizó correctamente.";
           this.notifierService.showNotification(mensaje, 'Listo', 'success');
-          window.location.reload();
+          const result = isNew ? "creado" : "editado";
+          this.dialogoReferencia.close(result);
         } else {
           this.notifierService.showNotification(data.msg, 'Error', 'error');
         }

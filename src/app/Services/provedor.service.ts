@@ -15,11 +15,22 @@ export class ProvedorService {
   private apiUrl: string = this.endpoint + "api/provider/";
 
   constructor(private http: HttpClient) { }
-  
-    getList(): Observable<ResponseAcces> {
-      return this.http.get<ResponseAcces>((`${this.apiUrl}Lista`))
-    }
-    register(formData: FormData): Observable<ResponseAcces> {
-      return this.http.post<ResponseAcces>(`${this.apiUrl}Register`, formData);
-    }
+
+  getList(): Observable<ResponseAcces> {
+    return this.http.get<ResponseAcces>((`${this.apiUrl}Lista`))
+  }
+  register(formData: FormData): Observable<ResponseAcces> {
+    return this.http.post<ResponseAcces>(`${this.apiUrl}Register`, formData);
+  }
+  getListInactive(): Observable<ResponseAcces> {
+    return this.http.get<ResponseAcces>((`${this.apiUrl}ListaInactive`))
+  }
+  activeProvider(providerId: string): Observable<ResponseAcces> {
+    return this.http.post<ResponseAcces>(`${this.apiUrl}ActivateProvider/${providerId}`, null)
+  }
+
+  disableProvider(providerId: string): Observable<ResponseAcces> {
+    return this.http.post<ResponseAcces>(`${this.apiUrl}DesactiveProvider/${providerId}`, null)
+  }
+
 }

@@ -8,4 +8,5 @@ export interface Empresas {
     email?: string;
     logHeader?: string;
     logoFooter?: string;
+    isActive:boolean
 }

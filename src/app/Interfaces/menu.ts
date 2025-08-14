@@ -8,7 +8,8 @@ export interface Menu {
 export interface RoleViewModel {
     id:string,
     nombre:string,
-    menus:MenuViewModel[]
+    menus:MenuViewModel[],
+    state:boolean
 }
 export interface MenuViewModel {
     id:string,

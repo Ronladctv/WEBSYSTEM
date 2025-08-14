@@ -17,6 +17,8 @@ import { PermisoModal } from '../../Modals/permiso-modal/permiso-modal';
 import { AccionModal } from '../../Modals/accion-modal/accion-modal';
 import { NotifierService } from '../../notifier.service';
 import { AccionService } from '../../Services/accion.service';
+import Swal from 'sweetalert2';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-configuration',
@@ -33,9 +35,11 @@ export class Configuration implements AfterViewInit, OnInit {
   public registerPermission = signal(true);
   public registerAccion = signal(true);
   public RoleAdmin = signal<Roles[]>([]);
+  public RoleAdminInactive = signal<Roles[]>([]);
   public PermissionAdmin = signal<Permissions[]>([]);
 
   expandedRole = signal<string | null>(null);
+  expandedRoleInactive = signal<string | null>(null);
   expandedPermission = signal<string | null>(null);
 
   readonly dialog = inject(MatDialog);
@@ -69,7 +73,11 @@ export class Configuration implements AfterViewInit, OnInit {
     this._roleService.getListRole().subscribe({
       next: (response) => {
         if (response.status) {
-          this.RoleAdmin.set(response.value)
+
+          const rolActivos = response.value.filter((rol: Roles) => rol.state);
+          const rolInactivos = response.value.filter((rol: Roles) => !rol.state);
+          this.RoleAdmin.set(rolActivos)
+          this.RoleAdminInactive.set(rolInactivos)
         }
         else {
           this.notifierService.showNotification(response.msg, 'Error', 'error');
@@ -120,7 +128,9 @@ export class Configuration implements AfterViewInit, OnInit {
       maxWidth: "none"
     }).afterClosed().subscribe(resultado => {
       if (resultado === "creado") {
-        //
+        this.ViewRole();
+        // this.ViewPermission();
+        // this.ViewAccion();
       }
     });
   }
@@ -132,8 +142,10 @@ export class Configuration implements AfterViewInit, OnInit {
       width: "750px",
       maxWidth: "none",
     }).afterClosed().subscribe(resultado => {
-      if (resultado == "editado") {
+      if (resultado === "editado") {
+        // this.ViewRole();
         this.ViewPermission();
+        // this.ViewAccion();
       }
     });
   }
@@ -146,6 +158,8 @@ export class Configuration implements AfterViewInit, OnInit {
     }).afterClosed().subscribe(resultado => {
       debugger
       if (resultado === "creado") {
+        // this.ViewRole();
+        // this.ViewPermission();
         this.ViewAccion();
       }
     });
@@ -158,8 +172,10 @@ export class Configuration implements AfterViewInit, OnInit {
       maxWidth: "none",
       data: data
     }).afterClosed().subscribe(resultado => {
-      if (resultado == "editado") {
-        this.ViewPermission();
+      if (resultado === "editado") {
+        this.ViewRole();
+        // this.ViewPermission();
+        // this.ViewAccion();
       }
     });
   }
@@ -171,8 +187,10 @@ export class Configuration implements AfterViewInit, OnInit {
       maxWidth: "none",
       data: data
     }).afterClosed().subscribe(resultado => {
-      if (resultado == "editado") {
+      if (resultado === "editado") {
+        // this.ViewRole();
         this.ViewPermission();
+        // this.ViewAccion();
       }
     });
   }
@@ -184,14 +202,20 @@ export class Configuration implements AfterViewInit, OnInit {
       maxWidth: "none",
       data: data
     }).afterClosed().subscribe(resultado => {
-      if (resultado == "editado") {
-        this.ViewPermission();
+      if (resultado === "editado") {
+        // this.ViewRole();
+        // this.ViewPermission();
+        this.ViewAccion();
       }
     });
   }
 
   toggleUserRole(id: string) {
     this.expandedRole.update(current => (current === id ? null : id));
+  }
+
+  toggleUserRoleInactive(id: string) {
+    this.expandedRoleInactive.update(current => (current === id ? null : id));
   }
 
   toggleUserPermission(id: string) {
@@ -202,5 +226,90 @@ export class Configuration implements AfterViewInit, OnInit {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSourcemaster.filter = filterValue.trim().toLowerCase();
   }
+
+  DeleteRole(roleId: string) {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: '¡Esta acción no se puede deshacer!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: '<i class="fa fa-trash"></i> Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+      reverseButtons: true,
+      focusCancel: true,
+      showLoaderOnConfirm: true,
+      preConfirm: () => {
+        return firstValueFrom(this._roleService.disableRole(roleId))
+          .then((data) => {
+            if (data?.status) {
+              Swal.fire('¡Borrado!', 'El rol ha sido deshabilitado correctamente.', 'success');
+              return true;
+            } else {
+              Swal.showValidationMessage(
+                `Error: ${data?.msg || 'No se pudo eliminar el rol'}`
+              );
+              return false;
+            }
+          })
+          .catch((err) => {
+            Swal.showValidationMessage(
+              `Error: ${err.message || 'No se pudo conectar al servidor'}`
+            );
+            return false;
+          });
+      },
+      allowOutsideClick: () => !Swal.isLoading()
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.ViewRole();
+        // this.mostrarProvedoresInactive();
+      }
+    });
+  }
+
+  ActivateRole(roleId: string) {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: '¡Esta acción activará el provedor!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: '<i class="fa fa-check"></i> Sí, activar',
+      cancelButtonText: 'Cancelar',
+      reverseButtons: true,
+      focusCancel: true,
+      showLoaderOnConfirm: true,
+      preConfirm: () => {
+        return firstValueFrom(this._roleService.activeRole(roleId))
+          .then((data) => {
+            if (data?.status) {
+              Swal.fire('¡Success!', 'El rol ha sido habilitado correctamente.', 'success');
+              return true;
+            } else {
+              Swal.showValidationMessage(
+                `Error: ${data?.msg || 'No se pudo habilitar el rol'}`
+              );
+              return false;
+            }
+          })
+          .catch((err) => {
+            Swal.showValidationMessage(
+              `Error: ${err.message || 'No se pudo conectar al servidor'}`
+            );
+            return false;
+          });
+      },
+      allowOutsideClick: () => !Swal.isLoading()
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.ViewRole();
+        // this.mostrarProvedoresInactive();
+      }
+    });
+  }
+
 
 }

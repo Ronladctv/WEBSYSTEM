@@ -9,10 +9,6 @@
     <mat-sidenav #sidenav mode="side" opened>
         <div class="sidebar-card">
             <mat-nav-list>
-                <mat-list-item routerLink="/inicio" (click)="sidenav.mode === 'over' && sidenav.close()">
-                    <mat-icon matListItemIcon>home</mat-icon>
-                    <span style="color: white;">Inicio</span>
-                </mat-list-item>
                 @for (menu of menus(); track menu.id) {
                 <mat-list-item [routerLink]="menu.url" (click)="sidenav.mode === 'over' && sidenav.close()">
                     <mat-icon matListItemIcon>{{ menu.icono }}</mat-icon>

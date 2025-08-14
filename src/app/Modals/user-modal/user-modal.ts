@@ -131,11 +131,8 @@ export class UserModal implements OnInit {
         email: this.datauser.email,
         categoriType: this.datauser.typeUserId,
       })
-
       this.formUser.get('password')?.clearValidators();
       this.formUser.get('password')?.updateValueAndValidity();
-
-
       this._userService.obtainRole(this.datauser.id!, empresaId).subscribe({
         next: (data) => {
           if (data.status) {

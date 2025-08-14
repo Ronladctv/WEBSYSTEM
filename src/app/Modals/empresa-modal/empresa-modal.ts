@@ -122,7 +122,8 @@ export class EmpresaModal implements OnInit {
         if (data.status) {
           const mensaje = isNew ? "La empresa se creó correctamente." : "La empresa se actualizó correctamente.";
           this.notifierService.showNotification(mensaje, 'Listo', 'success');
-          window.location.reload();
+          const result = isNew ? "creado" : "editado";
+          this.dialogoReferencia.close(result);
         } else {
           this.notifierService.showNotification(data.msg, 'Error', 'error');
         }

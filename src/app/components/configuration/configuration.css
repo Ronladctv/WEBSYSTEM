@@ -103,6 +103,17 @@ mat-form-field {
     color: #d32f2f;
 }
 
+.small-raised-button.color-accent {
+    background-color: #66e241ae;
+    color: white;
+}
+
+.small-raised-button.color-accent:hover {
+    background-color: white;
+    color: #66e241ae;
+}
+
+
 .custom-tooltip-Ron {
     background-color: #6200EE !important;
     color: white !important;

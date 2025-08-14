@@ -29,4 +29,13 @@ export class RolService {
   AsignarPermisos(roleId: string, permissionIds: string[]): Observable<ResponseAcces> {
     return this.http.post<ResponseAcces>(`${this.apiUrl}AsignarPermisos/${roleId}`, permissionIds);
   }
+
+  activeRole(roleId: string): Observable<ResponseAcces> {
+    return this.http.post<ResponseAcces>(`${this.apiUrl}ActivateRole/${roleId}`, null)
+  }
+
+  disableRole(roleId: string): Observable<ResponseAcces> {
+    return this.http.post<ResponseAcces>(`${this.apiUrl}DesactiveRole/${roleId}`, null)
+  }
+
 }

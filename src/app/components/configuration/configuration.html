@@ -5,7 +5,7 @@
     </mat-card-title>
     <div style="display: flex; justify-content: flex-end; align-items: center; margin-bottom: 12px;">
         <button mat-raised-button color="primary" (click)="NewRole()" matTooltip="Agregar Nuevo Rol">
-            <mat-icon>person_add</mat-icon>
+            <mat-icon>difference_24</mat-icon>
             Agregar
         </button>
     </div>
@@ -23,11 +23,11 @@
                 <button mat-icon-button style="flex-shrink: 0; margin-right: 10px;"
                     (click)="EditRole(Role); $event.stopPropagation()" matTooltip="Editar Role"
                     class="small-icon-button color-primary">
-                    <mat-icon>edit</mat-icon>
+                    <mat-icon>edit_location_24</mat-icon>
                 </button>
-                <button mat-icon-button style="flex-shrink: 0; margin-right: 35px;" matTooltip="Eliminar Role"
-                    class="small-icon-button color-warn">
-                    <mat-icon>delete</mat-icon>
+                <button mat-icon-button style="flex-shrink: 0; margin-right: 35px;" matTooltip="Deshabilitar Rol"
+                    class="small-icon-button color-warn" (click)="DeleteRole(Role.id)">
+                    <mat-icon>playlist_remove_24</mat-icon>
                 </button>
             </div>
             <!-- Expandable Content -->
@@ -58,7 +58,75 @@
                             <!-- Imagen con altura igual a la altura del bloque Nombre + Apellido -->
                             <div
                                 style="width: 180px; height: auto; border-radius: 8px; overflow: hidden; box-shadow: 0 0 5px rgba(0,0,0,0.1);">
-                                <img [src]="Role.urlImagen ? 'https://recursosstorage.blob.core.windows.net/roles/' + Role.urlImagen : 'https://recursosstorage.blob.core.windows.net/default/roldefault.png'" 
+                                <img [src]="Role.urlImagen ? 'https://recursosstorage.blob.core.windows.net/roles/' + Role.urlImagen : 'https://recursosstorage.blob.core.windows.net/default/roldefault.png'"
+                                    alt="Imagen usuario" style="width: 100%; height: 100%; object-fit: cover;" />
+                            </div>
+                        </div>
+                        <!-- Bloque permisos separado debajo -->
+                        <h4 style="margin-bottom: 5px; font-weight: 600; color: #444;">Permisos</h4>
+                        <div style="margin-top: 24px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;">
+                            @for (perm of Role.permissions; track perm.id) {
+                            <mat-form-field appearance="outline" style="width: 100%;">
+                                <input matInput [value]="perm.name ?? '(Sin nombre)'" readonly>
+                            </mat-form-field>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        }
+    </div>
+</mat-card>
+<mat-card class="mat-elevation-z8">
+    <mat-card-title style="font-size: 1.5rem; font-weight: 600; margin-bottom: 12px;">
+        Roles Inactivos
+    </mat-card-title>
+    <div
+        style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; grid-auto-rows: minmax(auto, max-content);">
+        @for (Role of RoleAdminInactive(); track Role.id) {
+        <div style="width: 100%; border: 1px solid #ccc; border-radius: 6px; overflow: hidden; align-self: start;">
+            <!-- Header -->
+            <div style="width: 100%; padding:  8px 16px 8px 16px; background-color: #f3f3f3; display: flex; justify-content: space-between; align-items: center; cursor: pointer;"
+                (click)="toggleUserRoleInactive(Role.id!)">
+                <div style="flex: 1; display: flex; align-items: center; gap: 8px;">
+                    <mat-icon>{{ Role.icon }}</mat-icon>
+                    <strong>{{ Role.description }}</strong>
+                </div>
+                <button mat-icon-button style="flex-shrink: 0; margin-right: 35px;" matTooltip="Habilitar Rol"
+                    class="small-raised-button color-accent" (click)="ActivateRole(Role.id)">
+                    <mat-icon>playlist_add_check_24</mat-icon>
+                </button>
+            </div>
+            <!-- Expandable Content -->
+            <div class="expandable-content" [class.expanded]="expandedRoleInactive() === Role.id">
+                <div style="padding: 12px; background-color: white;">
+                    <div
+                        style="max-width: 100%; border: 1px solid #ccc; border-radius: 6px; overflow: hidden; padding: 16px;">
+                        <div style="display: flex; align-items: stretch; gap: 24px;">
+                            <!-- Bloque Nombre + Apellido -->
+                            <div style="display: flex; flex-direction: column; gap: 24px; flex: 1;">
+                                <div style="display: flex; flex-wrap: wrap; gap: 4%;">
+                                    <mat-form-field appearance="outline" style="flex: 1 1 48%; height: 56px;">
+                                        <mat-label>Nombre</mat-label>
+                                        <input matInput [value]="Role.nameRol" readonly style="font-size: 13px;" />
+                                        <mat-icon matSuffix
+                                            style="color: green; font-size: 18px;">account_box</mat-icon>
+                                    </mat-form-field>
+                                </div>
+                                <div style="display: flex; flex-wrap: wrap; gap: 4%;">
+                                    <mat-form-field appearance="outline" style="flex: 1 1 48%; height: 56px;">
+                                        <mat-label>Descripción</mat-label>
+                                        <input matInput [value]="Role.description" readonly style="font-size: 13px;" />
+                                        <mat-icon matSuffix
+                                            style="color: aqua; font-size: 18px;">person_outline</mat-icon>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <!-- Imagen con altura igual a la altura del bloque Nombre + Apellido -->
+                            <div
+                                style="width: 180px; height: auto; border-radius: 8px; overflow: hidden; box-shadow: 0 0 5px rgba(0,0,0,0.1);">
+                                <img [src]="Role.urlImagen ? 'https://recursosstorage.blob.core.windows.net/roles/' + Role.urlImagen : 'https://recursosstorage.blob.core.windows.net/default/roldefault.png'"
                                     alt="Imagen usuario" style="width: 100%; height: 100%; object-fit: cover;" />
                             </div>
                         </div>
@@ -87,7 +155,7 @@
     </mat-card-title>
     <div style="display: flex; justify-content: flex-end; align-items: center; margin-bottom: 12px;">
         <button mat-raised-button color="primary" (click)="NewPermission()" matTooltip="Agregar Nuevo Permiso">
-            <mat-icon>person_add</mat-icon>
+            <mat-icon>note_stack_add_24</mat-icon>
             Agregar
         </button>
     </div>
@@ -103,15 +171,15 @@
                     <mat-icon>{{ permission.icon }}</mat-icon>
                     <strong>{{ permission.name }}</strong>
                 </div>
-                <button mat-icon-button style="flex-shrink: 0; margin-right: 10px;"
+                <button mat-icon-button style="flex-shrink: 0; margin-right: 30px;"
                     (click)="EditPermiso(permission); $event.stopPropagation()" matTooltip="Editar Permiso"
                     class="small-icon-button color-primary">
-                    <mat-icon>edit</mat-icon>
+                    <mat-icon>table_edit_24</mat-icon>
                 </button>
-                <button mat-icon-button style="flex-shrink: 0; margin-right: 35px;" matTooltip="Eliminar Permiso"
+                <!-- <button mat-icon-button style="flex-shrink: 0; margin-right: 35px;" matTooltip="Eliminar Permiso"
                     class="small-icon-button color-warn">
                     <mat-icon>delete</mat-icon>
-                </button>
+                </button> -->
             </div>
             <!-- Expandable Content -->
             <div class="expandable-content" [class.expanded]="expandedPermission() === permission.id">
@@ -141,7 +209,7 @@
                             <!-- Imagen con altura igual a la altura del bloque Nombre + Apellido -->
                             <div
                                 style="width: 140px; height: 140px; border-radius: 8px; overflow: hidden; box-shadow: 0 0 5px rgba(0,0,0,0.1);">
-                                <img [src]="permission.urlImagen ? 'https://recursosstorage.blob.core.windows.net/permisos/' + permission.urlImagen : 'https://recursosstorage.blob.core.windows.net/default/permisosdefault.png'" 
+                                <img [src]="permission.urlImagen ? 'https://recursosstorage.blob.core.windows.net/permisos/' + permission.urlImagen : 'https://recursosstorage.blob.core.windows.net/default/permisosdefault.png'"
                                     alt="Imagen usuario" style="width: 100%; height: 100%; object-fit: cover;" />
                             </div>
                         </div>
@@ -179,7 +247,7 @@
             </mat-form-field>
             <div style="flex: 1 1 50%; display: flex; justify-content: flex-end;">
                 <button mat-raised-button color="primary" (click)="NewAccion()" matTooltip="Agregar Accion">
-                    <mat-icon>person_add</mat-icon>
+                    <mat-icon>post_add_24</mat-icon>
                     Agregar
                 </button>
             </div>
@@ -203,12 +271,12 @@
             <td mat-cell *matCellDef="let element" style="display: flex; gap: 8px; justify-content: center;">
                 <button mat-icon-button aria-label="Editar" class="small-icon-button color-primary"
                     (click)="EditAccion(element)" matTooltip="Editar Accion">
-                    <mat-icon class="small-icon">edit</mat-icon>
+                    <mat-icon class="small-icon">edit_note_24</mat-icon>
                 </button>
-                <button mat-icon-button aria-label="Eliminar" class="small-icon-button color-warn"
+                <!-- <button mat-icon-button aria-label="Eliminar" class="small-icon-button color-warn"
                     matTooltip="Eliminar Accion">
                     <mat-icon class="small-icon">delete</mat-icon>
-                </button>
+                </button> -->
             </td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumnsmaster"></tr>

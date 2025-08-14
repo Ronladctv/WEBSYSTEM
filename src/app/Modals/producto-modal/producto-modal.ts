@@ -54,7 +54,7 @@ export class ProductoModal implements OnInit {
   tituloAccion: string = "Nuevo";
   botonAccion: string = "Guardar";
   inputpassword: boolean = true;
-  public typeProduct = signal<CategoryType[]>([]);
+  public typeProducts = signal<CategoryType[]>([]);
   selectedFile: File | null = null;
 
   constructor(
@@ -77,7 +77,7 @@ export class ProductoModal implements OnInit {
       price: ["", Validators.required],
       stock: ["", Validators.required],
       state: [false, Validators.required],
-      typeProduct: ["", Validators.required],
+      typeProductId: ["", Validators.required],
       codePr: ["", Validators.required],
       porcentageDiscount: ["", Validators.required],
       porcentageIva: ["", Validators.required],
@@ -87,7 +87,7 @@ export class ProductoModal implements OnInit {
       next: (data) => {
         if (data.status) {
           if (data.status && data.value.length > 0) {
-            this.typeProduct.set(data.value)
+            this.typeProducts.set(data.value)
           }
         } else {
           this.notifierService.showNotification(data.msg, 'Error', 'error');
@@ -101,7 +101,7 @@ export class ProductoModal implements OnInit {
 
   ngOnInit(): void {
     if (this.dataProducto) {
-      console.log(this.dataProducto)
+      console.log("prueba" + this.dataProducto)
       this.formProducto.patchValue({
         name: this.dataProducto.name,
         description: this.dataProducto.description,
@@ -110,7 +110,7 @@ export class ProductoModal implements OnInit {
         stock: this.dataProducto.stock,
         state: this.dataProducto.state,
         codePr: this.dataProducto.codePr,
-        typeProduct: this.dataProducto.typeProductId,
+        typeProductId: this.dataProducto.typeProductId,
         porcentageDiscount: this.dataProducto.porcentageDiscount,
         porcentageIva: this.dataProducto.porcentageIva
 
@@ -141,7 +141,7 @@ export class ProductoModal implements OnInit {
 
     formData.append('stock', this.formProducto.value.stock);
     formData.append('state', this.formProducto.value.state);
-    formData.append('typeProductId', this.formProducto.value.typeProduct);
+    formData.append('typeProductId', this.formProducto.value.typeProductId);
     formData.append('codePr', this.formProducto.value.codePr);
 
 
@@ -155,7 +155,8 @@ export class ProductoModal implements OnInit {
         if (data.status) {
           const mensaje = isNew ? "El producto se creó correctamente." : "El producto se actualizó correctamente.";
           this.notifierService.showNotification(mensaje, 'Listo', 'success');
-          window.location.reload();
+          const result = isNew ? "creado" : "editado";
+          this.dialogoReferencia.close(result);
         } else {
           this.notifierService.showNotification(data.msg, 'Error', 'error');
         }

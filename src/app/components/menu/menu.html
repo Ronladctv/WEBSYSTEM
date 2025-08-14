@@ -33,13 +33,13 @@
             <th mat-header-cell *matHeaderCellDef style="width: 80px;"> Acciones </th>
             <td mat-cell *matCellDef="let element" style="display: flex; gap: 8px; justify-content: center;">
                 <button mat-icon-button aria-label="Editar" class="small-icon-button color-primary" (click)="EditMenu(element)"
-                    matTooltip="Editar usuario">
-                    <mat-icon class="small-icon">edit</mat-icon>
+                    matTooltip="Editar menu">
+                    <mat-icon class="small-icon">edit_note_24</mat-icon>
                 </button>
-                <button mat-icon-button aria-label="Eliminar" class="small-icon-button color-warn"
+                <!-- <button mat-icon-button aria-label="Eliminar" class="small-icon-button color-warn"
                     matTooltip="Eliminar usuario">
                     <mat-icon class="small-icon">delete</mat-icon>
-                </button>
+                </button> -->
             </td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -69,15 +69,15 @@
                 <div style="flex: 1;">
                     <strong>{{ role.nombre }}</strong>
                 </div>
-                <button mat-icon-button style="flex-shrink: 0; margin-right: 10px;"
-                    (click)="EditRoleMenu(role); $event.stopPropagation()" matTooltip="Editar Empresa"
+                <button mat-icon-button style="flex-shrink: 0; margin-right: 35px;"
+                    (click)="EditRoleMenu(role); $event.stopPropagation()" matTooltip="Editar los menus del rol"
                     class="small-icon-button color-primary">
-                    <mat-icon>edit</mat-icon>
+                    <mat-icon>edit_note_24</mat-icon>
                 </button>
-                <button mat-icon-button style="flex-shrink: 0; margin-right: 35px;" matTooltip="Eliminar Empresa"
+                <!-- <button mat-icon-button style="flex-shrink: 0; margin-right: 35px;" matTooltip="Eliminar Empresa"
                     class="small-icon-button color-warn">
                     <mat-icon>delete</mat-icon>
-                </button>
+                </button> -->
             </div>
 
             <!-- Expandable Content -->

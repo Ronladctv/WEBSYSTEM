@@ -8,7 +8,7 @@
                     <mat-select formControlName="roleList">
                         <mat-option value="" disabled>Seleccione el rol al que desea asignar los menús.</mat-option>
                         @for (role of roleList(); track role.id ) {
-                        <mat-option [value]="role.id">{{ role.nameRol}}</mat-option>
+                        <mat-option [value]="role.id" [disabled]="!role.state">{{ role.nameRol}}</mat-option>
                         }
                     </mat-select>
                     <mat-icon matSuffix>supervisor_account</mat-icon>
@@ -31,6 +31,6 @@
 </mat-dialog-content>
 <mat-dialog-actions>
     <button matButton mat-dialog-close color="warn">Volver</button>
-    <button matButton mat-dialog-close color="warn" [disabled]="formMenuRol.invalid"
+    <button matButton color="warn" [disabled]="disableSaveButton || formMenuRol.invalid"
         (click)="save()">{{botonAccion}}</button>
 </mat-dialog-actions>

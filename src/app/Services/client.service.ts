@@ -27,5 +27,12 @@ export class ClientService {
     return this.http.post<ResponseAcces>(`${this.apiUrl}Register`, formData)
   }
 
+  activeCliente(clienteId: string): Observable<ResponseAcces> {
+    return this.http.post<ResponseAcces>(`${this.apiUrl}ActivateCliente/${clienteId}`, null)
+  }
+
+  disableCliente(clienteId: string): Observable<ResponseAcces> {
+    return this.http.post<ResponseAcces>(`${this.apiUrl}DesactiveCliente/${clienteId}`, null)
+  }
 
 }

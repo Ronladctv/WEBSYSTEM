@@ -7,5 +7,6 @@ export interface Provedores {
     phone:number,
     document:number,
     ruc:number,
-    urlImagen:string    
+    urlImagen:string,
+    state:boolean    
 }

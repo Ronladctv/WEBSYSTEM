@@ -15,7 +15,6 @@ export class AccessService {
   constructor() { }
 
   Login(objeto: UserLogin): Observable<ResponseAccesLogin> {
-    debugger
     return this.http.post<ResponseAccesLogin>(`${this.baseUrl}api/Authenticated/Login`, objeto)
   }
   validateToken(token: string): Observable<ResponseAcces> {

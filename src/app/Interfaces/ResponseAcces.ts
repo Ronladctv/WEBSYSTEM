@@ -9,7 +9,7 @@ export interface ResponseAcces
 export interface ResponseAccesLogin
 {
     status:boolean;
-    msg:LoginResponse,
+    msg:string,
     value:any
 }
 

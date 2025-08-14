@@ -100,13 +100,14 @@ export class MenuModal {
       url: this.formMenu.value.url,
       icono: this.formMenu.value.icono
     }
-
+    const isNew = this.dataMenu == null;
     if (id != null) {
       this._menuService.register(modelo).subscribe({
         next: (data) => {
           if (data.status) {
             this.notifierService.showNotification('Menu registrado correctamente.', 'Listo', 'success');
-            window.location.reload();
+            const result = isNew ? "creado" : "editado";
+            this.dialogoReferencia.close(result);
           } else {
             this.notifierService.showNotification(data.msg, 'Error', 'error');
           }

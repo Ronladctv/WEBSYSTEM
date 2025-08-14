@@ -34,8 +34,8 @@
                     <mat-label>Tipo de Producto</mat-label>
                     <mat-select formControlName="typeProductId">
                         <mat-option value="" disabled>Seleccione tipo de producto</mat-option>
-                        @for (categoriType of typeProduct(); track categoriType.id) {
-                        <mat-option [value]="categoriType.id">{{ categoriType.name }}</mat-option>
+                        @for (typeProduct of typeProducts(); track typeProduct.id) {
+                        <mat-option [value]="typeProduct.id">{{ typeProduct.name }}</mat-option>
                         }
                     </mat-select>
                     <mat-icon matSuffix>category</mat-icon>
@@ -127,6 +127,6 @@
 </mat-dialog-content>
 <mat-dialog-actions>
     <button matButton mat-dialog-close color="warn">Volver</button>
-    <button matButton mat-dialog-close color="warn" [disabled]="formProducto.invalid"
+    <button matButton color="warn" [disabled]="formProducto.invalid"
         (click)="save()">{{botonAccion}}</button>
 </mat-dialog-actions>

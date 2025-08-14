@@ -1,4 +1,4 @@
-import { Component, Inject, signal } from '@angular/core';
+import { Component, Inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DATE_FORMATS, MatNativeDateModule } from '@angular/material/core';
@@ -49,7 +49,7 @@ export const MY_DATE_FORMATS = {
   styleUrl: './menu-role-modal.css',
   providers: [{ provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS }]
 })
-export class MenuRoleModal {
+export class MenuRoleModal implements OnInit {
 
   formMenuRol: FormGroup;
   tituloAccion: string = "Nuevo";
@@ -57,7 +57,7 @@ export class MenuRoleModal {
   public menuList = signal<Menu[]>([]);
   public roleList = signal<Roles[]>([]);
   selectedFile: File | null = null;
-
+  public disableSaveButton = false;
 
   constructor(
 
@@ -82,7 +82,6 @@ export class MenuRoleModal {
       next: (data) => {
         if (data.status) {
           if (data.status && data.value.length > 0) {
-            console.log(data.value)
             this.roleList.set(data.value)
           }
         } else {
@@ -110,7 +109,10 @@ export class MenuRoleModal {
 
   ngOnInit(): void {
     if (this.dataRole) {
-      console.log(this.dataRole)
+      if (!this.dataRole.state) {
+        this.disableSaveButton = true;
+        this.notifierService.showNotification('El menu tiene un rol deshabilitado, no es posible actualizarlo.', 'Alerta', 'warning');
+      }
       this.formMenuRol.patchValue({
         roleList: this.dataRole.id,
         menuList: this.dataRole.menus.map(p => p.id),
@@ -118,6 +120,14 @@ export class MenuRoleModal {
       this.tituloAccion = "Editar";
       this.botonAccion = "Actualizar";
     }
+    this.formMenuRol.get('roleList')?.valueChanges.subscribe(rolId => {
+      const rolCompleto = this.roleList().find(r => r.id === rolId);
+      if (rolCompleto?.state) {
+        this.disableSaveButton = false;
+      } else {
+        this.disableSaveButton = true;
+      }
+    });
   }
 
   save() {
@@ -126,14 +136,16 @@ export class MenuRoleModal {
       return;
     }
 
-    const roleId = this.formMenuRol.value.roleList; 
-    const menuIds = this.formMenuRol.value.menuList;   
+    const roleId = this.formMenuRol.value.roleList;
+    const menuIds = this.formMenuRol.value.menuList;
 
+    const isNew = this.dataRole == null;
     this._menuService.asignarMenu(roleId, menuIds).subscribe({
       next: (data) => {
         if (data.status) {
           this.notifierService.showNotification('Permisos asignados correctamente.', 'Listo', 'success');
-          window.location.reload();
+          const result = isNew ? "creado" : "editado";
+          this.dialogoReferencia.close(result);
         } else {
           this.notifierService.showNotification(data.msg, 'Error', 'error');
         }
