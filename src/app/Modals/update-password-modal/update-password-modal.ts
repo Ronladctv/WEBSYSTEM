@@ -97,7 +97,6 @@ export class UpdatePasswordModal implements OnInit {
             if (userId == usuarioId) {
               localStorage.clear();
               this.router.navigate(['/login']);
-              this.dialogoReferencia.close();
             } else {
               this.dialogoReferencia.close("editado");
             }

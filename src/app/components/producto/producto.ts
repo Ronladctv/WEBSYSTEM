@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, inject, OnInit, signal, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { materialProviders } from '../../shared-ui';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -12,6 +12,7 @@ import { formatError } from '../../Helper/error.helper';
 import { NotifierService } from '../../notifier.service';
 import Swal from 'sweetalert2';
 import { firstValueFrom } from 'rxjs';
+import { SecurityService } from '../../Services/security.service';
 
 @Component({
   selector: 'app-producto',
@@ -35,17 +36,27 @@ export class Producto implements OnInit {
   public productoAdmin = signal<Productos[]>([]);
   public productoAdminInactive = signal<Productos[]>([]);
 
+  [key: string]: any;
+
+  addProducto: boolean = false;
+  editProducto: boolean = false;
+  deleteProducto: boolean = false;
+  activateProducto: boolean = false;
+
   readonly dialog = inject(MatDialog);
 
 
   constructor(
     private _productoService: ProductoService,
+    private _securityService: SecurityService,
+    private cd: ChangeDetectorRef,
     private notifierService: NotifierService) {
 
   }
 
   ngOnInit(): void {
     this.mostrarProducto();
+    this.validarPermisos();
   }
 
   @ViewChild('paginatorProduct') paginator!: MatPaginator;
@@ -93,6 +104,22 @@ export class Producto implements OnInit {
       error: (e) => {
         this.notifierService.showNotification(formatError(e), 'Error', 'error');
       }
+    });
+  }
+
+  validarPermisos(): void {
+    const permisos = [
+      { recurso: 'Producto', accion: 'Crear', prop: 'addProducto' },
+      { recurso: 'Producto', accion: 'Actualizar', prop: 'editProducto' },
+      { recurso: 'Producto', accion: 'Eliminar', prop: 'deleteProducto' },
+      { recurso: 'Producto', accion: 'Activar', prop: 'activateProducto' }
+    ];
+
+    permisos.forEach(p => {
+      this._securityService.ValidatePermiso(p.recurso, p.accion).subscribe(result => {
+        this[p.prop] = result.value;
+        this.cd.detectChanges();
+      });
     });
   }
 

@@ -11,10 +11,16 @@ export class SecurityService {
 
   private endpoint: string = settings.endPoint;
   private apiUrl: string = this.endpoint + "api/Security/";
+  private usuarioId = localStorage.getItem('UsuarioId') ?? '';
+  private empresaId = localStorage.getItem('EmpresaId') ?? '';
 
   constructor(private http: HttpClient) { }
-  
-  ValudateUrl(path:string, usuarioId:string, empresaId:string): Observable<ResponseAcces> {
+
+  ValudateUrl(path: string, usuarioId: string, empresaId: string): Observable<ResponseAcces> {
     return this.http.get<ResponseAcces>(`${this.apiUrl}ValidateUrl/${path}/${usuarioId}/${empresaId}`)
+  }
+
+  ValidatePermiso(permission: string, accion: string): Observable<ResponseAcces> {
+    return this.http.get<ResponseAcces>(`${this.apiUrl}PermisionAccion/${permission}/${accion}/${this.usuarioId}/${this.empresaId}`)
   }
 }

@@ -6,7 +6,8 @@
     </button>
     <button mat-button
         style="flex: 1; font-weight: 600; font-size: 0.9rem; height: 100%; border-radius: 4px !important;"
-        (click)="mostrarTable.set(true); mostrarRegistro.set(false)" [class.active]="mostrarTable()" (click)="UpdatePaginator()">
+        (click)="mostrarTable.set(true); mostrarRegistro.set(false)" [class.active]="mostrarTable()"
+        (click)="UpdatePaginator()">
         Tabla
     </button>
 </mat-card>
@@ -22,10 +23,12 @@
                 <input matInput (keyup)="applyFilter2($event)" placeholder="Ex. ium" #input>
             </mat-form-field>
             <div style="flex: 1 1 50%; display: flex; justify-content: flex-end;">
+                @if (addUser) {
                 <button mat-raised-button color="primary" (click)="NewUser()" matTooltip="Agregar Usuario">
                     <mat-icon>person_add</mat-icon>
                     Agregar
                 </button>
+                }
             </div>
         </div>
     </div>
@@ -54,15 +57,17 @@
             <th mat-header-cell *matHeaderCellDef style="width: 80px;"> Acciones </th>
             <td mat-cell *matCellDef="let element" style="display: flex; gap: 8px; justify-content: center;">
                 <button mat-icon-button aria-label="Editar" class="small-icon-button color-primary"
-                    (click)="EditUser(element)" matTooltip="Editar usuario">
+                    (click)="EditUser(element)" matTooltip="Editar usuario"
+                    [style.visibility]="editUser ? 'visible' : 'hidden'">
                     <mat-icon class="small-icon">edit</mat-icon>
                 </button>
                 <button mat-icon-button aria-label="Eliminar" class="small-icon-button color-warn"
-                    matTooltip="Deshabilitar usuario" (click)="DeleteUserAdmin(element.id)">
+                    matTooltip="Deshabilitar usuario" (click)="DeleteUserAdmin(element.id)"
+                    [style.visibility]="deleteUser ? 'visible' : 'hidden'">
                     <mat-icon class="small-icon">person_add_disabled_24</mat-icon>
                 </button>
                 <button mat-icon-button aria-label="Editar" class="small-raised-button color-accent"
-                    (click)="UpdatePassword(element)" matTooltip="Cambiar Clave">
+                    (click)="UpdatePassword(element)" matTooltip="Cambiar Clave" [style.visibility]="UpdatePasswordUser ? 'visible' : 'hidden'">
                     <mat-icon class="small-icon">admin_panel_settings</mat-icon>
                 </button>
             </td>
@@ -70,7 +75,8 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumnsAdmin"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumnsAdmin;"></tr>
     </table>
-    <mat-paginator #paginatorUserAdmin [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of periodic elements">
+    <mat-paginator #paginatorUserAdmin [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+        aria-label="Select page of periodic elements">
     </mat-paginator>
 </mat-card>
 
@@ -112,7 +118,8 @@
             <th mat-header-cell *matHeaderCellDef style="width: 80px;"> Acciones </th>
             <td mat-cell *matCellDef="let element" style="display: flex; gap: 8px; justify-content: center;">
                 <button mat-icon-button aria-label="Eliminar" class="small-raised-button color-accent"
-                    matTooltip="Activar usuario" (click)="ActivateUserEmpresa(element.id)">
+                    matTooltip="Activar usuario" (click)="ActivateUserEmpresa(element.id)"
+                    [style.visibility]="activateUser ? 'visible' : 'hidden'">
                     <mat-icon class="small-icon">how_to_reg_24</mat-icon>
                 </button>
             </td>
@@ -120,7 +127,8 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumnsAdminInactive"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumnsAdminInactive;"></tr>
     </table>
-    <mat-paginator #paginatorUserAdminInactive [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of periodic elements">
+    <mat-paginator #paginatorUserAdminInactive [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+        aria-label="Select page of periodic elements">
     </mat-paginator>
 </mat-card>
 
@@ -135,10 +143,12 @@
                 <input matInput (keyup)="applyFilter1($event)" placeholder="Ex. ium" #input>
             </mat-form-field>
             <div style="flex: 1 1 50%; display: flex; justify-content: flex-end;">
+                @if (addUser) {
                 <button mat-raised-button color="primary" (click)="NewUser()" matTooltip="Agregar Usuario">
                     <mat-icon>person_add</mat-icon>
                     Agregar
                 </button>
+                }
             </div>
         </div>
     </div>
@@ -167,15 +177,17 @@
             <th mat-header-cell *matHeaderCellDef style="width: 80px;"> Acciones </th>
             <td mat-cell *matCellDef="let element" style="display: flex; gap: 8px; justify-content: center;">
                 <button mat-icon-button aria-label="Editar" class="small-icon-button color-primary"
-                    (click)="EditUser(element)" matTooltip="Editar usuario">
+                    (click)="EditUser(element)" matTooltip="Editar usuario"
+                    [style.visibility]="editUser ? 'visible' : 'hidden'">
                     <mat-icon class="small-icon">edit</mat-icon>
                 </button>
                 <button mat-icon-button aria-label="Eliminar" class="small-icon-button color-warn"
-                    matTooltip="Deshabilitar usuario" (click)="DeleteUser(element.id)">
+                    matTooltip="Deshabilitar usuario" (click)="DeleteUser(element.id)"
+                    [style.visibility]="deleteUser ? 'visible' : 'hidden'">
                     <mat-icon class="small-icon">person_add_disabled_24</mat-icon>
                 </button>
                 <button mat-icon-button aria-label="Eliminar" class="small-raised-button color-accent"
-                    (click)="UpdatePassword(element)" matTooltip="Cambiar Clave">
+                    (click)="UpdatePassword(element)" matTooltip="Cambiar Clave" [style.visibility]="UpdatePasswordUser ? 'visible' : 'hidden'">
                     <mat-icon class="small-icon">admin_panel_settings</mat-icon>
                 </button>
             </td>
@@ -183,7 +195,8 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
-    <mat-paginator #paginatorUser [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of periodic elements">
+    <mat-paginator #paginatorUser [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+        aria-label="Select page of periodic elements">
     </mat-paginator>
 </mat-card>
 
@@ -225,7 +238,8 @@
             <th mat-header-cell *matHeaderCellDef style="width: 80px;"> Acciones </th>
             <td mat-cell *matCellDef="let element" style="display: flex; gap: 8px; justify-content: center;">
                 <button mat-icon-button aria-label="Eliminar" class="small-raised-button color-accent"
-                    matTooltip="Activar usuario" (click)="ActivateUser(element.id)">
+                    matTooltip="Activar usuario" (click)="ActivateUser(element.id)"
+                    [style.visibility]="activateUser ? 'visible' : 'hidden'">
                     <mat-icon class="small-icon">how_to_reg_24</mat-icon>
                 </button>
             </td>
@@ -233,7 +247,8 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumnsInactive"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumnsInactive;"></tr>
     </table>
-    <mat-paginator #paginatorUserInactive [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of periodic elements">
+    <mat-paginator #paginatorUserInactive [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+        aria-label="Select page of periodic elements">
     </mat-paginator>
 </mat-card>
 }
@@ -244,10 +259,12 @@
         Usuarios
     </mat-card-title>
     <div style="display: flex; justify-content: flex-end; align-items: center; margin-bottom: 12px;">
+        @if (addUser) {
         <button mat-raised-button color="primary" (click)="NewUser()" matTooltip="Agregar Usuario">
             <mat-icon>person_add</mat-icon>
             Agregar
         </button>
+        }
     </div>
     <div style="display: flex; flex-direction: column; gap: 12px;">
         @for (user of useradmin(); track user.id) {
@@ -261,15 +278,16 @@
                 </div>
                 <button mat-icon-button style="flex-shrink: 0; margin-right: 10px;"
                     (click)="EditUser(user); $event.stopPropagation()" matTooltip="Editar usuario"
-                    class="small-icon-button color-primary">
+                    class="small-icon-button color-primary" [style.visibility]="editUser ? 'visible' : 'hidden'">
                     <mat-icon>edit</mat-icon>
                 </button>
                 <button mat-icon-button style="flex-shrink: 0; margin-right: 10px;" matTooltip="Deshabilitar usuario"
-                    class="small-icon-button color-warn" (click)="DeleteUserAdmin(user.id!)">
+                    class="small-icon-button color-warn" (click)="DeleteUserAdmin(user.id!)"
+                    [style.visibility]="deleteUser ? 'visible' : 'hidden'">
                     <mat-icon>person_add_disabled_24</mat-icon>
                 </button>
                 <button mat-icon-button style="flex-shrink: 0; margin-right: 35px;" (click)="UpdatePassword(user)"
-                    matTooltip="Cambiar Clave" class="small-raised-button color-accent">
+                    matTooltip="Cambiar Clave" class="small-raised-button color-accent" [style.visibility]="UpdatePasswordUser ? 'visible' : 'hidden'">
                     <mat-icon>admin_panel_settings</mat-icon>
                 </button>
             </div>
@@ -344,7 +362,8 @@
                     <strong>{{ user.name }} {{ user.lastName }}</strong>
                 </div>
                 <button mat-icon-button style="flex-shrink: 0; margin-right: 35px;" matTooltip="Activar usuario"
-                    class="small-raised-button color-accent" (click)="ActivateUserEmpresa(user.id!)">
+                    class="small-raised-button color-accent" (click)="ActivateUserEmpresa(user.id!)"
+                    [style.visibility]="activateUser ? 'visible' : 'hidden'">
                     <mat-icon>how_to_reg_24</mat-icon>
                 </button>
             </div>
@@ -410,10 +429,12 @@
         Usuarios Totales
     </mat-card-title>
     <div style="display: flex; justify-content: flex-end; align-items: center; margin-bottom: 12px;">
+        @if (addUser) {
         <button mat-raised-button color="primary" (click)="NewUser()" matTooltip="Agregar Usuario">
             <mat-icon>person_add</mat-icon>
             Agregar
         </button>
+        }
     </div>
     <div style="display: flex; flex-direction: column; gap: 12px;">
         @for (user of user(); track user.id) {
@@ -427,15 +448,15 @@
                 </div>
                 <button mat-icon-button style="flex-shrink: 0; margin-right: 10px;"
                     (click)="EditUser(user); $event.stopPropagation()" matTooltip="Editar usuario"
-                    class="small-icon-button color-primary">
+                    class="small-icon-button color-primary" [style.visibility]="editUser ? 'visible' : 'hidden'">
                     <mat-icon>edit</mat-icon>
                 </button>
                 <button mat-icon-button style="flex-shrink: 0; margin-right: 10px;" matTooltip="Deshabilitar usuario"
-                    class="small-icon-button color-warn" (click)="DeleteUser(user.id!)">
+                    class="small-icon-button color-warn" (click)="DeleteUser(user.id!)" [style.visibility]="deleteUser ? 'visible' : 'hidden'">
                     <mat-icon>person_add_disabled_24</mat-icon>
                 </button>
                 <button mat-icon-button style="flex-shrink: 0; margin-right: 35px;" (click)="UpdatePassword(user)"
-                    matTooltip="Cambiar Clave" class="small-raised-button color-accent">
+                    matTooltip="Cambiar Clave" class="small-raised-button color-accent" [style.visibility]="UpdatePasswordUser ? 'visible' : 'hidden'">
                     <mat-icon>admin_panel_settings </mat-icon>
                 </button>
             </div>
@@ -512,7 +533,7 @@
                     <strong>{{ user.name }} {{ user.lastName }}</strong>
                 </div>
                 <button mat-icon-button style="flex-shrink: 0; margin-right: 35px;" matTooltip="Activar usuario"
-                    class="small-raised-button color-accent" (click)="ActivateUser(user.id!)">
+                    class="small-raised-button color-accent" (click)="ActivateUser(user.id!)" [style.visibility]="activateUser ? 'visible' : 'hidden'">
                     <mat-icon>how_to_reg_24</mat-icon>
                 </button>
             </div>

@@ -1,4 +1,4 @@
-import { Component, inject, signal, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, signal, ViewChild } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { Clientes } from '../../Interfaces/clientes';
 import { MatDialog } from '@angular/material/dialog';
@@ -15,6 +15,7 @@ import { formatError } from '../../Helper/error.helper';
 import { NotifierService } from '../../notifier.service';
 import Swal from 'sweetalert2';
 import { firstValueFrom } from 'rxjs';
+import { SecurityService } from '../../Services/security.service';
 
 @Component({
   selector: 'app-cliente',
@@ -41,13 +42,22 @@ export class Cliente {
 
   readonly dialog = inject(MatDialog);
 
+  [key: string]: any;
+
+  addCliente: boolean = false;
+  editCliente: boolean = false;
+  deleteCliente: boolean = false;
+  activateCliente: boolean = false;
 
   constructor(
     private _clienteService: ClientService,
+    private _securityService: SecurityService,
+    private cd: ChangeDetectorRef,
     private notifierService: NotifierService) { }
 
   ngOnInit(): void {
     this.mostrarClient();
+    this.validarPermisos();
   }
 
   @ViewChild('paginatorCliente') paginator!: MatPaginator;
@@ -94,6 +104,22 @@ export class Cliente {
       error: (e) => {
         this.notifierService.showNotification(formatError(e), 'Error', 'error');
       }
+    });
+  }
+
+  validarPermisos(): void {
+    const permisos = [
+      { recurso: 'Cliente', accion: 'Crear', prop: 'addCliente' },
+      { recurso: 'Cliente', accion: 'Actualizar', prop: 'editCliente' },
+      { recurso: 'Cliente', accion: 'Eliminar', prop: 'deleteCliente' },
+      { recurso: 'Cliente', accion: 'Activar', prop: 'activateCliente' },
+    ];
+
+    permisos.forEach(p => {
+      this._securityService.ValidatePermiso(p.recurso, p.accion).subscribe(result => {
+        this[p.prop] = result.value;
+        this.cd.detectChanges();
+      });
     });
   }
 

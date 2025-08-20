@@ -73,6 +73,7 @@ export class PermisoModal implements OnInit {
     this.formPermission = this.fb.group({
       ///Campo para el formulario
       name: ["", Validators.required],
+      module: ["", Validators.required],
       icon: ["", Validators.required],
       accionList: [[], Validators.required],
 
@@ -99,6 +100,7 @@ export class PermisoModal implements OnInit {
       this.formPermission.patchValue({
         name: this.dataPermiso.name,
         icon: this.dataPermiso.icon,
+        module: this.dataPermiso.module,
         accionList: this.dataPermiso.accions.map(p => p.accionId),
       })
       this.tituloAccion = "Editar";
@@ -119,6 +121,7 @@ export class PermisoModal implements OnInit {
 
     formData.append('id', id);
     formData.append('name', this.formPermission.value.name);
+    formData.append('module', this.formPermission.value.module);
     formData.append('icon', this.formPermission.value.icon);
 
     const accionList = this.formPermission.value.accionList || [];
@@ -136,7 +139,8 @@ export class PermisoModal implements OnInit {
         if (data.status) {
           const mensaje = isNew ? "El permiso se creó correctamente." : "El permiso se actualizó correctamente.";
           this.notifierService.showNotification(mensaje, 'Listo', 'success');
-          window.location.reload();
+          const result = isNew ? "creado" : "editado";
+          this.dialogoReferencia.close(result);
         } else {
           this.notifierService.showNotification(data.msg, 'Error', 'error');
         }

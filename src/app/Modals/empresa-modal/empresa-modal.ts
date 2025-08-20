@@ -96,6 +96,8 @@ export class EmpresaModal implements OnInit {
   }
 
   save() {
+
+    const empresaId = localStorage.getItem('EmpresaId') ?? '';
     const EMPTY_GUID = '00000000-0000-0000-0000-000000000000';
     const formData = new FormData();
     const id = this.dataEmpresa?.id ?? EMPTY_GUID;
@@ -123,7 +125,12 @@ export class EmpresaModal implements OnInit {
           const mensaje = isNew ? "La empresa se creó correctamente." : "La empresa se actualizó correctamente.";
           this.notifierService.showNotification(mensaje, 'Listo', 'success');
           const result = isNew ? "creado" : "editado";
-          this.dialogoReferencia.close(result);
+          if (empresaId == id) {
+            window.location.reload();
+          }
+          else {
+            this.dialogoReferencia.close(result);
+          }
         } else {
           this.notifierService.showNotification(data.msg, 'Error', 'error');
         }

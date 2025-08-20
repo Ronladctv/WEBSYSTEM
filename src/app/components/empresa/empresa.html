@@ -24,10 +24,12 @@
                 <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input>
             </mat-form-field>
             <div style="flex: 1 1 50%; display: flex; justify-content: flex-end;">
+                @if (addEmpresa) {
                 <button mat-raised-button color="primary" (click)="NewEmpresa()" matTooltip="Agregar Usuario">
                     <mat-icon>person_add</mat-icon>
                     Agregar
                 </button>
+                }
             </div>
         </div>
     </div>
@@ -60,11 +62,13 @@
             <th mat-header-cell *matHeaderCellDef style="width: 80px;"> Acciones </th>
             <td mat-cell *matCellDef="let element" style="display: flex; gap: 8px; justify-content: center;">
                 <button mat-icon-button aria-label="Editar" class="small-icon-button color-primary"
-                    (click)="EditEmpresa(element)" matTooltip="Editar Empresa">
+                    (click)="EditEmpresa(element)" matTooltip="Editar Empresa"
+                    [style.visibility]="editEmpresa ? 'visible' : 'hidden'">
                     <mat-icon class="small-icon">business_center_24</mat-icon>
                 </button>
                 <button mat-icon-button aria-label="Eliminar" class="small-icon-button color-warn"
-                    matTooltip="Deshabilitar Empresa" (click)="DeleteEmpresa(element.id)">
+                    matTooltip="Deshabilitar Empresa" (click)="DeleteEmpresa(element.id)"
+                    [style.visibility]="deleteEmpresa ? 'visible' : 'hidden'">
                     <mat-icon class="small-icon">remove_from_queue_24</mat-icon>
                 </button>
             </td>
@@ -117,7 +121,8 @@
             <th mat-header-cell *matHeaderCellDef style="width: 80px;"> Acciones </th>
             <td mat-cell *matCellDef="let element" style="display: flex; gap: 8px; justify-content: center;">
                 <button mat-icon-button aria-label="Eliminar" class="small-raised-button color-accent"
-                    matTooltip="Habilitar Empresa" (click)="ActivateEmpresa(element.id)">
+                    matTooltip="Habilitar Empresa" (click)="ActivateEmpresa(element.id)"
+                    [style.visibility]="activateEmpresa ? 'visible' : 'hidden'">
                     <mat-icon class="small-icon">assignment_turned_in_24</mat-icon>
                 </button>
             </td>
@@ -137,10 +142,12 @@
         Empresas Totales
     </mat-card-title>
     <div style="display: flex; justify-content: flex-end; align-items: center; margin-bottom: 12px;">
+        @if (addEmpresa) {
         <button mat-raised-button color="primary" (click)="NewEmpresa()" matTooltip="Agregar Usuario">
             <mat-icon>person_add</mat-icon>
             Agregar
         </button>
+        }
     </div>
     <div style="display: flex; flex-direction: column; gap: 12px;">
         @for (empresa of empresaAdmin(); track empresa.id) {
@@ -154,11 +161,12 @@
                 </div>
                 <button mat-icon-button style="flex-shrink: 0; margin-right: 10px;"
                     (click)="EditEmpresa(empresa); $event.stopPropagation()" matTooltip="Editar Empresa"
-                    class="small-icon-button color-primary">
+                    class="small-icon-button color-primary" [style.visibility]="editEmpresa ? 'visible' : 'hidden'">
                     <mat-icon>business_center_24</mat-icon>
                 </button>
                 <button mat-icon-button style="flex-shrink: 0; margin-right: 35px;" matTooltip="Eliminar Empresa"
-                    class="small-icon-button color-warn" (click)="DeleteEmpresa(empresa.id)">
+                    class="small-icon-button color-warn" (click)="DeleteEmpresa(empresa.id)"
+                    [style.visibility]="deleteEmpresa ? 'visible' : 'hidden'">
                     <mat-icon>remove_from_queue_24</mat-icon>
                 </button>
             </div>
@@ -237,7 +245,7 @@
                     <strong>{{ empresa.nameEmpresa }} {{ empresa.address }}</strong>
                 </div>
                 <button mat-icon-button style="flex-shrink: 0; margin-right: 35px;" matTooltip="Habilitar Empresa"
-                    class="small-raised-button color-accent" (click)="ActivateEmpresa(empresa.id)">
+                    class="small-raised-button color-accent" (click)="ActivateEmpresa(empresa.id)" [style.visibility]="activateEmpresa ? 'visible' : 'hidden'">
                     <mat-icon>assignment_turned_in_24</mat-icon>
                 </button>
             </div>

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ViewChild, OnInit, inject, signal } from '@angular/core';
+import { AfterViewInit, Component, ViewChild, OnInit, inject, signal, ChangeDetectorRef } from '@angular/core';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { materialProviders } from '../../shared-ui';
@@ -13,6 +13,7 @@ import { UpdatePasswordModal } from '../../Modals/update-password-modal/update-p
 import { formatError } from '../../Helper/error.helper';
 import { NotifierService } from '../../notifier.service';
 import Swal from 'sweetalert2';
+import { SecurityService } from '../../Services/security.service';
 
 @Component({
   selector: 'app-index',
@@ -52,10 +53,21 @@ export class Users implements OnInit {
   public mostrarTable = signal(false);
   public mostrarRegistro = signal(true);
 
+
+  [key: string]: any;
+
+  addUser: boolean = false;
+  editUser: boolean = false;
+  deleteUser: boolean = false;
+  activateUser: boolean = false;
+  UpdatePasswordUser: boolean = false;
+
   readonly dialog = inject(MatDialog);
 
   constructor(
     private _userService: UserService,
+    private _securityService: SecurityService,
+    private cd: ChangeDetectorRef,
     private notifierService: NotifierService) { }
 
   ngOnInit(): void {
@@ -63,14 +75,15 @@ export class Users implements OnInit {
     this.mostrarUserAdmin();
     this.mostrarUserAdminInactive();
     this.mostrarUserInactive();
+    this.validarPermisos();
   }
 
   @ViewChild('paginatorUserAdmin') paginatorUserAdmin!: MatPaginator;
   @ViewChild('paginatorUserAdminInactive') paginatorUserAdminInactive!: MatPaginator;
-  
+
   @ViewChild('paginatorUser') paginatorUser!: MatPaginator;
   @ViewChild('paginatorUserInactive') paginatorUserInactive!: MatPaginator;
-  
+
   // ngAfterViewInit() {
   //   //Usuarios Activos
   //   this.dataSource.paginator = this.paginator;
@@ -185,6 +198,23 @@ export class Users implements OnInit {
       error: (e) => {
         this.notifierService.showNotification(formatError(e), 'Error', 'error');
       }
+    });
+  }
+
+  validarPermisos(): void {
+    const permisos = [
+      { recurso: 'Usuarios', accion: 'Crear', prop: 'addUser' },
+      { recurso: 'Usuarios', accion: 'Actualizar', prop: 'editUser' },
+      { recurso: 'Usuarios', accion: 'Eliminar', prop: 'deleteUser' },
+      { recurso: 'Usuarios', accion: 'Activar', prop: 'activateUser' },
+      { recurso: 'Usuarios', accion: 'Actualizar_Clave', prop: 'UpdatePasswordUser' }
+    ];
+
+    permisos.forEach(p => {
+      this._securityService.ValidatePermiso(p.recurso, p.accion).subscribe(result => {
+        this[p.prop] = result.value;
+        this.cd.detectChanges();
+      });
     });
   }
 
@@ -399,7 +429,7 @@ export class Users implements OnInit {
       showLoaderOnConfirm: true,
       preConfirm: () => {
         const empresaId = localStorage.getItem('EmpresaId') ?? '';
-        return this._userService.activeUserEmpresa(usuarioId,empresaId).toPromise()
+        return this._userService.activeUserEmpresa(usuarioId, empresaId).toPromise()
           .then((data) => {
             if (data?.status) {
               Swal.fire('Activado!', 'El usuario ha sido activado correctamente.', 'success');

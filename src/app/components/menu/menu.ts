@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, inject, OnInit, signal, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { materialProviders } from '../../shared-ui';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -11,6 +11,7 @@ import { NotifierService } from '../../notifier.service';
 import { formatError } from '../../Helper/error.helper';
 import { MenuModal } from '../../Modals/menu-modal/menu-modal';
 import { MenuRoleModal } from '../../Modals/menu-role-modal/menu-role-modal';
+import { SecurityService } from '../../Services/security.service';
 
 @Component({
   selector: 'app-menu',
@@ -23,6 +24,11 @@ export class Menu implements AfterViewInit, OnInit {
   displayedColumns: string[] = ['Nombre', 'Url', 'Icono', 'Acciones'];
   dataSource = new MatTableDataSource<MenuDTO>();
 
+  editMenu: boolean = false;
+  addMenu: boolean = false;
+
+  [key: string]: any;
+
   expandedMenu = signal<string | null>(null);
 
   public menuAdmin = signal<MenuDTO[]>([]);
@@ -33,6 +39,8 @@ export class Menu implements AfterViewInit, OnInit {
 
   constructor(
     private _menuService: MenuService,
+    private cd: ChangeDetectorRef,
+    private _securityService: SecurityService,
     private notifierService: NotifierService) {
 
   }
@@ -40,6 +48,7 @@ export class Menu implements AfterViewInit, OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   ngOnInit(): void {
+    this.validarPermisos();
     this.mostrarMenu();
     this.mostrarMenuRelation();
   }
@@ -81,6 +90,20 @@ export class Menu implements AfterViewInit, OnInit {
       error: (e) => {
         this.notifierService.showNotification(formatError(e), 'Error', 'error');
       }
+    });
+  }
+
+  validarPermisos(): void {
+    const permisos = [
+      { recurso: 'Menu', accion: 'Actualizar', prop: 'editMenu' },
+      { recurso: 'Menu', accion: 'Crear', prop: 'addMenu' },
+    ];
+
+    permisos.forEach(p => {
+      this._securityService.ValidatePermiso(p.recurso, p.accion).subscribe(result => {
+        this[p.prop] = result.value;
+        this.cd.detectChanges();
+      });
     });
   }
 

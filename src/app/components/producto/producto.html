@@ -24,10 +24,12 @@
                 <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input>
             </mat-form-field>
             <div style="flex: 1 1 50%; display: flex; justify-content: flex-end;">
+                @if (addProducto) {
                 <button mat-raised-button color="primary" (click)="NewProducto()" matTooltip="Agregar Producto">
                     <mat-icon>add_shopping_cart_24</mat-icon>
                     Agregar
                 </button>
+                }
             </div>
         </div>
     </div>
@@ -67,11 +69,13 @@
             <th mat-header-cell *matHeaderCellDef style="width: 80px;"> Acciones </th>
             <td mat-cell *matCellDef="let element" style="display: flex; gap: 8px; justify-content: center;">
                 <button mat-icon-button aria-label="Editar" class="small-icon-button color-primary"
-                    matTooltip="Editar producto" (click)="EditProducto(element)">
+                    matTooltip="Editar producto" (click)="EditProducto(element)"
+                    [style.visibility]="editProducto ? 'visible' : 'hidden'">
                     <mat-icon class="small-icon">inventory_24</mat-icon>
                 </button>
                 <button mat-icon-button aria-label="Eliminar" class="small-icon-button color-warn"
-                    matTooltip="Eliminar producto" (click)="DeleteProduct(element.id)">
+                    matTooltip="Eliminar producto" (click)="DeleteProduct(element.id)"
+                    [style.visibility]="deleteProducto ? 'visible' : 'hidden'">
                     <mat-icon class="small-icon">remove_shopping_cart_24</mat-icon>
                 </button>
             </td>
@@ -79,7 +83,8 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
-    <mat-paginator #paginatorProduct [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of periodic elements">
+    <mat-paginator #paginatorProduct [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+        aria-label="Select page of periodic elements">
     </mat-paginator>
 </mat-card>
 
@@ -131,7 +136,8 @@
             <th mat-header-cell *matHeaderCellDef style="width: 80px;"> Acciones </th>
             <td mat-cell *matCellDef="let element" style="display: flex; gap: 8px; justify-content: center;">
                 <button mat-icon-button aria-label="Eliminar" class="small-raised-button color-accent"
-                    matTooltip="Activar Producto" (click)="ActivateProduct(element.id)">
+                    matTooltip="Activar Producto" (click)="ActivateProduct(element.id)"
+                    [style.visibility]="activateProducto ? 'visible' : 'hidden'">
                     <mat-icon class="small-icon">shopping_cart_checkout_24</mat-icon>
                 </button>
             </td>
@@ -139,7 +145,8 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumnsInactive"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumnsInactive;"></tr>
     </table>
-    <mat-paginator #paginatorProductInactive [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of periodic elements">
+    <mat-paginator #paginatorProductInactive [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+        aria-label="Select page of periodic elements">
     </mat-paginator>
 </mat-card>
 }
@@ -151,10 +158,12 @@
         Productos Totales
     </mat-card-title>
     <div style="display: flex; justify-content: flex-end; align-items: center; margin-bottom: 12px;">
+        @if (addProducto) {
         <button mat-raised-button color="primary" (click)="NewProducto()" matTooltip="Agregar Usuario">
             <mat-icon>add_shopping_cart_24</mat-icon>
             Agregar
         </button>
+        }
     </div>
     <div style="display: flex; flex-direction: column; gap: 12px;">
         @for (producto of productoAdmin(); track producto.id) {
@@ -168,11 +177,11 @@
                 </div>
                 <button mat-icon-button style="flex-shrink: 0; margin-right: 10px;"
                     (click)="EditProducto(producto); $event.stopPropagation()" matTooltip="Editar producto"
-                    class="small-icon-button color-primary">
+                    class="small-icon-button color-primary" [style.visibility]="editProducto ? 'visible' : 'hidden'">
                     <mat-icon>inventory_24</mat-icon>
                 </button>
                 <button mat-icon-button style="flex-shrink: 0; margin-right: 35px;" matTooltip="Eliminar producto"
-                    class="small-icon-button color-warn" (click)="DeleteProduct(producto.id)">
+                    class="small-icon-button color-warn" (click)="DeleteProduct(producto.id)" [style.visibility]="deleteProducto ? 'visible' : 'hidden'">
                     <mat-icon>remove_shopping_cart_24</mat-icon>
                 </button>
             </div>
@@ -263,7 +272,7 @@
                     <strong>Codigo Producto: {{ producto.codePr }} - {{ producto.name }}</strong>
                 </div>
                 <button mat-icon-button style="flex-shrink: 0; margin-right: 35px;" matTooltip="Activar producto"
-                    class="small-raised-button color-accent" (click)="ActivateProduct(producto.id)">
+                    class="small-raised-button color-accent" (click)="ActivateProduct(producto.id)" [style.visibility]="activateProducto ? 'visible' : 'hidden'">
                     <mat-icon>shopping_cart_checkout_24</mat-icon>
                 </button>
             </div>

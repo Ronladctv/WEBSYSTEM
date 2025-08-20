@@ -142,7 +142,7 @@ export class Configuration implements AfterViewInit, OnInit {
       width: "750px",
       maxWidth: "none",
     }).afterClosed().subscribe(resultado => {
-      if (resultado === "editado") {
+      if (resultado === "creado") {
         // this.ViewRole();
         this.ViewPermission();
         // this.ViewAccion();

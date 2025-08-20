@@ -1,11 +1,11 @@
-<h2 mat-dialog-title>{{tituloAccion}} Usuario</h2>
+<h2 mat-dialog-title>{{tituloAccion}} Acción</h2>
 <mat-dialog-content>
     <form [formGroup]="formAccion">
         <mat-grid-list cols="2" rowHeight="85px" gutterSize="10px">
             <mat-grid-tile colspan="2">
                 <mat-form-field appearance="outline" class="input-custom">
                     <mat-label>Nombre de la Acción</mat-label>
-                    <input matInput formControlName="nombre" placeholder="Nombre de la Acción" autocomplete="off">
+                    <input matInput formControlName="nombre" placeholder="Nombre de la Acción" autocomplete="off" [readonly]="dataAccion ? true : false">
                     <mat-icon matSuffix>title</mat-icon>
                 </mat-form-field>
             </mat-grid-tile>

@@ -141,7 +141,8 @@ export class RolesModal implements OnInit {
               next: (data) => {
                 if (data.status) {
                   this.notifierService.showNotification('Permisos agredados correctamente', 'Listo', 'success');
-                  window.location.reload();
+                  const result = isNew ? "creado" : "editado";
+                  this.dialogoReferencia.close(result);
                 } else {
                   this.notifierService.showNotification(data.msg, 'Error', 'error');
                 }

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, inject, OnInit, signal, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { materialProviders } from '../../shared-ui';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -12,6 +12,7 @@ import { formatError } from '../../Helper/error.helper';
 import { NotifierService } from '../../notifier.service';
 import Swal from 'sweetalert2';
 import { firstValueFrom } from 'rxjs';
+import { SecurityService } from '../../Services/security.service';
 
 @Component({
   selector: 'app-empresa',
@@ -37,15 +38,24 @@ export class Empresa implements OnInit {
 
   readonly dialog = inject(MatDialog);
 
+  [key: string]: any;
+
+  addEmpresa: boolean = false;
+  editEmpresa: boolean = false;
+  deleteEmpresa: boolean = false;
+  activateEmpresa: boolean = false;
 
   constructor(
     private _empresaService: EmpresaService,
+    private _securityService: SecurityService,
+    private cd: ChangeDetectorRef,
     private notifierService: NotifierService) {
 
   }
 
   ngOnInit(): void {
     this.mostrarEmpresas();
+    this.validarPermisos();
   }
 
   @ViewChild('paginatorEmpresa') paginator!: MatPaginator;
@@ -92,6 +102,22 @@ export class Empresa implements OnInit {
       error: (e) => {
         this.notifierService.showNotification(formatError(e), 'Error', 'error');
       }
+    });
+  }
+
+  validarPermisos(): void {
+    const permisos = [
+      { recurso: 'Empresa', accion: 'Crear', prop: 'addEmpresa' },
+      { recurso: 'Empresa', accion: 'Actualizar', prop: 'editEmpresa' },
+      { recurso: 'Empresa', accion: 'Eliminar', prop: 'deleteEmpresa' },
+      { recurso: 'Empresa', accion: 'Activar', prop: 'activateEmpresa' },
+    ];
+
+    permisos.forEach(p => {
+      this._securityService.ValidatePermiso(p.recurso, p.accion).subscribe(result => {
+        this[p.prop] = result.value;
+        this.cd.detectChanges();
+      });
     });
   }
 

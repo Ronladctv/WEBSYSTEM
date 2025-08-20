@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, inject, OnInit, signal, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { materialProviders } from '../../shared-ui';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -12,6 +12,7 @@ import { formatError } from '../../Helper/error.helper';
 import { NotifierService } from '../../notifier.service';
 import Swal from 'sweetalert2';
 import { firstValueFrom } from 'rxjs';
+import { SecurityService } from '../../Services/security.service';
 
 @Component({
   selector: 'app-provedor',
@@ -29,6 +30,12 @@ export class Provedor implements OnInit {
   expandedProvedor = signal<string | null>(null);
   expandedProvedorInactive = signal<string | null>(null);
 
+  addProvedor: boolean = false;
+  editProvedor: boolean = false;
+  deleteProvedor: boolean = false;
+  activateProvedor: boolean = false;
+
+  [key: string]: any;
 
   public mostrarTable = signal(false);
   public mostrarRegistro = signal(true);
@@ -40,11 +47,14 @@ export class Provedor implements OnInit {
 
   constructor(
     private _providerService: ProvedorService,
+    private _securityService: SecurityService,
+    private cd: ChangeDetectorRef,
     private notifierService: NotifierService) {
 
   }
   ngOnInit(): void {
     this.mostrarProvedores();
+    this.validarPermisos();
     // this.mostrarProvedoresInactive();
   }
 
@@ -97,6 +107,22 @@ export class Provedor implements OnInit {
       error: (e) => {
         this.notifierService.showNotification(formatError(e), 'Error', 'error');
       }
+    });
+  }
+
+  validarPermisos(): void {
+    const permisos = [
+      { recurso: 'Proveedor', accion: 'Crear', prop: 'addProvedor' },
+      { recurso: 'Proveedor', accion: 'Actualizar', prop: 'editProvedor' },
+      { recurso: 'Proveedor', accion: 'Eliminar', prop: 'deleteProvedor' },
+      { recurso: 'Proveedor', accion: 'Activar', prop: 'activateProvedor' }
+    ];
+
+    permisos.forEach(p => {
+      this._securityService.ValidatePermiso(p.recurso, p.accion).subscribe(result => {
+        this[p.prop] = result.value;
+        this.cd.detectChanges();
+      });
     });
   }
 

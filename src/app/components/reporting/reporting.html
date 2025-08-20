@@ -3,10 +3,12 @@
         HISTORIAL DE VENTAS
     </mat-card-title>
     <div style="display: flex; justify-content: flex-end; align-items: center; margin-bottom: 12px;">
+        @if (addVenta) {
         <button mat-raised-button color="primary" (click)="NewVenta()" matTooltip="Agregar Provedor">
             <mat-icon>person_add</mat-icon>
             REGISTAR NUEVA VENTA
         </button>
+        }
     </div>
     <div style="display: flex; flex-direction: column; gap: 12px;">
         @for (venta of ventasAdmin(); track venta.id) {
@@ -16,7 +18,8 @@
             <div style="width: 100%; padding:  8px 16px 8px 16px; background-color: #f3f3f3; display: flex; justify-content: space-between; align-items: center; cursor: pointer;"
                 (click)="toggleVenta(venta.id!)">
                 <div style="flex: 1; display: flex; align-items: center; text-align: center; gap: 10px;">
-                    <strong>Codigo De Venta: {{ venta.code }} - Fecha de Venta :{{ venta.date | date: 'yyyy - MM - dd' }}</strong>
+                    <strong>Codigo De Venta: {{ venta.code }} - Fecha de Venta :{{ venta.date | date: 'yyyy - MM - dd'
+                        }}</strong>
                 </div>
                 <!-- <button mat-icon-button style="flex-shrink: 0; margin-right: 10px;"
                     (click)="EditPermiso(venta); $event.stopPropagation()" matTooltip="Editar Permiso"
