@@ -11,7 +11,8 @@ export interface Productos {
     state: boolean,
     typeProductId: string;
     codePr: string;
-    urlImagen:string
+    urlImagen:string;
+    empresaId:string
 }
 
 export interface ProductoDTO {

@@ -19,8 +19,16 @@ export class PermissionService {
     return this.http.get<ResponseAcces>(`${this.apiUrl}Lista`)
   }
 
+  getListEmpresa(empresaId:string): Observable<ResponseAcces> {
+    return this.http.get<ResponseAcces>(`${this.apiUrl}ListaEmpresa/${empresaId}`)
+  }
+
   getListAccion(): Observable<ResponseAcces> {
     return this.http.get<ResponseAcces>(`${this.apiUrl}ListaPermission`)
+  }
+
+  getListAccionEmpresa(empresaId:string): Observable<ResponseAcces> {
+    return this.http.get<ResponseAcces>(`${this.apiUrl}ListaPermissionEmpresa/${empresaId}`)
   }
 
   register(formData: FormData): Observable<ResponseAcces> {

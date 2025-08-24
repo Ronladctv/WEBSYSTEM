@@ -27,13 +27,16 @@ export class MenuService {
     return this.http.get<ResponseAcces>(`${this.baseUrl}ListaRoleMenu`);
   }
 
+  GetListRoleEmpresa(empresaId: string): Observable<ResponseAcces> {
+    return this.http.get<ResponseAcces>(`${this.baseUrl}ListaRoleMenuEmpresa/${empresaId}`);
+  }
+
   register(formData: MenuDTO): Observable<ResponseAcces> {
     return this.http.post<ResponseAcces>(`${this.baseUrl}Register`, formData);
   }
-  
-  asignarMenu(roleId: string, menuids:string[] ): Observable<ResponseAcces> {
+
+  asignarMenu(roleId: string, menuids: string[]): Observable<ResponseAcces> {
     return this.http.post<ResponseAcces>(`${this.baseUrl}AsignarMenu/${roleId}`, menuids);
   }
 
-  
 }

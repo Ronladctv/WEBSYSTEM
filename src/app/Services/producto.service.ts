@@ -18,6 +18,11 @@ export class ProductoService {
   getList(): Observable<ResponseAcces> {
     return this.http.get<ResponseAcces>((`${this.apiUrl}Lista`))
   }
+
+  getListEmpresa(empresaId: string): Observable<ResponseAcces> {
+    return this.http.get<ResponseAcces>((`${this.apiUrl}ListaEmpresa/${empresaId}`))
+  }
+
   register(formData: FormData): Observable<ResponseAcces> {
     return this.http.post<ResponseAcces>(`${this.apiUrl}Register`, formData);
   }

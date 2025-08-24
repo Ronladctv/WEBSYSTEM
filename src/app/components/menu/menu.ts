@@ -79,7 +79,8 @@ export class Menu implements AfterViewInit, OnInit {
   }
 
   mostrarMenuRelation() {
-    this._menuService.GetListRole().subscribe({
+    const empresaId = localStorage.getItem('EmpresaId') ?? '';
+    this._menuService.GetListRoleEmpresa(empresaId).subscribe({
       next: (response) => {
         if (response.status) {
           this.menuRoleAdmin.set(response.value)

@@ -78,7 +78,8 @@ export class MenuRoleModal implements OnInit {
 
     })
 
-    this._roleService.getList().subscribe({
+    const empresaId = localStorage.getItem('EmpresaId') ?? '';
+    this._roleService.getListEmpresa(empresaId).subscribe({
       next: (data) => {
         if (data.status) {
           if (data.status && data.value.length > 0) {

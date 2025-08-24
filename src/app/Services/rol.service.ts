@@ -18,8 +18,16 @@ export class RolService {
     return this.http.get<ResponseAcces>(`${this.apiUrl}Lista`)
   }
 
+  getListEmpresa(empresaId: string): Observable<ResponseAcces> {
+    return this.http.get<ResponseAcces>(`${this.apiUrl}ListaEmpresa/${empresaId}`)
+  }
+
   getListRole(): Observable<ResponseAcces> {
     return this.http.get<ResponseAcces>(`${this.apiUrl}ListaRole`)
+  }
+
+  getListRoleEmpresa(empresaId: string): Observable<ResponseAcces> {
+    return this.http.get<ResponseAcces>(`${this.apiUrl}ListaRoleEmpresa/${empresaId}`)
   }
 
   register(formData: FormData): Observable<ResponseAcces> {

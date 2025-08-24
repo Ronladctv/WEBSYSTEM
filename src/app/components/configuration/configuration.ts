@@ -70,10 +70,10 @@ export class Configuration implements AfterViewInit, OnInit {
   }
 
   ViewRole() {
-    this._roleService.getListRole().subscribe({
+    const empresaId = localStorage.getItem('EmpresaId') ?? '';
+    this._roleService.getListRoleEmpresa(empresaId).subscribe({
       next: (response) => {
         if (response.status) {
-
           const rolActivos = response.value.filter((rol: Roles) => rol.state);
           const rolInactivos = response.value.filter((rol: Roles) => !rol.state);
           this.RoleAdmin.set(rolActivos)
@@ -90,7 +90,8 @@ export class Configuration implements AfterViewInit, OnInit {
   }
 
   ViewPermission() {
-    this._permissionService.getListAccion().subscribe({
+    const empresaId = localStorage.getItem('EmpresaId') ?? '';
+    this._permissionService.getListAccionEmpresa(empresaId).subscribe({
       next: (response) => {
         if (response.status) {
           this.PermissionAdmin.set(response.value)

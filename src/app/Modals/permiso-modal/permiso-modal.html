@@ -25,7 +25,7 @@
             </mat-grid-tile>
             <mat-grid-tile colspan="2">
                 <mat-form-field appearance="outline" class="input-custom">
-                    <mat-label>Permisos Seleccionados</mat-label>
+                    <mat-label>Acciones Seleccionados</mat-label>
                     <mat-select formControlName="accionList" multiple>
                         <mat-option value="" disabled>Seleccione los permisos para el rol</mat-option>
                         @for (accion of accionList(); track accion.accionId ) {

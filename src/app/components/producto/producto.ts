@@ -87,7 +87,8 @@ export class Producto implements OnInit {
   }
 
   mostrarProducto() {
-    this._productoService.getList().subscribe({
+    const empresaId = localStorage.getItem('EmpresaId') ?? '';
+    this._productoService.getListEmpresa(empresaId).subscribe({
       next: (response) => {
         if (response.status) {
           const provedoresActivos = response.value.filter((producto: Productos) => producto.state);

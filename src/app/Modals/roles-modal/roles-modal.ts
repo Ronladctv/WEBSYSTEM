@@ -79,7 +79,8 @@ export class RolesModal implements OnInit {
 
     })
 
-    this._permissionService.getList().subscribe({
+    const empresaId = localStorage.getItem('EmpresaId') ?? '';
+    this._permissionService.getListEmpresa(empresaId).subscribe({
       next: (data) => {
         if (data.status) {
           if (data.status && data.value.length > 0) {
@@ -118,11 +119,11 @@ export class RolesModal implements OnInit {
     const formData = new FormData();
     const id = this.dataRoles?.id ?? EMPTY_GUID;
 
-
     formData.append('id', id);
     formData.append('nameRol', this.formRole.value.nameRol);
     formData.append('icon', this.formRole.value.icon);
     formData.append('description', this.formRole.value.description);
+    formData.append('empresaId', empresaId);
 
     if (this.selectedFile) {
       formData.append('file', this.selectedFile);

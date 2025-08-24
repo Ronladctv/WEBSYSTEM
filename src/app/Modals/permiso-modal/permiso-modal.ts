@@ -116,6 +116,7 @@ export class PermisoModal implements OnInit {
   save() {
 
     const EMPTY_GUID = '00000000-0000-0000-0000-000000000000';
+    const empresaId = localStorage.getItem('EmpresaId') ?? '';
     const formData = new FormData();
     const id = this.dataPermiso?.id ?? EMPTY_GUID;
 
@@ -123,6 +124,7 @@ export class PermisoModal implements OnInit {
     formData.append('name', this.formPermission.value.name);
     formData.append('module', this.formPermission.value.module);
     formData.append('icon', this.formPermission.value.icon);
+    formData.append('empresaId', empresaId);
 
     const accionList = this.formPermission.value.accionList || [];
     accionList.forEach((accionId: string) => {

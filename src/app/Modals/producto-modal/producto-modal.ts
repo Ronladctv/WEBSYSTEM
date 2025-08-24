@@ -124,6 +124,7 @@ export class ProductoModal implements OnInit {
     const EMPTY_GUID = '00000000-0000-0000-0000-000000000000';
     const formData = new FormData();
     const id = this.dataProducto?.id ?? EMPTY_GUID;
+    const empresaId = localStorage.getItem('EmpresaId') ?? '';
 
     formData.append('id', id);
     formData.append('name', this.formProducto.value.name);
@@ -143,7 +144,7 @@ export class ProductoModal implements OnInit {
     formData.append('state', this.formProducto.value.state);
     formData.append('typeProductId', this.formProducto.value.typeProductId);
     formData.append('codePr', this.formProducto.value.codePr);
-
+    formData.append('empresaId', empresaId);
 
     if (this.selectedFile) {
       formData.append('file', this.selectedFile);
