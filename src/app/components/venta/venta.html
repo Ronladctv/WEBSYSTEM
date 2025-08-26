@@ -62,19 +62,15 @@
                     <td mat-cell *matCellDef="let element; let i = index">
                         <mat-form-field appearance="outline" style="width: 100%;">
                             <input matInput type="number" [(ngModel)]="dataSource[i].discount"
-                                (ngModelChange)="calcularTotales(i)" placeholder="Descuento" />
+                                (ngModelChange)="calcularTotales(i)" placeholder="Descuento" 
+                                readonly/>
                         </mat-form-field>
                     </td>
                 </ng-container>
                 <!-- % DESCUENTO-->
                 <ng-container matColumnDef="discountPercent">
-                    <th mat-header-cell *matHeaderCellDef> % Descuento </th>
-                    <td mat-cell *matCellDef="let element; let i = index">
-                        <mat-form-field appearance="outline" style="width: 100%;">
-                            <input matInput type="number" min="0" max="100"
-                                [(ngModel)]="dataSource[i].porcentageDiscount" readonly
-                                (ngModelChange)="calcularTotales(i)" placeholder="% Descuento" />
-                        </mat-form-field>
+                    <td mat-cell *matCellDef="let element; let i = index" hidden>
+                        <input [(ngModel)]="dataSource[i].porcentageDiscount" />
                     </td>
                 </ng-container>
                 <!-- IVA -->
@@ -90,12 +86,8 @@
 
                 <!-- % IVA -->
                 <ng-container matColumnDef="ivaPercent">
-                    <th mat-header-cell *matHeaderCellDef> % IVA </th>
-                    <td mat-cell *matCellDef="let element; let i = index">
-                        <mat-form-field appearance="outline" style="width: 100%;">
-                            <input matInput type="number" min="0" max="100" [(ngModel)]="dataSource[i].porcentageIva"
-                                readonly (ngModelChange)="calcularTotales(i)" placeholder="% IVA" />
-                        </mat-form-field>
+                    <td mat-cell *matCellDef="let element; let i = index" hidden>
+                        <input [(ngModel)]="dataSource[i].porcentageIva" />
                     </td>
                 </ng-container>
 

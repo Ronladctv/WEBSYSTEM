@@ -13,6 +13,7 @@ import { EmpresaService } from '../../Services/empresa.service';
 import { Empresas } from '../../Interfaces/empresas';
 import { NotifierService } from '../../notifier.service';
 import { formatError } from '../../Helper/error.helper';
+import { LocalStorageService } from '../../Services/LocalStorage.service';
 
 
 export const MY_DATE_FORMATS = {
@@ -63,6 +64,7 @@ export class EmpresaModal implements OnInit {
     private fb: FormBuilder,
     private _empresaService: EmpresaService,
     private notifierService: NotifierService,
+    private localStorageService: LocalStorageService,
 
     @Inject(MAT_DIALOG_DATA) public dataEmpresa: Empresas
 
@@ -97,7 +99,7 @@ export class EmpresaModal implements OnInit {
 
   save() {
 
-    const empresaId = localStorage.getItem('EmpresaId') ?? '';
+    const empresaId = this.localStorageService.getItem('EmpresaId') ?? '';
     const EMPTY_GUID = '00000000-0000-0000-0000-000000000000';
     const formData = new FormData();
     const id = this.dataEmpresa?.id ?? EMPTY_GUID;

@@ -16,6 +16,7 @@ import { PermissionService } from '../../Services/permission.service';
 import { Roles } from '../../Interfaces/roles';
 import { formatError } from '../../Helper/error.helper';
 import { NotifierService } from '../../notifier.service';
+import { LocalStorageService } from '../../Services/LocalStorage.service';
 
 export const MY_DATE_FORMATS = {
   parse: {
@@ -66,6 +67,7 @@ export class RolesModal implements OnInit {
     private _rolesService: RolService,
     private _permissionService: PermissionService,
     private notifierService: NotifierService,
+    private localStorageService: LocalStorageService,
 
     @Inject(MAT_DIALOG_DATA) public dataRoles: Roles
 
@@ -79,7 +81,7 @@ export class RolesModal implements OnInit {
 
     })
 
-    const empresaId = localStorage.getItem('EmpresaId') ?? '';
+    const empresaId = this.localStorageService.getItem('EmpresaId') ?? '';
     this._permissionService.getListEmpresa(empresaId).subscribe({
       next: (data) => {
         if (data.status) {
@@ -115,7 +117,7 @@ export class RolesModal implements OnInit {
 
   save() {
     const EMPTY_GUID = '00000000-0000-0000-0000-000000000000';
-    const empresaId = localStorage.getItem('EmpresaId') ?? '';
+    const empresaId = this.localStorageService.getItem('EmpresaId') ?? '';
     const formData = new FormData();
     const id = this.dataRoles?.id ?? EMPTY_GUID;
 

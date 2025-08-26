@@ -13,6 +13,7 @@ import { UserService } from '../../Services/user.service';
 import { User, UserPassword } from '../../Interfaces/user';
 import { Router } from '@angular/router';
 import { NotifierService } from '../../notifier.service';
+import { LocalStorageService } from '../../Services/LocalStorage.service';
 
 
 export const MY_DATE_FORMATS = {
@@ -59,8 +60,9 @@ export class UpdatePasswordModal implements OnInit {
     private fb: FormBuilder,
     private _userService: UserService,
     private notifierService: NotifierService,
+    private localStorageService: LocalStorageService,
     private dialogoReferencia: MatDialogRef<UpdatePasswordModal>,
-    
+
     @Inject(MAT_DIALOG_DATA) public dataUser: User
   ) {
     this.formUserPassword = this.fb.group({
@@ -81,8 +83,7 @@ export class UpdatePasswordModal implements OnInit {
 
     const userId = this.dataUser.id;
     const password = this.formUserPassword.value.password;
-    const usuarioId = localStorage.getItem('UsuarioId') ?? '';
-
+    const usuarioId = this.localStorageService.getItem('UsuarioId') ?? '';
     const modelo: UserPassword =
     {
       password: this.formUserPassword.value.password

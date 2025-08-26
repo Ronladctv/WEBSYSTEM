@@ -15,6 +15,7 @@ import { CategoryTypeService } from '../../Services/category-type.service';
 import { CategoryType } from '../../Interfaces/category-type';
 import { formatError } from '../../Helper/error.helper';
 import { NotifierService } from '../../notifier.service';
+import { LocalStorageService } from '../../Services/LocalStorage.service';
 
 export const MY_DATE_FORMATS = {
   parse: {
@@ -64,6 +65,7 @@ export class ProductoModal implements OnInit {
     private _productoService: ProductoService,
     private _categoryType: CategoryTypeService,
     private notifierService: NotifierService,
+    private localStorageService: LocalStorageService,
 
     @Inject(MAT_DIALOG_DATA) public dataProducto: Productos
 
@@ -124,7 +126,7 @@ export class ProductoModal implements OnInit {
     const EMPTY_GUID = '00000000-0000-0000-0000-000000000000';
     const formData = new FormData();
     const id = this.dataProducto?.id ?? EMPTY_GUID;
-    const empresaId = localStorage.getItem('EmpresaId') ?? '';
+    const empresaId = this.localStorageService.getItem('EmpresaId') ?? '';
 
     formData.append('id', id);
     formData.append('name', this.formProducto.value.name);

@@ -15,6 +15,7 @@ import { MenuService } from '../../Services/menu.service';
 import { NotifierService } from '../../notifier.service';
 import { formatError } from '../../Helper/error.helper';
 import { Roles } from '../../Interfaces/roles';
+import { LocalStorageService } from '../../Services/LocalStorage.service';
 
 export const MY_DATE_FORMATS = {
   parse: {
@@ -66,6 +67,7 @@ export class MenuRoleModal implements OnInit {
     private _roleService: RolService,
     private _menuService: MenuService,
     private notifierService: NotifierService,
+        private localStorageService: LocalStorageService,
 
     @Inject(MAT_DIALOG_DATA) public dataRole: RoleViewModel
 
@@ -78,7 +80,7 @@ export class MenuRoleModal implements OnInit {
 
     })
 
-    const empresaId = localStorage.getItem('EmpresaId') ?? '';
+    const empresaId = this.localStorageService.getItem('EmpresaId') ?? '';
     this._roleService.getListEmpresa(empresaId).subscribe({
       next: (data) => {
         if (data.status) {

@@ -13,6 +13,7 @@ import { NotifierService } from '../../notifier.service';
 import Swal from 'sweetalert2';
 import { firstValueFrom } from 'rxjs';
 import { SecurityService } from '../../Services/security.service';
+import { LocalStorageService } from '../../Services/LocalStorage.service';
 
 @Component({
   selector: 'app-producto',
@@ -50,6 +51,7 @@ export class Producto implements OnInit {
     private _productoService: ProductoService,
     private _securityService: SecurityService,
     private cd: ChangeDetectorRef,
+    private localStorageService: LocalStorageService,
     private notifierService: NotifierService) {
 
   }
@@ -87,7 +89,7 @@ export class Producto implements OnInit {
   }
 
   mostrarProducto() {
-    const empresaId = localStorage.getItem('EmpresaId') ?? '';
+    const empresaId = this.localStorageService.getItem('EmpresaId') ?? '';
     this._productoService.getListEmpresa(empresaId).subscribe({
       next: (response) => {
         if (response.status) {

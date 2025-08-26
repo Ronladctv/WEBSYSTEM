@@ -13,6 +13,7 @@ import { MenuService } from '../../Services/menu.service';
 import { NotifierService } from '../../notifier.service';
 import { MenuDTO } from '../../Interfaces/menu';
 import { formatError } from '../../Helper/error.helper';
+import { LocalStorageService } from '../../Services/LocalStorage.service';
 
 export const MY_DATE_FORMATS = {
   parse: {
@@ -58,6 +59,7 @@ export class MenuModal {
     private fb: FormBuilder,
     private _menuService: MenuService,
     private notifierService: NotifierService,
+    private localStorageService: LocalStorageService,
 
     @Inject(MAT_DIALOG_DATA) public dataMenu: MenuDTO
 
@@ -89,8 +91,7 @@ export class MenuModal {
 
   save() {
     const EMPTY_GUID = '00000000-0000-0000-0000-000000000000';
-    const empresaId = localStorage.getItem('EmpresaId') ?? '';
-
+    const empresaId = this.localStorageService.getItem('EmpresaId') ?? '';
     const id = this.dataMenu?.id ?? EMPTY_GUID;
 
     const modelo: MenuDTO =

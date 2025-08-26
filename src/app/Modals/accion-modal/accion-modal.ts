@@ -13,6 +13,7 @@ import { AccionService } from '../../Services/accion.service';
 import { formatError } from '../../Helper/error.helper';
 import { Accions } from '../../Interfaces/accions';
 import { NotifierService } from '../../notifier.service';
+import { LocalStorageService } from '../../Services/LocalStorage.service';
 
 export const MY_DATE_FORMATS = {
   parse: {
@@ -60,6 +61,7 @@ export class AccionModal implements OnInit {
     private fb: FormBuilder,
     private _accionService: AccionService,
     private notifierService: NotifierService,
+    private localStorageService: LocalStorageService,
 
     @Inject(MAT_DIALOG_DATA) public dataAccion: Accions
 
@@ -88,8 +90,7 @@ export class AccionModal implements OnInit {
 
   save() {
     const EMPTY_GUID = '00000000-0000-0000-0000-000000000000';
-    const empresaId = localStorage.getItem('EmpresaId') ?? '';
-
+    const empresaId = this.localStorageService.getItem('EmpresaId') ?? '';
     const id = this.dataAccion?.accionId ?? EMPTY_GUID;
 
     const modelo: Accions =

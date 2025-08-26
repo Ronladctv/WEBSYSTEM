@@ -15,6 +15,7 @@ import { PermissionService } from '../../Services/permission.service';
 import { AccionService } from '../../Services/accion.service';
 import { formatError } from '../../Helper/error.helper';
 import { NotifierService } from '../../notifier.service';
+import { LocalStorageService } from '../../Services/LocalStorage.service';
 
 export const MY_DATE_FORMATS = {
   parse: {
@@ -66,6 +67,7 @@ export class PermisoModal implements OnInit {
     private _permissionService: PermissionService,
     private _accionService: AccionService,
     private notifierService: NotifierService,
+    private localStorageService: LocalStorageService,
 
     @Inject(MAT_DIALOG_DATA) public dataPermiso: Permissions
 
@@ -116,7 +118,7 @@ export class PermisoModal implements OnInit {
   save() {
 
     const EMPTY_GUID = '00000000-0000-0000-0000-000000000000';
-    const empresaId = localStorage.getItem('EmpresaId') ?? '';
+    const empresaId = this.localStorageService.getItem('EmpresaId') ?? '';
     const formData = new FormData();
     const id = this.dataPermiso?.id ?? EMPTY_GUID;
 

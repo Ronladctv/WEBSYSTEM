@@ -12,6 +12,7 @@ import { formatError } from '../../Helper/error.helper';
 import { MenuModal } from '../../Modals/menu-modal/menu-modal';
 import { MenuRoleModal } from '../../Modals/menu-role-modal/menu-role-modal';
 import { SecurityService } from '../../Services/security.service';
+import { LocalStorageService } from '../../Services/LocalStorage.service';
 
 @Component({
   selector: 'app-menu',
@@ -41,6 +42,7 @@ export class Menu implements AfterViewInit, OnInit {
     private _menuService: MenuService,
     private cd: ChangeDetectorRef,
     private _securityService: SecurityService,
+    private localStorageService: LocalStorageService,
     private notifierService: NotifierService) {
 
   }
@@ -79,7 +81,7 @@ export class Menu implements AfterViewInit, OnInit {
   }
 
   mostrarMenuRelation() {
-    const empresaId = localStorage.getItem('EmpresaId') ?? '';
+    const empresaId = this.localStorageService.getItem('EmpresaId') ?? '';
     this._menuService.GetListRoleEmpresa(empresaId).subscribe({
       next: (response) => {
         if (response.status) {

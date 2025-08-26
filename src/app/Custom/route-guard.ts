@@ -2,7 +2,7 @@ import { CanActivateFn, Router } from '@angular/router';
 
 import { AccessService } from '../Services/Access.service';
 import { catchError, map, of } from 'rxjs';
-import { LocalStorageService } from '../Services/local-storage';
+import { LocalStorageService } from '../Services/LocalStorage.service';
 import { inject } from '@angular/core';
 import { SecurityService } from '../Services/security.service';
 import { NotifierService } from '../notifier.service';

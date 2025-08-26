@@ -14,6 +14,7 @@ import { formatError } from '../../Helper/error.helper';
 import { NotifierService } from '../../notifier.service';
 import Swal from 'sweetalert2';
 import { SecurityService } from '../../Services/security.service';
+import { LocalStorageService } from '../../Services/LocalStorage.service';
 
 @Component({
   selector: 'app-index',
@@ -68,6 +69,7 @@ export class Users implements OnInit {
     private _userService: UserService,
     private _securityService: SecurityService,
     private cd: ChangeDetectorRef,
+    private localStorageService: LocalStorageService,
     private notifierService: NotifierService) { }
 
   ngOnInit(): void {
@@ -152,7 +154,7 @@ export class Users implements OnInit {
   }
 
   mostrarUserAdmin() {
-    const empresaId = localStorage.getItem('EmpresaId') ?? '';
+    const empresaId = this.localStorageService.getItem('EmpresaId') ?? '';
     this._userService.getListAdmin(empresaId).subscribe({
       next: (response) => {
         if (response.value) {
@@ -185,7 +187,7 @@ export class Users implements OnInit {
   }
 
   mostrarUserAdminInactive() {
-    const empresaId = localStorage.getItem('EmpresaId') ?? '';
+    const empresaId = this.localStorageService.getItem('EmpresaId') ?? '';
     this._userService.getListAdminInactive(empresaId).subscribe({
       next: (response) => {
         if (response.value) {

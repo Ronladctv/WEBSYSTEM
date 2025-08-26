@@ -11,6 +11,7 @@ import { Ventas } from '../../Interfaces/ventas';
 import { VentaService } from '../../Services/venta.service';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
+import { LocalStorageService } from '../../Services/LocalStorage.service';
 
 @Component({
   selector: 'app-venta',
@@ -21,7 +22,7 @@ import { Router } from '@angular/router';
 export class Venta implements OnInit {
 
 
-  displayedColumns: string[] = ['product', 'quantity', 'price', 'discount', 'discountPercent', 'iva', 'ivaPercent', 'subTotal', 'total', 'actions'];
+  displayedColumns: string[] = ['product', 'quantity', 'price', 'discount', 'iva', 'subTotal', 'total', 'actions'];
   dataSource: any[] = [];
   totalSubtotal: number = 0;
   totalDescuento: number = 0;
@@ -36,7 +37,7 @@ export class Venta implements OnInit {
   constructor(
     private _productoService: ProductoService,
     private _clienteService: ClientService,
-
+    private localStorageService: LocalStorageService,
     private _ventaService: VentaService,
     private notifierService: NotifierService) { }
 
@@ -64,7 +65,8 @@ export class Venta implements OnInit {
   }
 
   cargarProductos() {
-    this._productoService.getList().subscribe({
+    const empresaId = this.localStorageService.getItem('EmpresaId') ?? '';
+    this._productoService.getListEmpresa(empresaId).subscribe({
       next: (data) => {
         if (data.status) {
           if (data.status && data.value.length > 0) {
@@ -84,8 +86,7 @@ export class Venta implements OnInit {
 
   save() {
     const EMPTY_GUID = '00000000-0000-0000-0000-000000000000';
-    const UsuarioId = localStorage.getItem('UsuarioId') ?? '';
-
+    const UsuarioId = this.localStorageService.getItem('UsuarioId') ?? '';
     if (!this.clienteSeleccionado) {
       this.notifierService.showNotification('Por favor seleccione un cliente', 'Error', 'error');
       return;
@@ -241,26 +242,26 @@ export class Venta implements OnInit {
     const item = this.dataSource[index];
     if (!item) return;
 
-    const quantity = item.quantity || 0;
+    let quantity = item.quantity || 0;
+    if (quantity <= 0) quantity = 1;
+    item.quantity = quantity;
+
     const price = item.price || 0;
-    const subtotal = Number((quantity * price).toFixed(2));
 
-    let rawDiscount = item.discount;
-    let discount = isNaN(rawDiscount) || rawDiscount === null ? 0 : Number(Number(rawDiscount).toFixed(2));
-    let discountPercent = 0;
+    let subtotal = quantity * price;
 
-    if (discount > subtotal) {
-      discount = 0;
-      discountPercent = 0;
-    } else {
-      discountPercent = subtotal > 0 ? Number(((discount / subtotal) * 100).toFixed(2)) : 0;
-    }
+    const discountPercent = item.porcentageDiscount || 0;
+    let discount = (subtotal * discountPercent) / 100;
+    if (discount > subtotal) discount = subtotal;
 
-    let rawIva = item.iva;
-    let iva = isNaN(rawIva) || rawIva === null ? 0 : Number(Number(rawIva).toFixed(2));
-    const ivaPercent = subtotal > 0 ? Number(((iva / subtotal) * 100).toFixed(2)) : 0;
+    subtotal = Math.round(subtotal * 100) / 100;
+    discount = Math.round(discount * 100) / 100;
 
-    const total = Number((subtotal - discount + iva).toFixed(2));
+    const ivaPercent = item.porcentageIva || 0;
+    let iva = ((subtotal - discount) * (ivaPercent / 100));
+    iva = Math.round(iva * 100) / 100;
+
+    const total = subtotal - discount + iva;
 
     Object.assign(this.dataSource[index], {
       subTotal: subtotal,
@@ -298,4 +299,5 @@ export class Venta implements OnInit {
     this.dataSource = [...this.dataSource];
     this.actualizarTotalesGlobales();
   }
+
 }

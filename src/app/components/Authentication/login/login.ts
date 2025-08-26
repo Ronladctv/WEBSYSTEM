@@ -12,6 +12,7 @@ import { jwtDecode } from 'jwt-decode';
 import { Token } from '../../../Interfaces/token';
 import { formatError } from '../../../Helper/error.helper';
 import { NotifierService } from '../../../notifier.service';
+import { LocalStorageService } from '../../../Services/LocalStorage.service';
 
 @Component({
   selector: 'app-login',
@@ -30,7 +31,8 @@ export class Login {
   public fechaActual: number;
 
   constructor(
-    private notifierService: NotifierService
+    private notifierService: NotifierService,
+    private localStorageService: LocalStorageService
   ) {
     this.fechaActual = new Date().getFullYear();
   }
@@ -57,21 +59,21 @@ export class Login {
       next: (data) => {
         if (data.status) {
           if (data.value.token != null) {
-            localStorage.setItem("token", data.value.token)
+            this.localStorageService.setItem("token", data.value.token);
             if (data.value.token) {
               const decoded = jwtDecode<Token>(data.value.token);
-              localStorage.setItem('EmpresaId', decoded.EmpresaId);
-              localStorage.setItem('UsuarioId', decoded.UsuarioId);
-              localStorage.setItem('NameProfile', decoded.NameProfile);
-              localStorage.setItem('Email', decoded.Email);
-              localStorage.setItem('Name', decoded.Name);
-              localStorage.setItem('NameEmpresa', decoded.NameEmpresa);
-              localStorage.setItem('ColorPrimary', decoded.ColorPrimary);
-              localStorage.setItem('ColorSecundary', decoded.ColorSecundary);
-              localStorage.setItem('LogoHeader', decoded.LogoHeader);
-              localStorage.setItem('LogoFooter', decoded.LogoFooter);
+              this.localStorageService.setItem('EmpresaId', decoded.EmpresaId);
+              this.localStorageService.setItem('UsuarioId', decoded.UsuarioId);
+              this.localStorageService.setItem('NameProfile', decoded.NameProfile);
+              this.localStorageService.setItem('Email', decoded.Email);
+              this.localStorageService.setItem('Name', decoded.Name);
+              this.localStorageService.setItem('NameEmpresa', decoded.NameEmpresa);
+              this.localStorageService.setItem('ColorPrimary', decoded.ColorPrimary);
+              this.localStorageService.setItem('ColorSecundary', decoded.ColorSecundary);
+              this.localStorageService.setItem('LogoHeader', decoded.LogoHeader);
+              this.localStorageService.setItem('LogoFooter', decoded.LogoFooter);
               if (decoded.exp) {
-                localStorage.setItem('SessionExp', decoded.exp.toString());
+                this.localStorageService.setItem('SessionExp', decoded.exp.toString());
               }
 
               this.notifierService.showNotification('Inicio de sesión exitoso.¡Bienvenido!', 'Éxito', 'success');
@@ -84,7 +86,7 @@ export class Login {
             this.formLogin.get('empresa')?.setValidators(Validators.required);
             this.formLogin.get('empresa')?.updateValueAndValidity();
           }
-          
+
         } else {
           this.notifierService.showNotification(`Acceso denegado: ${data.msg}`, 'Acceso denegado', 'error');
         }

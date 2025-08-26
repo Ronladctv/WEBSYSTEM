@@ -19,6 +19,7 @@ import { Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { formatError } from '../../Helper/error.helper';
 import { NotifierService } from '../../notifier.service';
+import { LocalStorageService } from '../../Services/LocalStorage.service';
 
 
 export const MY_DATE_FORMATS = {
@@ -70,7 +71,7 @@ export class UserModal implements OnInit {
     private _userService: UserService,
     private _rolesService: RolService,
     private notifierService: NotifierService,
-
+    private localStorageService: LocalStorageService,
     private _categoryType: CategoryTypeService,
     @Inject(MAT_DIALOG_DATA) public datauser: User
 
@@ -120,7 +121,7 @@ export class UserModal implements OnInit {
   }
 
   ngOnInit(): void {
-    const empresaId = localStorage.getItem('EmpresaId') ?? '';
+    const empresaId = this.localStorageService.getItem('EmpresaId') ?? '';
     if (this.datauser) {
       this.formUser.patchValue({
         nameProfile: this.datauser.nameProfile,
@@ -170,7 +171,7 @@ export class UserModal implements OnInit {
 
     const EMPTY_GUID = '00000000-0000-0000-0000-000000000000';
     const formData = new FormData();
-    const empresaId = localStorage.getItem('EmpresaId') ?? '';
+    const empresaId = this.localStorageService.getItem('EmpresaId') ?? '';
     const id = this.datauser?.id ?? EMPTY_GUID;
 
     formData.append('id', id);

@@ -19,6 +19,7 @@ import { NotifierService } from '../../notifier.service';
 import { AccionService } from '../../Services/accion.service';
 import Swal from 'sweetalert2';
 import { firstValueFrom } from 'rxjs';
+import { LocalStorageService } from '../../Services/LocalStorage.service';
 
 @Component({
   selector: 'app-configuration',
@@ -49,7 +50,8 @@ export class Configuration implements AfterViewInit, OnInit {
     private _roleService: RolService,
     private _permissionService: PermissionService,
     private _accionService: AccionService,
-    private notifierService: NotifierService
+    private notifierService: NotifierService,
+    private localStorageService: LocalStorageService
   ) {
 
   }
@@ -70,7 +72,7 @@ export class Configuration implements AfterViewInit, OnInit {
   }
 
   ViewRole() {
-    const empresaId = localStorage.getItem('EmpresaId') ?? '';
+    const empresaId = this.localStorageService.getItem('EmpresaId') ?? '';
     this._roleService.getListRoleEmpresa(empresaId).subscribe({
       next: (response) => {
         if (response.status) {
@@ -90,7 +92,7 @@ export class Configuration implements AfterViewInit, OnInit {
   }
 
   ViewPermission() {
-    const empresaId = localStorage.getItem('EmpresaId') ?? '';
+    const empresaId = this.localStorageService.getItem('EmpresaId') ?? '';
     this._permissionService.getListAccionEmpresa(empresaId).subscribe({
       next: (response) => {
         if (response.status) {

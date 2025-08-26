@@ -12,6 +12,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { UpdatePasswordModal } from '../../Modals/update-password-modal/update-password-modal';
 import { formatError } from '../../Helper/error.helper';
 import { NotifierService } from '../../notifier.service';
+import { LocalStorageService } from '../../Services/LocalStorage.service';
 
 @Component({
   selector: 'app-perfil',
@@ -27,7 +28,8 @@ export class Perfil implements OnInit {
 
   constructor(
     private _userService: UserService,
-    private notifierService: NotifierService
+    private notifierService: NotifierService,
+    private localStorageService: LocalStorageService
   ) { }
 
   ngOnInit(): void {
@@ -36,9 +38,7 @@ export class Perfil implements OnInit {
   }
 
   mostrarUser() {
-
-    const usuarioId = localStorage.getItem('UsuarioId') ?? '';
-
+    const usuarioId = this.localStorageService.getItem('UsuarioId') ?? '';
     this._userService.profile(usuarioId).subscribe({
       next: (response) => {
         if (response.status) {
