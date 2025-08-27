@@ -294,7 +294,7 @@ export class Users implements OnInit {
       focusCancel: true,
       showLoaderOnConfirm: true,
       preConfirm: () => {
-        const empresaId = localStorage.getItem('EmpresaId') ?? '';
+        const empresaId = this.localStorageService.getItem('EmpresaId') ?? '';
         return this._userService.disableUserEmpresa(usuarioId, empresaId).toPromise()
           .then((data) => {
             if (data?.status) {
@@ -339,7 +339,7 @@ export class Users implements OnInit {
       focusCancel: true,
       showLoaderOnConfirm: true,
       preConfirm: () => {
-        const empresaId = localStorage.getItem('EmpresaId') ?? '';
+        const empresaId = this.localStorageService.getItem('EmpresaId') ?? '';
         return this._userService.disableUser(usuarioId).toPromise()
           .then((data) => {
             if (data?.status) {
@@ -384,7 +384,7 @@ export class Users implements OnInit {
       focusCancel: true,
       showLoaderOnConfirm: true,
       preConfirm: () => {
-        const empresaId = localStorage.getItem('EmpresaId') ?? '';
+        const empresaId = this.localStorageService.getItem('EmpresaId') ?? '';
         return this._userService.activeUser(usuarioId).toPromise()
           .then((data) => {
             if (data?.status) {
@@ -430,7 +430,7 @@ export class Users implements OnInit {
       focusCancel: true,
       showLoaderOnConfirm: true,
       preConfirm: () => {
-        const empresaId = localStorage.getItem('EmpresaId') ?? '';
+        const empresaId = this.localStorageService.getItem('EmpresaId') ?? '';
         return this._userService.activeUserEmpresa(usuarioId, empresaId).toPromise()
           .then((data) => {
             if (data?.status) {

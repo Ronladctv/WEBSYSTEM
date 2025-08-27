@@ -7,6 +7,7 @@ import { Footer } from '../../Shared/footer/footer';
 import { materialProviders } from '../../shared-ui';
 import { MenuService } from '../../Services/menu.service';
 import { Menu } from '../../Interfaces/menu';
+import { LocalStorageService } from '../../Services/LocalStorage.service';
 
 
 @Component({
@@ -25,7 +26,8 @@ export class MainLayout {
 
   public menus = signal<Menu[]>([]);
 
-  constructor(private observer: BreakpointObserver) {
+  constructor(private observer: BreakpointObserver,
+    private localStorageService: LocalStorageService) {
 
   }
 
@@ -41,13 +43,13 @@ export class MainLayout {
         }
       })
 
-    const usuarioId = localStorage.getItem('UsuarioId') ?? '';
-    const empresaId = localStorage.getItem('EmpresaId') ?? '';
+    const usuarioId = this.localStorageService.getItem('UsuarioId') ?? '';
+    const empresaId = this.localStorageService.getItem('EmpresaId') ?? '';
 
-    const colorPrimary = localStorage.getItem('ColorPrimary');
-    const colorSecondary = localStorage.getItem('ColorSecondary');
-    document.documentElement.style.setProperty('--color-primary', colorPrimary);
-    document.documentElement.style.setProperty('--color-secondary', colorSecondary);
+    const colorPrimary = this.localStorageService.getItem('ColorPrimary');
+    const colorSecondary = this.localStorageService.getItem('ColorSecondary');
+    //document.documentElement.style.setProperty('--color-primary', colorPrimary);
+    //document.documentElement.style.setProperty('--color-secondary', colorSecondary);
 
 
     this.Menu.GetMneu(usuarioId, empresaId).subscribe({

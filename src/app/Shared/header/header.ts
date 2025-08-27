@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { materialProviders } from '../../shared-ui';
+import { LocalStorageService } from '../../Services/LocalStorage.service';
 
 @Component({
   selector: 'app-header',
@@ -18,13 +19,13 @@ export class Header implements OnInit {
   timeSession: string = '00:00';
   isMenuOpen = false;
 
-  constructor(private router: Router, private cd: ChangeDetectorRef) { }
+  constructor(private router: Router, private cd: ChangeDetectorRef, private localStorageService: LocalStorageService) { }
 
   ngOnInit(): void {
-    this.username = localStorage.getItem('NameProfile');
-    this.logHeader = localStorage.getItem('LogoHeader');
-    this.nameEmpresa = localStorage.getItem('NameEmpresa');
-    const exp = localStorage.getItem('SessionExp');
+    this.username = this.localStorageService.getItem('NameProfile');
+    this.logHeader = this.localStorageService.getItem('LogoHeader');
+    this.nameEmpresa = this.localStorageService.getItem('NameEmpresa');
+    const exp = this.localStorageService.getItem('SessionExp');
     if (exp) {
       this.startCountdown(parseInt(exp, 10));
     }

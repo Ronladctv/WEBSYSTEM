@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/10f75c77-b8c7-42e9-bde9-32c2b06ade4b/resourceGroups/WEBAAPITESIS/providers/Microsoft.Web/sites/SYSTEMTESIS",
+    "appService.deploySubpath": "dist\\WEBAPP"
+}
