@@ -1,5 +1,5 @@
 export const settings = {
-    production: false,
+    production: true,
     //endPoint: 'https://localhost:7251/'
     endPoint: 'https://webapitesis-hzgmezhdfjgcbygb.brazilsouth-01.azurewebsites.net/'
 };
