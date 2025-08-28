@@ -1,69 +1,24 @@
-process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
-import {
-  AngularNodeAppEngine,
-  createNodeRequestHandler,
-  isMainModule,
-  writeResponseToNodeResponse,
-} from '@angular/ssr/node';
-import express from 'express';
-import { join } from 'node:path';
+// server.mjs o server.ts
+import { AngularAppEngine, createRequestHandler } from '@angular/ssr';
+import { getContext } from '@netlify/angular-runtime/context.mjs';
 
-const browserDistFolder = join(import.meta.dirname, '../browser');
+// Inicializa el motor Angular SSR
+const angularAppEngine = new AngularAppEngine();
 
-const app = express();
-const angularApp = new AngularNodeAppEngine();
+// Handler principal compatible con Netlify
+export async function netlifyAppEngineHandler(request: Request): Promise<Response> {
+  const context = getContext();
 
-/**
- * Example Express Rest API endpoints can be defined here.
- * Uncomment and define endpoints as necessary.
- *
- * Example:
- * ```ts
- * app.get('/api/{*splat}', (req, res) => {
- *   // Handle API request
- * });
- * ```
- */
+  // Ejemplo de endpoints API, descomenta y personaliza si los necesitas
+  // const pathname = new URL(request.url).pathname;
+  // if (pathname === '/api/menu') {
+  //   return Response.json({ message: 'API funcionando' });
+  // }
 
-/**
- * Serve static files from /browser
- */
-app.use(
-  express.static(browserDistFolder, {
-    maxAge: '1y',
-    index: false,
-    redirect: false,
-  }),
-);
-
-/**
- * Handle all other requests by rendering the Angular application.
- */
-app.use((req, res, next) => {
-  angularApp
-    .handle(req)
-    .then((response) =>
-      response ? writeResponseToNodeResponse(response, res) : next(),
-    )
-    .catch(next);
-});
-
-/**
- * Start the server if this module is the main entry point.
- * The server listens on the port defined by the `PORT` environment variable, or defaults to 4000.
- */
-if (isMainModule(import.meta.url)) {
-  const port = process.env['PORT'] || 4000;
-  app.listen(port, (error) => {
-    if (error) {
-      throw error;
-    }
-
-    console.log(`Node Express server listening on http://localhost:${port}`);
-  });
+  // Manejo SSR Angular
+  const result = await angularAppEngine.handle(request, context);
+  return result || new Response('Not found', { status: 404 });
 }
 
-/**
- * Request handler used by the Angular CLI (for dev-server and during build) or Firebase Cloud Functions.
- */
-export const reqHandler = createNodeRequestHandler(app);
+// Request handler que Netlify utiliza para SSR
+export const reqHandler = createRequestHandler(netlifyAppEngineHandler);
