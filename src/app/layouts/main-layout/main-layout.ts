@@ -57,6 +57,7 @@ export class MainLayout {
       this.notifierService.showNotification('No se pudo cargar el menú. Usuario o empresa no definidos.', 'Aviso', 'warning');
       this.menus.set([]);
       return;
+      
     }
 
     this.Menu.GetMneu(usuarioId, empresaId).subscribe({
