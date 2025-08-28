@@ -12,12 +12,8 @@
     ],
     "routes": [
         {
-            "src": "/api/(.*)",
-            "dest": "dist/WEBAPP/server/main.js"
-        },
-        {
             "src": "/(.*)",
-            "dest": "dist/WEBAPP/browser/$1"
+            "dest": "dist/WEBAPP/server/main.js"
         }
     ]
 }
