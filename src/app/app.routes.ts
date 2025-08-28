@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './Custom/auth-guard';
 import { Login } from './components/Authentication/login/login';
-import { MainLayout } from './Layouts/main-layout/main-layout';
+import { MainLayout } from './layouts/main-layout/main-layout';
 import { Home } from './components/home/home';
 import { Users } from './components/user/user';
 import { Dashoard } from './components/dashoard/dashoard';
