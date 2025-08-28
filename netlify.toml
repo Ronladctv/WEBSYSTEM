@@ -1,6 +1,6 @@
 [build]
-  command = "npm run build:ssr"
+  command = "npm run build && ng run WEBAPP:server:production && ng run WEBAPP:prerender"
   publish = "dist/WEBAPP/browser"
 
-[functions]
-  directory = "dist/WEBAPP/server"
+[[plugins]]
+  package = "@netlify/angular-runtime"

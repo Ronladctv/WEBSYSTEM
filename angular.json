@@ -92,6 +92,24 @@
             "outputPath": "dist/WEBAPP/server",
             "main": "src/main.server.ts",
             "tsConfig": "tsconfig.server.json"
+          },
+          "configurations": {
+            "production": {
+              "outputHashing": "media",
+              "optimization": true,
+              "sourceMap": false,
+              "extractLicenses": true
+            }
+          }
+        },
+        "prerender": {
+          "builder": "@angular-devkit/build-angular:prerender",
+          "options": {
+            "browserTarget": "WEBAPP:build:production",
+            "serverTarget": "WEBAPP:server:production",
+            "routes": [
+              "/"
+            ]
           }
         }
       }
