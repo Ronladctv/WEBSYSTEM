@@ -4,4 +4,4 @@
   functions = "dist/WEBAPP/server"
 
 [[plugins]]
-  package = "@netlify/angular-runtime"
+package = "@netlify/plugin-functions-core"
