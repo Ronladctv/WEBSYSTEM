@@ -1,7 +1,6 @@
 [build]
-  command = "npm run build:ssr"
   publish = "dist/WEBAPP/browser"
-  functions = "dist/WEBAPP/server"
+  command = "npm run build:ssr"
 
-[[plugins]]
-package = "@netlify/plugin-functions-core"
+[functions]
+  directory = "dist/WEBAPP/server"
