@@ -1,6 +1,6 @@
 [build]
-  publish = "dist/WEBAPP/browser"
   command = "npm run build:ssr"
+  publish = "dist/WEBAPP/browser"
 
 [functions]
   directory = "dist/WEBAPP/server"
