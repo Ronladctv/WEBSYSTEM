@@ -1,0 +1,19 @@
+{
+    "version": 3,
+    "builds": [
+        {
+            "src": "dist/WEBAPP/server/main.js",
+            "use": "@vercel/node"
+        },
+        {
+            "src": "dist/WEBAPP/browser/**",
+            "use": "@vercel/static"
+        }
+    ],
+    "routes": [
+        {
+            "src": "/(.*)",
+            "dest": "dist/WEBAPP/server/main.js"
+        }
+    ]
+}
