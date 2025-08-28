@@ -1,5 +1,5 @@
 [build]
-  command = "npm run build && ng run WEBAPP:server:production && ng run WEBAPP:prerender"
+  command = "npm run prerender:build"
   publish = "dist/WEBAPP/browser"
 
 [[plugins]]

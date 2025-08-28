@@ -8,7 +8,8 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:WEBAPP": "node dist/WEBAPP/server/server.mjs",
-    "build:ssr": "ng build && ng run WEBAPP:server"
+    "build:ssr": "ng build && ng run WEBAPP:server",
+    "prerender:build": "ng build && ng run WEBAPP:server:production && ng run WEBAPP:prerender"
   },
   "private": true,
   "dependencies": {
